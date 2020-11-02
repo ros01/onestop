@@ -1,0 +1,172 @@
+{% extends 'base2.html'%}
+{% load static %}
+{% block title%}| Vendors {% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
+<link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+{% include "_modal.html" %}
+
+<!-- Page Wrapper -->
+  <div id="wrapper">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <!-- Main Content -->
+      <div id="content">
+
+
+      <!-- Begin Page Content -->
+        <div class="container-fluid">
+           <br>
+
+        <div class="row mr-4 mt-4">
+            <div class="col-md-6 mt-0">
+                <div class="col-md-12">
+                    <div class="row">
+                      <h3 class="col-12 text-info">Manage Item Details</h3>
+                      <br>
+                        <p class="col-12 text-success lead">Item Details</p>
+                    </div>
+
+                     <div class="row">
+                        <span class="col-5"><strong>Item Name:</strong></span>
+                        <span class="col-6 ">{{object.item_name}}</span>
+                    </div>
+
+                    <div class="row">
+                      <span class="col-5"><strong>Item Description:</strong></span>
+                      <span class="col-6">{{object.item_description}}</span>
+                  </div>
+                 
+                  <div class="row">
+                      <span class="col-5"><strong>Category:</strong></span>
+                      <span class="col-6">{{object.category}}</span>
+                  </div>
+                  <div class="row">
+                      <span class="col-5"><strong>Stock Code:</strong></span>
+                      <span class="col-6">{{object.stock_code}}</span>
+                  </div>
+                  <div class="row">
+                      <span class="col-5"><strong>Vendor:</strong></span>
+                      <span class="col-6">{{object.vendor}}</span>
+                    </div>  
+                  <div class="row">
+                      <span class="col-5"><strong>Unit of Measurement:</strong></span>
+                      <span class="col-6">{{object.unit}}</span>
+                  </div>
+                  <div class="row">
+                      <span class="col-5"><strong>Quantity:</strong></span>
+                      <span class="col-6">{{object.quantity}}</span>
+                  </div>
+                  <div class="row">
+                      <span class="col-5"><strong>Price:</strong></span>
+                      <span class="col-6">{{object.unit_price}}</span>
+                  </div>
+                  <div class="row">
+                      <span class="col-5"><strong>Re-order No:</strong></span>
+                      <span class="col-6">{{object.re_order_no}}</span>
+                    </div>
+
+                     <div class="row">
+                      <span class="col-5"><strong>Entered by:</strong></span>
+                      <span class="col-6">{{object.entered_by.first_name}} {{object.entered_by.last_name}}
+                      </span>
+                    </div>
+
+                    <div class="row">
+                        <span class="col-5"><strong>Entry Date:</strong></span>
+                        <span class="col-6">{{object.entry_date}}</span>
+                   
+                    </div>
+
+                </div>
+                <br>
+              </div>   
+
+            <div class="col-md-5 mt-5">
+            <p class="text-success lead">Uploads</p>
+            <p><strong>Item Image:</strong></p>
+
+            <div class="row py-0">
+            <table class="table table-hover">
+            <thead style="background-color: #bfe3f8;">
+          
+            </thead>
+            <tbody>
+              {% if object.item_image %}
+              
+              <img src="{{object.item_image.url}}" alt="rounded-circle mb-3">
+              {% endif %}       
+              </tbody>
+              </table>
+              </div>  
+              <hr> 
+              <div class="d-flex justify-content-end">  
+              
+              <button type="button" id="update_item" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'store:item_update' object.id %}"><i class="fa fa-list text-white"></i> Update Item</button>
+              <a href="{% url 'store:items_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Inventory</a>  
+            </div>  
+            </div>
+
+
+      </div>
+        <!-- /.container-fluid -->
+      </div>
+
+
+
+
+
+
+
+
+      </div>
+      <!-- End of Main Content -->
+
+      
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<script type="text/javascript">
+    $(function() {
+    
+        $(".bs-modal").each(function () {
+          $(this).modalForm({
+              formURL: $(this).data('form-url')
+          });
+        });
+    
+    });
+
+</script>
+
+
+
+
+<script>
+  $('#mydata').dataTable();
+</script>
+
+
+
+
+
+
+
+{% endblock %}

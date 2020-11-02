@@ -1,0 +1,38 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title%}| Welcome {% endblock %}
+
+{% block styles %}
+
+
+
+{% endblock %}
+
+                             
+{% block content %}
+
+
+<main class = "container">
+
+  <div class="wrapper">
+    <br>
+    <form class="form-signin" action="{% url 'accounts:login' %}" method="POST">
+        {% csrf_token %}     
+        <h3 class="form-signin-heading text-info">Staff Login</h3>
+        <hr class="colorgraph"><br>
+        
+        <input type="email" class="form-control" name="email" placeholder="Enter email" required="" autofocus="" />
+        <input type="password" class="form-control" name="password" placeholder="Password" required=""/>          
+       
+        <button class="btn btn-lg btn-info btn-block"  name="Submit" value="Login" type="Submit">Login</button> <br>
+        <div class="row mb-2" style="border-bottom:1px solid #008000; padding-bottom:11px"></div>
+        <a href="#" class="btn btn-outline-info">Forgot Password?</a>
+      </form>
+        
+  </div>
+  <br>
+</main>
+
+
+
+{% endblock %}

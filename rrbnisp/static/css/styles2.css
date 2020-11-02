@@ -1,0 +1,99 @@
+/* Nav Bar CSS Begins Here */
+
+
+.nav-link:hover{
+  color: rgb(78, 228, 78);
+}
+/* Nav Bar CSS Ends Here */
+
+.logo{
+  width: 100%;
+  margin-left: 30%;
+}
+
+.rrbn-logo{
+  width: 80%;
+  margin-left: 8%;
+}
+
+.card-body{
+      padding: 15px;
+}
+
+.btmMargin .card{
+  margin-bottom: 20px;
+}
+
+/*colors*/
+
+.yellow{
+    background: #ECD863;
+}
+
+.green{
+    background: #5CB85C;
+}
+
+.danger{
+    background: #E68F8D;
+}
+
+.blue{
+    background: #337AB7;
+}
+
+
+.skyblue{
+  background: #5bb0c5;
+}
+
+.red{
+  background: #c84f46;
+}
+
+.card-body{
+      padding: 15px 15px 5px 15px;
+}
+
+.panel-body .btn:not(.btn-block) { width:120px;margin-bottom:10px; }
+
+
+
+a.info:hover{
+    background: skyblue !important;
+    color: #fff !important;
+}
+
+
+button.info:hover{
+    background: skyblue !important;
+    color: #fff !important;
+}
+
+a.warning:hover{
+    background: orange !important;
+    color: #fff !important;
+}
+
+
+button.warning:hover{
+    background: orange !important;
+    color: #fff !important;
+}
+
+a.danger:hover{
+    background: red !important;
+    color: #fff !important;
+}
+
+
+button.danger:hover{
+    background: red !important;
+    color: #fff !important;
+}
+
+
+
+
+
+

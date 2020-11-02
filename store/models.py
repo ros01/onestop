@@ -1,0 +1,128 @@
+from django.db import models
+import uuid
+from django.conf import settings
+from datetime import datetime
+from django.utils import timezone
+from .choices import UNIT_OF_MEASUREMENT
+from multiselectfield import MultiSelectField
+from rrbnstaff.models import Requisition
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
+
+class Vendor(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    vendor_name = models.CharField(max_length=200)
+    address = models.CharField(max_length=200)
+    phone = models.CharField(max_length=100)
+    email = models.EmailField(max_length=100)
+    description = models.TextField(blank=True)
+    date_created = models.DateTimeField(auto_now_add=True, auto_now=False)
+    
+    def __str__(self):
+        return self.vendor_name
+
+    def date_created_pretty(self):
+        return self.date_created.strftime('%b %e %Y')
+
+class Item(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    item_name = models.CharField(max_length=200)
+    item_description = models.TextField(blank=True, null=True)
+    category = models.ForeignKey('Category', related_name='default_category', null=True, blank=True, on_delete=models.DO_NOTHING)
+    stock_code = models.CharField(max_length=200)
+    vendor = models.ForeignKey('Vendor', null=True, blank=True, on_delete=models.DO_NOTHING)
+    unit = models.CharField(max_length=100, choices = UNIT_OF_MEASUREMENT)
+    quantity = models.IntegerField()
+    unit_price = models.DecimalField(decimal_places=2, max_digits=20)
+    re_order_no = models.IntegerField()
+    item_image = models.ImageField(upload_to='%Y/%m/%d/', blank=True)
+    entered_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
+    entry_date = models.DateTimeField(auto_now_add=True, auto_now=False)
+    updated = models.DateTimeField(auto_now_add=False, auto_now=True)
+    
+    def __str__(self):
+        return self.item_name
+
+    def entry_date_pretty(self):
+        return self.entry_date.strftime('%b %e %Y')
+
+    def updated_pretty(self):
+        return self.updated.strftime('%b %e %Y')
+
+    def get_success_url(self):
+        return reverse("store:item_detail", kwargs={"id": self.object.id})
+    
+class Category(models.Model):
+	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	category_name = models.CharField(max_length=120, unique=True)
+	description = models.TextField(null=True, blank=True)
+	active = models.BooleanField(default=True)
+	entry_date = models.DateTimeField(auto_now_add=True, auto_now=False)
+	updated = models.DateTimeField(auto_now_add=False, auto_now=True)
+
+	def __str__(self):
+   		return self.category_name
+
+class Issue(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    item = models.ForeignKey('Item', null=True, blank=True, on_delete=models.DO_NOTHING)
+    requisition_no = models.CharField(max_length=200)
+    department = models.CharField(max_length=200)
+    requisition_date = models.DateTimeField(default=datetime.now, blank=True)
+    quantity_requested = models.IntegerField()
+    requesting_staff = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='requesting_staff',  on_delete=models.DO_NOTHING)
+    quantity_issued = models.IntegerField()
+    issued_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='issuing_staff',  on_delete=models.DO_NOTHING)
+    issue_date = models.DateTimeField(auto_now_add = True, auto_now = False)
+    
+    def __str__(self):
+        return str(self.quantity_issued)
+
+
+    def save(self, *args, **kwargs):
+        super(Issue, self).save(*args, **kwargs)
+        
+        try:
+            requisition = Requisition.objects.get(
+                requisition_no=self.requisition_no,
+                requesting_staff=self.requesting_staff,
+                
+                )
+        except Requisition.DoesNotExist:
+            pass
+        
+       
+        if self.id is not None:
+            requisition.requisition_status = 2
+            requisition.save()
+
+
+        p = Item.objects.get(item_name=self.item)
+        p.quantity -= self.quantity_issued
+        p.save()
+  
+
+
+        
+           
+
+
+
+
+        
+
+
+
+
+    
+
+
+
+
+
+
+
+    
+
+
+

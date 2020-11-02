@@ -1,0 +1,93 @@
+{% extends 'base2.html'%}
+{% load static %}
+{% block title%}| Categories {% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
+<link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+{% include "_modal.html" %}
+
+<!-- Page Wrapper -->
+  <div id="wrapper">
+
+
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+          <br><br><br>
+        <div class="row mr-4">
+            <div class="col-md-7 mt-5">
+                <div class="col-md-12">
+                    <div class="row">
+                     
+                        <p class="col-12 text-success lead">Confirm Deletion</p>
+                        <form action='.' method='POST'>{% csrf_token %}
+                        <p class="col-12 lead">Do you want to delete this category "{{ object.category_name }}"?</p>
+                      <div class="ml-3">          
+                        
+                        <button type="submit" class="btn btn-success"><i class="fa fa-barcode text-white"></i> Yes </button>
+                        <a href="{% url 'store:category_list' %}" class="btn btn-info text-white pt-1 pb-2 px-3 mt-3 ml-3 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Category List</a>
+
+
+                        </div>
+                       </form>
+                     </div>
+        </div>          
+      </div>
+      </div>
+    </div>
+    <!-- End of Content Wrapper -->
+      </div>
+      <!-- End of Main Content -->
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<script type="text/javascript">
+    $(function() {
+    
+        $(".bs-modal").each(function () {
+          $(this).modalForm({
+              formURL: $(this).data('form-url')
+          });
+        });
+    
+    });
+
+</script>
+
+
+
+
+<script>
+  $('#mydata').dataTable();
+</script>
+
+
+
+
+
+
+
+{% endblock %}

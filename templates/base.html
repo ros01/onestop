@@ -1,0 +1,164 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.8.2-web/css/all.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+
+
+
+
+
+  <title>RRBN One Stop Shop {% block title %}{% endblock %}</title>
+</head>
+
+<body>
+<header>
+
+<section>
+  
+  <!--navbar start-->
+  <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light p-2">
+    <div class="container">
+      <a class="navbar-brand" href="#"><img class="logo" src="{% static 'img/rrbn-logo.png' %}" alt="rrbn-logo"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="col-auto">
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'index' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:create_portal_account' %}"><i class="fa fa-edit text-success"></i> Register</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:signin' %}" ><i class="fas fa-user text-success"></i> Login</a>
+          </li>
+        </ul>
+      </div>
+      </div>
+    </div>
+  </nav>
+  <!--navbar ends -->
+
+ 
+
+  </section>
+
+  
+       
+      </div>
+</header>
+  {% block styles %} {% endblock %}
+
+  {% block content%}
+
+  {%endblock%}
+  <footer class="bg-success">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-3 col-sm-12">
+                  <p class="text-white ft">RRBN</p>
+                  <p class="text-white ft">
+                    RRBN's key mandate is to regulate the practice of radiography in Nigeria.
+                  </p>
+                  <p class="text-white ft">
+                    RRBN Monitoring and Emforcement portal Automates all processes in RRBN M&E processes.
+                  </p>
+              </div>
+              <div class="col-md-3 col-sm-12">
+                  <p class="text-white ft">Home Links</p>
+                  <a class="text-white flink ft" href="#">Home</a><br />
+                  <a class="text-white flink ft" href="#">About</a><br />
+                  <a class="text-white flink ft" href="#">Services</a><br />
+                  <a class="text-white flink ft" href="#">Help</a><br />
+              </div>
+              <div class="col-md-3 col-sm-12">
+                  <p class="text-white ft">External Links</p>
+                  <a class="text-white flink ft" href="#">RRBN</a><br />
+                  <a class="text-white flink ft" href="#">ARN</a><br />
+                  <a class="text-white flink ft" href="#">NJIRT</a><br />
+                  <a class="text-white flink ft" href="#">MINISTRY OF HEALTH</a>
+              </div>
+              <div class="col-md-3 col-sm-12">
+                  <p class="text-white ft">Contact Us</p>
+                  <p class="text-white flink ft">
+                      Federal Secretariat Complex, Phase I, Annex III, 4th Floor, <br>Central Area - Abuja, Nigeria.
+                  </p>
+                  <p class="text-white ft">+234 092914928</p>
+                  <p class="text-white ft">info@rrbn.gov.ng</p>
+                  <p class="text-white ft">www.rrbn.gov.ng</p>
+              </div>
+          </div>
+      </div>
+  </footer>
+  <div class="copyright">
+      <div class="copyright-container">
+        <center><p>
+            &copy All Rights Reserved RRBN 2019</p>
+          </center>
+      </div>
+    </div>
+
+<script src="{% static 'bootstrap/js/jquery-3.3.1.slim.min.js' %}"></script>
+
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+
+
+        
+        
+
+
+
+
+
+      <script>
+          // Example starter JavaScript for disabling form submissions if there are invalid fields
+          (function () {
+              'use strict';
+              window.addEventListener('load', function () {
+                  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                  var forms = document.getElementsByClassName('needs-validation');
+                  // Loop over them and prevent submission
+                  var validation = Array.prototype.filter.call(forms, function (form) {
+                      form.addEventListener('submit', function (event) {
+                          if (form.checkValidity() === false) {
+                              event.preventDefault();
+                              event.stopPropagation();
+                          }
+                          form.classList.add('was-validated');
+                      }, false);
+                  });
+              }, false);
+          })();
+      </script>
+  </body>
+  </html>
+
+
+
+
+    
+
+
+
+
+
+
+
+
+</html>

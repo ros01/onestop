@@ -1,0 +1,74 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title%}| Welcome {% endblock %}
+{% block styles %}
+
+{% endblock %}
+{% block content %}
+
+
+
+<main class="container">
+
+    <div class="row mt-1 pt-1 mx-1">
+    <div class="col text-left p-0 ml-3 mt-3">
+    <p class="text-success display-4 paragraph3">Successful Creation of Portal Account</p>
+    <hr>
+    </div>
+    </div>
+
+
+<section class="my-0">
+    <div class="container">
+   
+
+<section>
+    
+        <div class="row rounded justify-content-center align-items-center mx-1 pt-4" style="background-color: #bfe3f8;">
+            
+            <div class="col-md-1 col-sm-2 col-xs-4 pb-4">
+               <i class="fas fa-info-circle fa-3x" style="color: #05567b;"></i>
+               
+            
+                </div>
+
+            <div class="col-md-11 col-sm-10 col-xs-8">
+                <p class="lead" style="color: #05567b;">
+                Your Portal Account was successfully created.  Please login to your personalized dashboard to process your requests on the portal</p>
+                <span style="float:right;"> </span> 
+                
+              
+            </div>
+    </div>
+
+</section>
+
+
+
+
+
+
+
+
+    <hr>
+    <div class="d-flex justify-content-end">  
+
+    <a href="{% url 'accounts:signin' %}" class="btn btn-outline-success py-1 px-3 mt-2 mb-4 mr-3"><i class="fas fa-user"></i>  Login</a>
+    
+    
+    <a href="{% url 'index' %}" class="btn btn-warning text-white py-1 px-3 mt-2 mb-4 "><i class="fa fa-angle-double-left" aria-hidden="true"></i> Close</a>
+    
+   
+    
+    </div>
+
+
+    </div>  
+    
+</section>
+
+</main>
+
+<!-- End of Skills -->
+
+{% endblock %}

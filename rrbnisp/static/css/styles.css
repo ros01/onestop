@@ -1,0 +1,410 @@
+/* Nav Bar CSS Begins Here */
+
+main{
+    margin: 5rem 0 0 0;
+}
+
+
+@font-face {
+  font-family: 'Conv_HelveticaNeue';
+  src: url('/static/fonts/HelveticaNeue.eot');
+  src: local('☺'), url('/static/fonts/HelveticaNeue.woff') format('woff'), url('/static/fonts/HelveticaNeue.ttf') format('truetype'), url('/static/fonts/HelveticaNeue.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'helveticaneuethin';
+    src: url('/static/fonts/helveticaneue_thin-webfont.woff2') format('woff2'),
+         url('/static/fonts/helveticaneue_thin-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+@font-face {
+    font-family: 'helveticaneuelight';
+    src: url('/static/fonts/helveticaneue_light-webfont.woff2') format('woff2'),
+         url('/static/fonts/helveticaneue_light-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.asteriskField {
+    display: none;
+}
+
+
+p {
+  font-family: "helveticaneuelight";
+
+}
+
+.paragraph {
+  font-size: 2.5rem;
+
+}
+.paragraph2 {
+  font-size: 2.0rem;
+
+}
+.paragraph3 {
+  font-size: 1.5rem;
+
+}
+
+h1 {
+  font-family: "helveticaneuelight";
+}
+h3 {
+  font-family: "helveticaneuelight";
+}
+
+.alinks{
+  color:#fff;
+}
+
+.card .card-header {
+  border:100px;
+  width: 60%;
+  height: 40px;
+  border-bottom-right-radius: 30px;
+}
+
+.card .card-square {
+  border:100px;
+  width: 60%;
+  height: 80px;
+  border-bottom-right-radius: 30px;
+}
+
+.no-border{
+  border: none;
+}
+
+a:hover{
+  text-decoration: none;
+}
+
+.navbar-brand{
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 24px;
+}
+
+.gutter-reducer{
+  margin-right: -3px;
+  margin-left: -2px;
+}
+
+.expand{
+  width: 280px;
+  border-radius: 0;
+}
+
+.push-up{
+  margin-top: -3px !important;
+}
+
+.push-down{
+  margin-top: 70px;
+}
+
+.button-rectangle{
+  border-radius: 0;
+}
+
+.bg-success-dark{
+  background: rgb(20, 146, 20);
+}
+.bg-success-light{
+  background: rgb(12, 177, 12);
+}
+
+.alighn-left{
+  text-align: left;
+  margin-top: -14px;
+}
+
+.tinyicon{
+  font-size:10px;
+}
+
+.big-icon{
+  font-size: 50px;
+}
+
+.nav-top-push{
+  margin-top: 100px;
+}
+
+.nav-item{
+  margin : 0 10px !important;
+}
+
+.nav-link{
+  color:rgb(2, 68, 2);
+}
+.nav-link:hover{
+  color: rgb(78, 228, 78);
+}
+/* Nav Bar CSS Ends Here */
+
+.logo{
+  width: 80%;
+}
+
+.remove-borer{
+    border: none;
+}
+
+.big-iconz{
+    font-size: 40px;
+    color:rgb(0, 0, 0);
+
+}
+
+.icons-set{
+    width: 40px;
+    height: 40px;
+}
+
+
+
+a.warning:hover{
+    background: orange !important;
+    color: #fff !important;
+}
+
+
+button.warning:hover{
+    background: orange !important;
+    color: #fff !important;
+}
+
+
+
+
+
+.register{
+    background: -webkit-linear-gradient(left, #3931af, #00c6ff);
+    margin-top: 3%;
+    padding: 3%;
+}
+.register-left{
+    text-align: center;
+    color: #fff;
+    margin-top: 4%;
+}
+.register-left input{
+    border: none;
+    border-radius: 1.5rem;
+    padding: 2%;
+    width: 60%;
+    background: #f8f9fa;
+    font-weight: bold;
+    color: #383d41;
+    margin-top: 30%;
+    margin-bottom: 3%;
+    cursor: pointer;
+}
+.register-right{
+    background: #f8f9fa;
+    border-top-left-radius: 10% 50%;
+    border-bottom-left-radius: 10% 50%;
+}
+.register-left img{
+    margin-top: 15%;
+    margin-bottom: 5%;
+    width: 25%;
+    -webkit-animation: mover 2s infinite  alternate;
+    animation: mover 1s infinite  alternate;
+}
+@-webkit-keyframes mover {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-20px); }
+}
+@keyframes mover {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-20px); }
+}
+.register-left p{
+    font-weight: lighter;
+    padding: 12%;
+    margin-top: -9%;
+}
+.register .register-form{
+    padding: 10%;
+    margin-top: 10%;
+}
+
+.text-3
+{
+    padding: -40%;
+    margin: -40%;
+}
+
+.btnRegister{
+    float: right;
+    margin-top: 10%;
+    border: none;
+    border-radius: 1.5rem;
+    padding: 2%;
+    background: #0062cc;
+    color: #fff;
+    font-weight: 600;
+    width: 50%;
+    cursor: pointer;
+}
+.register .nav-tabs{
+    margin-top: 3%;
+    border: none;
+    background: #0062cc;
+    border-radius: 1.5rem;
+    width: 28%;
+    float: right;
+}
+.register .nav-tabs .nav-link{
+    padding: 2%;
+    height: 34px;
+    font-weight: 600;
+    color: #fff;
+    border-top-right-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+}
+.register .nav-tabs .nav-link:hover{
+    border: none;
+}
+.register .nav-tabs .nav-link.active{
+    width: 100px;
+    color: #0062cc;
+    border: 2px solid #0062cc;
+    border-top-left-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
+}
+.register-heading{
+    text-align: center;
+    margin-top: 8%;
+    margin-bottom: -15%;
+    color: #495057;
+}
+
+
+
+.wrapper {    
+  margin-top: 80px;
+  margin-bottom: 20px;
+}
+
+.form-signin {
+  max-width: 420px;
+  padding: 30px 38px 66px;
+  margin: 0 auto;
+  background-color: #eee;
+  border: 3px dotted rgba(0,0,0,0.1);  
+  }
+
+.form-signin-heading {
+  text-align:center;
+  margin-bottom: 30px;
+}
+
+.form-control {
+  position: relative;
+  font-size: 16px;
+  height: auto;
+  padding: 10px;
+}
+
+
+.login {
+  margin-bottom: 0px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+
+
+input[type="text"] {
+  margin-bottom: 0px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+input[type="password"] {
+  margin-bottom: 20px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.colorgraph {
+  height: 7px;
+  border-top: 0;
+  background: #c4e17f;
+  border-radius: 5px;
+  background-image: -webkit-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+  background-image: -moz-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+  background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+  background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+}
+    
+
+
+
+
+
+@media screen and (max-width: 768px) {
+
+  .push-down{
+    padding-bottom: 0px;
+  }
+
+  .gutter-reducer{
+    margin-right: 2px;
+    margin-left: -5px;
+  }
+  
+  .expand{
+    width: 170px;
+    border-radius: 0;
+  }
+}
+
+@media screen and (max-width: 414px) {
+  .expand{
+    width: 392px;
+    border-radius: 0;
+  }
+  
+  .nav-up{
+    margin-top: -20px;
+  }
+
+}
+
+@media screen and (max-width: 375px) {
+  .expand{
+    width: 355px;
+    border-radius: 0;
+  }
+
+  .nav-up{
+    margin-top: -20px;
+  }
+
+}
+
+@media screen and (max-width: 360px) {
+
+  .expand{
+    width: 340px;
+    border-radius: 0;
+  }
+
+  .nav-up{
+    margin-top: -20px;
+  }
+
+}
