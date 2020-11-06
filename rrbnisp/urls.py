@@ -9,6 +9,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('rrbnstaff/', include('rrbnstaff.urls')),
     path('store/', include('store.urls')),
+    path('fleet/', include('fleet.urls')),
 
 
 

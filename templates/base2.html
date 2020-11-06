@@ -125,7 +125,7 @@
 
 
 
-          {% if "requisition" in request.path %}
+          {% if "requisition_list" in request.path %}
 
           <li class="nav-item active ">
             <a class="nav-link" href="{% url 'store:requisition_list' %}">
@@ -146,6 +146,27 @@
           {% endif %}
 
 
+          {% if "issue" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'store:issued_requisitions_list' %}">
+              <i class="material-icons">info_outline</i>
+              <p>Issued Requisitions</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'store:issued_requisitions_list' %}">
+              <i class="material-icons">info_outline</i>
+              <p>Issued Requisitions</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+
 
         </ul>
       </div>
@@ -157,27 +178,30 @@
           <div class="navbar-wrapper">
 
       {% if "dashboard" in request.path %}
-			<a class="navbar-brand" href="javascript:;"><h3>Dashboard</h3></a>
+			<a class="navbar-brand" href="javascript:;"><h4>Dashboard</h4></a>
 
 			{% elif "profile" in request.path %}
 			<a class="navbar-brand" href="javascript:;">Edit Profile</a>
 
 
       {% elif "vendor_list" in request.path %}
-      <a class="navbar-brand" href="javascript:;"><h3>Vendors</h3></a>
+      <a class="navbar-brand" href="javascript:;"><h4>Manage Vendors</h4></a>
 
       
 
       {% elif "category_list" in request.path %}
-      <a class="navbar-brand" href="javascript:;"><h3>Item Categories</h3></a>
+      <a class="navbar-brand" href="javascript:;"><h4>Item Categories</h4></a>
 
       {% elif "items_list" in request.path %}
-      <a class="navbar-brand" href="javascript:;"><h3>Inventory</h3></a>
+      <a class="navbar-brand" href="javascript:;"><h4>Inventory</h4></a>
 
+      {% elif "requisition_list" in request.path %}
+      <a class="navbar-brand" href="javascript:;"><h4>Pending Requisitions</h4></a>
 
+      
 			{% else %}
 
-			<a class="navbar-brand" href="javascript:;"><h3></h3></a>
+			<a class="navbar-brand" href="javascript:;"><h4></h4></a>
           
 			{% endif %}
 

@@ -21,6 +21,8 @@ from .views import (
     RequisitionDetailsView,
     IssueRequisition,
     IssueRequisitionUpdate,
+    IssuedRequisitions,
+    IssuedRequisitionsDetailView,
 
 )
 
@@ -33,11 +35,13 @@ urlpatterns = [
 	path('items_list/', ItemsListView.as_view(), name='items_list'),
 	path('vendor_list/', VendorListView.as_view(), name='vendor_list'),
     path('requisition_list/', RequisitionListView.as_view(), name='requisition_list'), 
+    path('issued_requisitions_list/', IssuedRequisitions.as_view(), name='issued_requisitions_list'), 
     path('<uuid:id>/requisition_details/', RequisitionDetailsView.as_view(), name='requisition_details'),
 	path('create_item/', ItemCreateView.as_view(), name='create_item'),
 	path('create_vendor/', VendorCreateView.as_view(), name='create_vendor'),
 	path('create_category/', CategoryCreateView.as_view(), name='create_category'),
 	path('<uuid:pk>/item_detail/', ItemDetailView.as_view(), name='item_detail'),
+    path('<uuid:pk>/issued_requisitions_detail/', IssuedRequisitionsDetailView.as_view(), name='issued_requisitions_detail'),
 	path('<uuid:id>/vendor_detail/', VendorDetailView.as_view(), name='vendor_detail'),
 	path('<uuid:id>/category_detail/', CategoryDetailView.as_view(), name='category_detail'),
 	path('<uuid:pk>/item_update/', ItemUpdateView.as_view(), name='item_update'),

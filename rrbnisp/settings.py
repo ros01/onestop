@@ -50,7 +50,16 @@ INSTALLED_APPS = [
     'crispy_forms',
     'widget_tweaks',
     'multiselectfield',
+    'tempus_dominus',
+    'bootstrap_datepicker_plus',
 ]
+
+
+
+BOOTSTRAP4 = {
+    'include_jquery': True,
+}
+
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 

@@ -87,15 +87,8 @@
         <div class="d-flex justify-content-end">   
         
         {% for object in issue %}
-        <button type="button" id="update-requisitionn" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'store:update_requisition' issue.first.id %}"><i class="fa fa-list text-white"></i> Update Requisition</button>
-
-
-
-
-
+        <button type="button" id="update-requisitionn" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'store:update_requisition' issue.first.id %}"><i class="fa fa-list text-white"></i> Update Issue Details</button>
         {% endfor %} 
-
-       
         <a href="{% url 'store:requisition_list' %}" class="btn btn-warning text-white py-1 mr-4 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Requisition List</a>
         </div> 
         

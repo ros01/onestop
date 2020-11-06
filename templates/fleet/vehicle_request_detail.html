@@ -1,0 +1,155 @@
+{% extends 'base0.html'%}
+{% load static %}
+{% block title%}| Vehicle Requests {% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
+
+{% endblock %}
+
+{% block content %}
+{% include "_modal.html" %}
+
+<!-- Page Wrapper -->
+  <div id="wrapper">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <!-- Main Content -->
+      <div id="content">
+
+
+      <!-- Begin Page Content -->
+        <div class="container-fluid ">
+           <br>
+
+           <div class="row ml-4 mt-4 pt-4">
+
+           <h3 class="col-12 text-info">Manage Vehicle Requests</h3>
+
+           </div>
+
+        <div class="row mx-4 mt-2 pt-3 bg-white">
+            <div class="col-md-6 mt-0">
+                <div class="col-md-12">
+                    <div class="row">
+                      
+                      <br>
+                        <p class="col-12 text-success lead">Vehicle Requests Details</p>
+                    </div>
+                    <div class="row">
+                        <span class="col-5"><strong>Request No:</strong></span>
+                        <span class="col-6 ">{{object.request_no}}</span>
+                    </div>
+
+                    <div class="row">
+                      <span class="col-5"><strong>Vehicle Name:</strong></span>
+                      <span class="col-6">{{object.vehicle}}</span>
+                  </div>
+
+                  <div class="row">
+                      <span class="col-5"><strong>Vehicle Type:</strong></span>
+                      <span class="col-6">{{object.vehicle.vehicle_type}}</span>
+                  </div>
+                 
+                  <div class="row">
+                      <span class="col-5"><strong>Requesting Staff:</strong></span>
+                      <span class="col-6">{{object.requesting_staff.first_name}} {{object.requesting_staff.last_name}}</span>
+                  </div>
+                  <div class="row">
+                      <span class="col-5"><strong>Staff Department:</strong></span>
+                      <span class="col-6">{{object.department}}</span>
+                    </div>  
+                  <div class="row">
+                      <span class="col-5"><strong>Purpose:</strong></span>
+                      <span class="col-6">{{object.request_reason}}</span>
+                  </div>
+
+                  <div class="row">
+                      <span class="col-5"><strong>Destination:</strong></span>
+                      <span class="col-6">{{object.destination}}</span>
+                  </div>
+                  <div class="row">
+                      <span class="col-5"><strong>Assignment Duration:</strong></span>
+                      <span class="col-6">{{object.request_duration}}</span>
+                  </div>
+
+                  <div class="row">
+                      <span class="col-5"><strong>Request Date:</strong></span>
+                      <span class="col-6">{{object.request_date_pretty}}</span>
+                  </div>
+
+                  <div class="row">
+                      <span class="col-5"><strong>Trip Start Date:</strong></span>
+                      <span class="col-6">{{object.trip_date_pretty}}</span>
+                  </div>
+                </div>
+                <br>
+              </div>   
+
+            <div class="col-md-6 mt-5">
+            <p class="text-success lead">Actions</p>
+            <hr> 
+            <div class="d-flex justify-content-end">   
+            <button type="button" id="issue-request" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'fleet:issue_vehicle_request' object.id %}"><i class="fa fa-list text-white"></i> Assign Vehicle</button>
+            <a href="{% url 'fleet:vehicle_request_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Vehicle Requests List</a>  
+
+            </div>  
+            </div>            
+      </div>
+        <!-- /.container-fluid -->
+      </div>
+
+
+
+
+
+
+
+
+      </div>
+      <!-- End of Main Content -->
+
+      
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+
+
+<script type="text/javascript">
+
+    $(function() {
+        $(".bs-modal").each(function () {
+        
+
+          $(this).modalForm({
+
+
+              formURL: $(this).data('form-url')
+         
+          });
+        });
+    });
+
+</script>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

@@ -31,6 +31,7 @@
           
 
           <button type="button" id="create-vendor" class="bs-modal btn btn-small btn-success mt-1" data-form-url="{% url 'store:create_vendor' %}"><i class="fa fa-list text-white"></i> Add New Vendor</button><br>
+          {% include 'partials/_alerts.html' %}
 
 
 
@@ -39,7 +40,7 @@
           <!-- DataTales Example -->
           <div class="card shadow mb-2">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-info">Vendor Management</h6>
+              <h6 class="m-0 font-weight-bold text-info">Vendors Management</h6>
             </div>
             <div class="card-body">
 

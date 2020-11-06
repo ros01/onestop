@@ -1,0 +1,62 @@
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper bg-light" class="d-flex flex-column">
+
+      <!-- Main Content -->
+    <div id="content">
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+    <div class="modal-header">
+    <h5 class="modal-title text-success">Update Workshop</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+
+    <div class="modal-body">
+    <div class="row">
+    <div class="col">
+    <form method="POST" action="." enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="entered_by" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_entered_by">
+    <div class="form-row">
+    <div class="form-group col-md-6">
+    {{ form.workshop_name|as_crispy_field }}
+    </div>
+    <div class="form-group col-md-6">
+    {{ form.mechanic_name|as_crispy_field }}
+    </div>
+    </div>
+    <div class="form-row">
+    <div class="form-group col-md-6">
+    {{ form.address|as_crispy_field }}
+    </div>
+    <div class="form-group col-md-6">
+    {{ form.phone|as_crispy_field }}
+    </div>
+    </div>
+    <div class="form-row">
+    <div class="form-group col-md-6">
+    {{ form.email|as_crispy_field }}
+    </div>
+    
+    </form>
+    </div>
+    </div>
+    </div>
+
+    <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <button type="button" class="submit-btn btn btn-success ml-4 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i> Update Workshop</button>
+
+    </div>
+    </div>
+    <!-- /.container-fluid -->
+    </div>
+    <!-- End of Main Content -->
+    </div>

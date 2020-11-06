@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Requisition
+from .models import Requisition, Request
 
 
 class RequisitionAdmin(admin.ModelAdmin):
@@ -13,3 +13,13 @@ class RequisitionAdmin(admin.ModelAdmin):
 
 admin.site.register(Requisition, RequisitionAdmin)
 
+
+class RequestAdmin(admin.ModelAdmin):
+  list_display = ('request_no', 'vehicle', 'request_reason', 'requesting_staff', 'department', 'request_status')
+  list_display_links = ('request_no', 'vehicle', 'department')
+  list_filter = ('request_no', 'department')
+  search_fields = ('request_no', 'vehicle', 'request_reason', 'requesting_staff', 'department')
+  list_per_page = 25
+
+
+admin.site.register(Request, RequestAdmin)

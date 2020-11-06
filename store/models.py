@@ -24,12 +24,15 @@ class Vendor(models.Model):
     def date_created_pretty(self):
         return self.date_created.strftime('%b %e %Y')
 
+    class Meta:
+        ordering = ["-date_created"]
+
 class Item(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     item_name = models.CharField(max_length=200)
     item_description = models.TextField(blank=True, null=True)
     category = models.ForeignKey('Category', related_name='default_category', null=True, blank=True, on_delete=models.DO_NOTHING)
-    stock_code = models.CharField(max_length=200)
+    stock_code = models.CharField(max_length=200, unique=True)
     vendor = models.ForeignKey('Vendor', null=True, blank=True, on_delete=models.DO_NOTHING)
     unit = models.CharField(max_length=100, choices = UNIT_OF_MEASUREMENT)
     quantity = models.IntegerField()
@@ -51,6 +54,9 @@ class Item(models.Model):
 
     def get_success_url(self):
         return reverse("store:item_detail", kwargs={"id": self.object.id})
+
+    class Meta:
+        ordering = ["-entry_date"]
     
 class Category(models.Model):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -62,6 +68,11 @@ class Category(models.Model):
 
 	def __str__(self):
    		return self.category_name
+    
+    #class Meta:
+        #ordering = ["-entry_date"]
+
+
 
 class Issue(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -77,6 +88,17 @@ class Issue(models.Model):
     
     def __str__(self):
         return str(self.quantity_issued)
+
+    class Meta:
+        ordering = ["-issue_date"]
+
+
+    def requisition_date_pretty(self):
+        return self.requisition_date.strftime('%b %e %Y')
+
+
+    def issue_date_pretty(self):
+        return self.issue_date.strftime('%b %e %Y')
 
 
     def save(self, *args, **kwargs):

@@ -11,9 +11,11 @@ from django.views.generic import (
      DeleteView,
      TemplateView
 )
-from .forms import RequisitionModelForm
+from .forms import RequisitionModelForm, RequestModelForm
 from bootstrap_modal_forms.generic import BSModalCreateView
-from .models import Requisition
+from .models import Requisition, Request
+from store.models import Issue
+from fleet.models import Assign
 from django.contrib.messages.views import SuccessMessageMixin
 from bootstrap_modal_forms.mixins import PassRequestMixin, CreateUpdateAjaxMixin
 from django.contrib.auth.models import User
@@ -81,11 +83,13 @@ class RequisitionCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
     success_message = 'Requisition created successfully.'
     success_url = reverse_lazy('rrbnstaff:requisition_list') 
 
+class CreateVehicleRequest(PassRequestMixin, SuccessMessageMixin, CreateView):
+    template_name = 'rrbnstaff/create_vehicle_request.html'
+    form_class = RequestModelForm
+    success_message = 'Vehicle Request created successfully.'
+    success_url = reverse_lazy('rrbnstaff:request_list') 
 
 
-
-
-    
 class RequisitionsListView(ListView):
     template_name = "rrbnstaff/requisition_list2.html"
     context_object_name = 'object'
@@ -96,7 +100,22 @@ class RequisitionsListView(ListView):
 
     def get_context_data(self, **kwargs):
         obj = super(RequisitionsListView, self).get_context_data(**kwargs)
-        obj['requisition_qs'] = Requisition.objects.order_by('-requisition_date')
+        obj['requisition_qs'] = Requisition.objects.filter(requisition_status=1, requesting_staff=self.request.user)
+        obj['request_qs'] = Request.objects.filter(requesting_staff=self.request.user)
+        return obj
+
+
+class RequestListView(ListView):
+    template_name = "rrbnstaff/request_list.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return Request.objects.all()
+        
+
+    def get_context_data(self, **kwargs):
+        obj = super(RequestListView, self).get_context_data(**kwargs)
+        obj['request_qs'] = Request.objects.filter(requesting_staff=self.request.user)
         return obj
 
 class RequisitionObjectMixin(object):
@@ -108,29 +127,17 @@ class RequisitionObjectMixin(object):
             obj = get_object_or_404(self.model, id=id)
         return obj 
 
+class RequestObjectMixin(object):
+    model = Request
+    def get_object(self):
+        id = self.kwargs.get('id')
+        obj = None
+        if id is not None:
+            obj = get_object_or_404(self.model, id=id)
+        return obj 
 
 
 
-#class RequisitionCreateView(View):
-    #template_name = 'rrbnstaff/create_requisition.html'
-    #template_name1 = 'rrbnstaff/requisition_detail.html'
-    #def get(self, request,  *args, **kwargs):
-        #context = {}
-        #form = RequisitionModelForm()
-        #context['form'] = form
-
-        #return render(request, self.template_name, context)
-
-    #def post(self, request,  *args, **kwargs):
-        #form = RequisitionModelForm(request.POST)
-        #if form.is_valid():
-            #form.save()
-        #context = {}
-        #context["object"] = Requisition.objects.all()
-        #return render(request, self.template_name1, context)
-
-
-    
 class RequisitionDetailView(RequisitionObjectMixin, View):
     template_name = "rrbnstaff/requisition_detail.html"
 
@@ -139,6 +146,9 @@ class RequisitionDetailView(RequisitionObjectMixin, View):
         return render(request, self.template_name, context)
 
 
+class VehicleRequestDetailView(DetailView):
+    template_name = "fleet/vehicle_detail.html"
+    model = Request
 
 class RequisitionUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
     model = Requisition
@@ -146,6 +156,14 @@ class RequisitionUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
     form_class = RequisitionModelForm
     success_message = 'Success: Requisition updated Successfully'
     success_url = reverse_lazy('rrbnstaff:requisition_list')
+
+
+class VehicleRequestUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
+    model = Request
+    template_name = 'rrbnstaff/update_vehicle_request.html'
+    form_class = RequestModelForm
+    success_message = 'Success: Vehicle Request updated Successfully'
+    success_url = reverse_lazy('rrbnstaff:request_list')
 
 
 class RequisitionDeleteView(RequisitionObjectMixin, View):
@@ -167,6 +185,68 @@ class RequisitionDeleteView(RequisitionObjectMixin, View):
             context['object'] = None
             return redirect('rrbnstaff:requisition_list')
         return render(request, self.template_name, context)
+
+class VehicleRequestDeleteView(RequestObjectMixin, View):
+    template_name = "rrbnstaff/vehicle_request_delete.html" # DetailView
+    def get(self, request, id=None, *args, **kwargs):
+        # GET method
+        context = {}
+        obj = self.get_object()
+        if obj is not None:
+            context['object'] = obj
+        return render(request, self.template_name, context)
+
+    def post(self, request, id=None,  *args, **kwargs):
+        # POST method
+        context = {}
+        obj = self.get_object()
+        if obj is not None:
+            obj.delete()
+            context['object'] = None
+            return redirect('rrbnstaff:request_list')
+        return render(request, self.template_name, context)
+
+
+
+class MyIssuedRequisitions(ListView):
+    template_name = "rrbnstaff/my_issued_requisitions.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return Issue.objects.all()
+        
+
+    def get_context_data(self, **kwargs):
+        obj = super(MyIssuedRequisitions, self).get_context_data(**kwargs)
+        obj['issue_qs'] = Issue.objects.filter(requesting_staff=self.request.user)
+        return obj 
+
+
+class MyVehicleAllocations(ListView):
+    template_name = "rrbnstaff/my_vehicle_allocations.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return Assign.objects.all()
+        
+
+    def get_context_data(self, **kwargs):
+        obj = super(MyVehicleAllocations, self).get_context_data(**kwargs)
+        obj['assign_qs'] = Assign.objects.filter(requesting_staff=self.request.user)
+        return obj 
+
+
+class MyIssuedRequisitionsDetails(DetailView):
+    template_name = "rrbnstaff/my_issued_requisitions_details.html"
+    model = Issue 
+
+class AssignedVehicleDetails(DetailView):
+    template_name = "rrbnstaff/assigned_vehicle_details.html"
+    model = Assign
+
+
+
+    
 
 
 

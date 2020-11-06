@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
 <link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
 <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+<!--  <link href="{% static 'assets/css/material-dashboard.css' %}" rel="stylesheet" />   -->
 
 {% endblock %}
 
@@ -38,7 +39,7 @@
           <!-- DataTales Example -->
             <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-info">Requisition Management</h6>
+              <h6 class="m-0 font-weight-bold text-info">Pending Requisitions</h6>
             </div>
             <div class="card-body">
              <div class="table">
@@ -75,7 +76,10 @@
                 </tr>
                 {% endfor %}
                 {% endif %}
+            
+
                 </tbody>
+                      
                 </table>
               </div>
             </div>

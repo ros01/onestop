@@ -72,7 +72,7 @@ def login(request):
         if user.department == 'Protocol':
             return redirect('rrbnstaff:staff_dashboard')
         if user.role == 'Fleet Managment':
-            return redirect('store:store_dashboard')
+            return redirect('fleet:fleet_dashboard')
         if user.role == 'Human Resources':
             return redirect('store:store_dashboard')
         if user.role == 'Procurement':

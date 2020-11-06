@@ -99,12 +99,12 @@
 
           {% endif %} -->
 
-          {% if "requisition" in request.path %}
+          {% if "requisition_list" in request.path %}
 
           <li class="nav-item active ">
             <a class="nav-link" href="{% url 'rrbnstaff:requisition_list' %}">
-              <i class="material-icons">info_outline</i>
-              <p>Requisitions</p>
+              <i class="material-icons">find_in_page</i>
+              <p>Item Requisitions</p>
             </a>
           </li>
 
@@ -112,8 +112,68 @@
 
           <li class="nav-item ">
             <a class="nav-link" href="{% url 'rrbnstaff:requisition_list' %}">
-              <i class="material-icons">info_outline</i>
-              <p>Requisitions</p>
+              <i class="material-icons">find_in_page</i>
+              <p>Item Requisitions</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "request_list" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:request_list' %}">
+              <i class="material-icons">local_taxi</i>
+              <p>Vehicle Requests</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:request_list' %}">
+              <i class="material-icons">local_taxi</i>
+              <p>Vehicle Requests</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "issue" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_issued_requisitions' %}">
+              <i class="material-icons">assignment</i>
+              <p>My Issued Requisitions</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_issued_requisitions' %}">
+              <i class="material-icons">assignment</i>
+              <p>My Issued Requisitions</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "allocation" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_vehicles_allocations_list' %}">
+              <i class="material-icons">vpn_lock</i>
+              <p>My Assigned Vehicles</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_vehicles_allocations_list' %}">
+              <i class="material-icons">vpn_lock</i>
+              <p>My Assigned Vehicles</p>
             </a>
           </li>
 
@@ -130,15 +190,21 @@
         <div class="container-fluid">
           <div class="navbar-wrapper">
 
-          	 {% if "dashboard" in request.path %}
+      {% if "dashboard" in request.path %}
 			<a class="navbar-brand" href="javascript:;">Dashboard</a>
 
 			{% elif "profile" in request.path %}
 			<a class="navbar-brand" href="javascript:;">Edit Profile</a>
 
+      {% elif "requisition_list" in request.path %}
+      <a class="navbar-brand" href="javascript:;">Requisitions Management</a>
+
+      {% elif "my_issued_requisitions" in request.path %}
+      <a class="navbar-brand" href="javascript:;">Issued Requisitions</a>
+
 			{% else %}
 
-			<a class="navbar-brand" href="javascript:;">Requisitons List</a>
+			<a class="navbar-brand" href="javascript:;"></a>
           
 			{% endif %}
 

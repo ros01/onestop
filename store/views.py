@@ -31,19 +31,6 @@ class DashboardTemplateView(TemplateView):
         #context["inspection"] = Schedule.objects.all()
         return context
 
-class ItemsListView(ListView):
-    template_name = "store/items_list2.html"
-    context_object_name = 'object'
-
-    def get_queryset(self):
-        return Item.objects.all()
-        
-
-    def get_context_data(self, **kwargs):
-        obj = super(ItemsListView, self).get_context_data(**kwargs)
-        obj['items_qs'] = Item.objects.order_by('-entry_date')
-        return obj
-
 class VendorListView(ListView):
     template_name = "store/vendors_list2.html"
     context_object_name = 'object'
@@ -57,12 +44,72 @@ class VendorListView(ListView):
         obj['vendor_qs'] = Vendor.objects.order_by('-date_created')
         return obj
 
-class ItemCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
-    template_name = 'store/create_item2.html'
-    form_class = ItemModelForm
-    success_message = 'Item created Successfully.'
+class ItemCategoyListView(ListView):
+    template_name = "store/items_category_list2.html"
+    context_object_name = 'object'
 
-    success_url = reverse_lazy('store:items_list')
+    def get_queryset(self):
+        return Category.objects.all()
+        
+
+    def get_context_data(self, **kwargs):
+        obj = super(ItemCategoyListView, self).get_context_data(**kwargs)
+        obj['category_qs'] = Category.objects.order_by('-entry_date')
+        return obj
+
+class ItemsListView(ListView):
+    template_name = "store/items_list2.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return Item.objects.all()
+        
+
+    def get_context_data(self, **kwargs):
+        obj = super(ItemsListView, self).get_context_data(**kwargs)
+        obj['items_qs'] = Item.objects.order_by('-entry_date')
+        return obj
+
+class RequisitionListView(ListView):
+    template_name = "store/requisitions_list2.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return Requisition.objects.order_by('-requisition_date')
+        
+
+    def get_context_data(self, **kwargs):
+        obj = super(RequisitionListView, self).get_context_data(**kwargs)
+        obj['requisition_qs'] = Requisition.objects.filter(requisition_status=1)
+        return obj
+
+
+class RequisitionListView(ListView):
+    template_name = "store/requisitions_list2.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return Requisition.objects.order_by('-requisition_date')
+        
+
+    def get_context_data(self, **kwargs):
+        obj = super(RequisitionListView, self).get_context_data(**kwargs)
+        obj['requisition_qs'] = Requisition.objects.filter(requisition_status=1)
+        return obj
+
+
+class IssuedRequisitions(ListView):
+    template_name = "store/issued_requisitions.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return Issue.objects.all()
+        
+
+    def get_context_data(self, **kwargs):
+        obj = super(IssuedRequisitions, self).get_context_data(**kwargs)
+        obj['issued_requisitions_qs'] = Issue.objects.all()
+        return obj
 
 
 class VendorCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
@@ -79,6 +126,13 @@ class CategoryCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
 
     success_url = reverse_lazy('store:category_list')
 
+class ItemCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
+    template_name = 'store/create_item2.html'
+    form_class = ItemModelForm
+    success_message = 'Item created Successfully.'
+
+    success_url = reverse_lazy('store:items_list')
+
 class VendorObjectMixin(object):
     model = Vendor
     def get_object(self):
@@ -87,6 +141,89 @@ class VendorObjectMixin(object):
         if id is not None:
             obj = get_object_or_404(self.model, id=id)
         return obj 
+
+class CategoryObjectMixin(object):
+    model = Category
+    def get_object(self):
+        id = self.kwargs.get('id')
+        obj = None
+        if id is not None:
+            obj = get_object_or_404(self.model, id=id)
+        return obj 
+
+class ItemObjectMixin(object):
+    model = Item
+    def get_object(self):
+        id = self.kwargs.get('id')
+        obj = None
+        if id is not None:
+            obj = get_object_or_404(self.model, id=id)
+        return obj 
+   
+
+class RequisitionObjectMixin(object):
+    model = Requisition
+    def get_object(self):
+        id = self.kwargs.get('id')
+        obj = None
+        if id is not None:
+            obj = get_object_or_404(self.model, id=id)
+        return obj 
+
+class IssueObjectMixin(object):
+    model = Issue
+    def get_object(self):
+        id = self.kwargs.get('id')
+        obj = None
+        if id is not None:
+            obj = get_object_or_404(self.model, id=id)
+        return obj 
+
+class IssueRequisition(RequisitionObjectMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
+    template_name = 'store/issue_requisition.html'
+    template_name1 = 'store/issue_requisition_details2.html'
+    def get(self, request,  *args, **kwargs):
+        context = {}
+        obj = self.get_object()
+        if obj is not None:
+            form = IssueRequisitionModelForm(instance=obj)
+            context['object'] = obj
+            context['form'] = form
+
+        return render(request, self.template_name, context)
+
+
+    def post(self, request,  *args, **kwargs):
+        
+        form = IssueRequisitionModelForm(request.POST)
+        if form.is_valid():
+            if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
+                form.save(commit=False)
+            else:
+                form.save(commit=True)
+            
+        context = {}
+
+        obj = self.get_object()
+        if obj is not None:
+            form = IssueRequisitionModelForm(instance=obj)
+            context['object'] = obj
+            context['form'] = form
+            context['issue'] = Issue.objects.filter (requisition_no=obj.requisition_no)
+
+        return render(request, self.template_name1, context)
+
+
+class ItemDetailView(DetailView):
+    template_name = "store/item_detail2.html"
+    model = Item
+
+
+
+class IssuedRequisitionsDetailView(DetailView):
+    template_name = "store/issued_requisitions_details.html"
+    model = Issue
+
 
 
 class VendorDetailView(VendorObjectMixin, View):
@@ -127,20 +264,6 @@ class VendorDeleteView(VendorObjectMixin, View):
         return render(request, self.template_name, context)
 
 
-class ItemObjectMixin(object):
-    model = Item
-    def get_object(self):
-        id = self.kwargs.get('id')
-        obj = None
-        if id is not None:
-            obj = get_object_or_404(self.model, id=id)
-        return obj 
-   
-class ItemDetailView(DetailView):
-    template_name = "store/item_detail2.html"
-    model = Item
-
-    
 class ItemUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
     model = Item
     template_name = 'store/item_update2.html'
@@ -169,31 +292,6 @@ class ItemDeleteView(ItemObjectMixin, View):
             context['object'] = None
             return redirect('store:items_list')
         return render(request, self.template_name, context)
-
-
-class ItemCategoyListView(ListView):
-    template_name = "store/items_category_list2.html"
-    context_object_name = 'object'
-
-    def get_queryset(self):
-        return Category.objects.all()
-        
-
-    def get_context_data(self, **kwargs):
-        obj = super(ItemCategoyListView, self).get_context_data(**kwargs)
-        obj['category_qs'] = Category.objects.order_by('-entry_date')
-        return obj
-
-
-
-class CategoryObjectMixin(object):
-    model = Category
-    def get_object(self):
-        id = self.kwargs.get('id')
-        obj = None
-        if id is not None:
-            obj = get_object_or_404(self.model, id=id)
-        return obj 
 
 
 class CategoryDetailView(CategoryObjectMixin, View):
@@ -232,82 +330,11 @@ class CategoryDeleteView(CategoryObjectMixin, View):
             return redirect('store:category_list')
         return render(request, self.template_name, context)
 
-
-
-class RequisitionListView(ListView):
-    template_name = "store/requisitions_list2.html"
-    context_object_name = 'object'
-
-    def get_queryset(self):
-        return Requisition.objects.order_by('-requisition_date')
-        
-
-    def get_context_data(self, **kwargs):
-        obj = super(RequisitionListView, self).get_context_data(**kwargs)
-        obj['requisition_qs'] = Requisition.objects.filter(requisition_status=1)
-        return obj
-
-class RequisitionObjectMixin(object):
-    model = Requisition
-    def get_object(self):
-        id = self.kwargs.get('id')
-        obj = None
-        if id is not None:
-            obj = get_object_or_404(self.model, id=id)
-        return obj 
-
 class RequisitionDetailsView(RequisitionObjectMixin, View):
     template_name = "store/requisition_detail2.html" 
     def get(self, request, id=None, *args, **kwargs):
         context = {'object': self.get_object()}
         return render(request, self.template_name, context)
-
-
-
-
-class IssueRequisition(RequisitionObjectMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
-    template_name = 'store/issue_requisition.html'
-    template_name1 = 'store/issue_requisition_details2.html'
-    def get(self, request,  *args, **kwargs):
-        context = {}
-        obj = self.get_object()
-        if obj is not None:
-            form = IssueRequisitionModelForm(instance=obj)
-            context['object'] = obj
-            context['form'] = form
-
-        return render(request, self.template_name, context)
-
-
-    def post(self, request,  *args, **kwargs):
-        
-        form = IssueRequisitionModelForm(request.POST)
-        if form.is_valid():
-            if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
-                form.save(commit=False)
-            else:
-                form.save(commit=True)
-            
-        context = {}
-
-        obj = self.get_object()
-        if obj is not None:
-            form = IssueRequisitionModelForm(instance=obj)
-            context['object'] = obj
-            context['form'] = form
-            context['issue'] = Issue.objects.filter (requisition_no=obj.requisition_no)
-
-        return render(request, self.template_name1, context)
-
-        
-class IssueObjectMixin(object):
-    model = Issue
-    def get_object(self):
-        id = self.kwargs.get('id')
-        obj = None
-        if id is not None:
-            obj = get_object_or_404(self.model, id=id)
-        return obj 
 
 
 class IssueRequisitionDetail(IssueObjectMixin, View):

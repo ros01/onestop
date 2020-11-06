@@ -1,0 +1,161 @@
+{% extends 'base0.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
+<link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+
+{% endblock %}
+
+
+
+{% block content %}
+
+{% include "_modal.html" %}
+
+      <div class="content">
+        <div class="container-fluid ">
+          <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-warning card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">content_copy</i>
+                  </div>
+                  <p class="card-category">Total Vehicle Requests</p>
+                  <h3 class="card-title">150
+                  </h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons text-info">date_range</i>
+                    75 (Requested this Month)
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">update</i>
+                  </div>
+                  <p class="card-category">Total Assigned Vehicles</p>
+                  <h3 class="card-title">125</h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons text-info">date_range</i> 50 (Assigned this Month)
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-danger card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">info_outline</i>
+                  </div>
+                  <p class="card-category">Vehicles Due Maintenance</p>
+                  <h3 class="card-title">75</h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons text-info">date_range</i> 10 (Pending Maintenance this Month)
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-danger card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">info_outline</i>
+                  </div>
+                  <p class="card-category">Vehicle Repair Requests</p>
+                  <h3 class="card-title">50</h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons text-info">date_range</i> 5 (Vehicles repaired this Month)
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+
+
+          <div class="row">
+      
+              <div class="col-md-4" onclick="window.location='{% url 'fleet:vehicle_list' %}';" style="cursor: pointer;">
+              <div class="card remove-borer">
+                <div class="card-body">
+                <button type="button" class="btn info text-info pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/barcode.png' %}" alt="shop"> View Fleet List</button>
+                </div>
+                </div>
+              </div> 
+
+          
+
+            <div class="col-md-4" onclick="window.location='{% url 'fleet:vehicle_request_list' %}';" style="cursor: pointer;">
+              <div class="card remove-borer">
+                <div class="card-body">
+                <button type="button" class="btn warning text-warning pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/car.png' %}" alt="shop"> View Vehicle Requests</button>
+                </div>
+                </div>
+              </div> 
+
+
+              <div class="col-md-4" onclick="window.location='{% url 'fleet:vehicles_allocations_list' %}';" style="cursor: pointer;">
+              <div class="card remove-borer">
+                <div class="card-body">
+                <button type="button" class="btn danger text-danger pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/view-requisition.png' %}" alt="shop"> View Vehicle Assignment</button>
+                </div>
+                </div>
+              </div> 
+
+
+          </div>
+        </div>
+      </div>
+
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+<!-- <script src="{% static 'js/bootstrap.js' %}"></script>-->
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<script type="text/javascript">
+    $(function() {
+    
+        $(".bs-modal").each(function () {
+          $(this).modalForm({
+              formURL: $(this).data('form-url')
+          });
+        });
+    
+    });
+
+
+$("#request-vehicle").modalForm({
+        formURL: "{% url 'rrbnstaff:create_requisition' %}",
+        modalID: "#create-modal"
+    });
+
+
+</script>
+
+
+{% endblock %}

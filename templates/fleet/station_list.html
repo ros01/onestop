@@ -1,0 +1,131 @@
+{% extends 'base0.html'%}
+{% load static %}
+{% block title%}| Stations {% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
+<link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+{% include "_modal.html" %}
+<!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+
+          <!-- Page Heading -->
+         <br><br>
+
+          <h3 class="col-12 text-info">Manage Station Details</h3>
+
+
+
+          <button type="button" id="create-station" class="bs-modal btn btn-small btn-success mt-2" data-form-url="{% url 'fleet:create_station' %}"><i class="fa fa-list text-white"></i> Add New Station</button><br>
+          {% include 'partials/_alerts.html' %}
+
+          <!-- DataTales Example -->
+          <div class="card shadow mb-2">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-info">Stations Management</h6>
+            </div>
+            <div class="card-body">
+
+              <div class="table">
+                <table class="table table-bordered" id="mydata" width="100" cellspacing="0">
+                  <thead class="text-info">
+                    <tr>
+                      <th>S/N</th>
+                      <th width="12%">Station Name</th>
+                      <th width="12%">Contact Name</th>
+                      <th width="16%">Address</th>
+                      <th width="10%">Phone</th>
+                      <th width="14%">Email</th>
+                      <th width="10%">Created On</th>
+                      <th width="26%">Actions</th> 
+                    </tr>
+                  </thead>
+
+                <tbody>
+                {% if station_qs %}
+                {% for object in station_qs %}
+                <tr>
+                <td>{{forloop.counter}}</td>
+                <td width="12%">{{object.station_name}}</td>
+                <td width="12%">{{object.contact_name}}</td>
+                <td width="16%">{{object.address}}</td>
+                <td width="10%">{{object.phone}}</td>
+                <td width="14%">{{object.email}}</td>
+                <td width="10%">{{object.date_created_pretty}}</td>
+                <td width="26%">
+                  <a class="btn btn-success" href="{% url 'fleet:station_detail' object.pk %}"> View</a>
+                  <button type="button" id="update_station" class="bs-modal btn btn-small btn-primary mt-1" data-form-url="{% url 'fleet:station_update' object.pk %}"><i class="fa fa-list text-white"></i> Update</button>
+                   <button type="button" id="delete-station" class="bs-modal btn btn-small btn-danger mt-1" data-form-url="{% url 'fleet:station_delete' object.id %}"><i class="fa fa-list text-white"></i>  Delete</button> 
+                </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+                </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+      
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<script type="text/javascript">
+    $(function() {
+    
+        $(".bs-modal").each(function () {
+          $(this).modalForm({
+              formURL: $(this).data('form-url')
+          });
+        });
+    
+    });
+
+</script>
+
+
+
+
+<script>
+  $('#mydata').dataTable();
+</script>
+
+
+
+
+
+
+
+{% endblock %}
