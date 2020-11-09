@@ -53,7 +53,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('Audit', 'Audit'),
         ('ICT', 'ICT'),
         ('Stores', 'Stores'),
-        ('Protocol', 'Protocol'),
+        ('Institute', 'Institute'),
+        ('Protocol', 'PR & Protocol'),
         )
 
     MODULE_NAME = (

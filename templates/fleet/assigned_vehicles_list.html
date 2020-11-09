@@ -27,14 +27,14 @@
           <!-- Page Heading -->
          <br><br><br>
 
-         <h3 class="col-12 text-info">Manage Vehicle Assignment</h3>
+         <h3 class="col-12 text-info">Trip Finalization</h3>
 
          
 
            <!-- DataTales Example -->
           <div class="card shadow mb-2">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-info">Vehicle Assignments Management</h6>
+              <h6 class="m-0 font-weight-bold text-info">Assigned Vehicles List</h6>
             </div>
             <div class="card-body">
 
@@ -70,7 +70,7 @@
                 <td width="14%">{{object.approved_date}}</td>
                 <td width="10%">
 
-                <a href="{% url 'fleet:vehicles_allocations_detail' object.pk %}" class="btn btn-outline-warning btn-sm">View Vehicle Requests</a></td>
+                <a href="{% url 'fleet:vehicles_allocations_detail' object.id %}" class="btn btn-outline-warning btn-sm">View and Finalize Trips</a></td>
 
                 </td>
                 </tr>

@@ -12,7 +12,7 @@
 <div class="container-fluid">
 
 <div class="modal-header">
-<h5 class="modal-title text-success">Add Vehicle</h5>
+<h5 class="modal-title text-success">Enter Repair Record</h5>
 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 <span aria-hidden="true">&times;</span>
 </button>
@@ -23,70 +23,46 @@
 <div class="col">
 <form method="POST" action="." enctype="multipart/form-data">
 {% csrf_token %}
-<input type="hidden" name="entered_by" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_entered_by">
+<input type="hidden" name="authorised_by" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_authorised_by">
 <div class="form-row">
 <div class="form-group col-md-6">
-{{ form.vehicle_name|as_crispy_field }}
+{{ form.vehicle|as_crispy_field }}
 </div>
 <div class="form-group col-md-6">
-{{ form.vehicle_type|as_crispy_field }}
+{{ form.driver|as_crispy_field }}
 </div>
 </div>
-
 <div class="form-row">
 <div class="form-group col-md-6">
-{{ form.colour|as_crispy_field }}
+{{ form.current_mileage|as_crispy_field }}
 </div>
 <div class="form-group col-md-6">
-{{ form.description|as_crispy_field }}
+{{ form.fault|as_crispy_field }}
 </div>
 </div>
-
 <div class="form-row">
 <div class="form-group col-md-6">
-{{ form.model|as_crispy_field }}
+{{ form.repair_details|as_crispy_field }}
 </div>
 <div class="form-group col-md-6">
-{{ form.purchase_year|as_crispy_field }}
-</div>
-</div>
-
-
-<div class="form-row">
-<div class="form-group col-md-6">
-{{ form.engine_number|as_crispy_field }}
-</div>
-<div class="form-group col-md-6">
-{{ form.chasis_number|as_crispy_field }}
+{{ form.repair_cost|as_crispy_field }}
 </div>
 </div>
 
 <div class="form-row">
 <div class="form-group col-md-6">
-{{ form.location|as_crispy_field }}
+{{ form.workshop|as_crispy_field }}
 </div>
 <div class="form-group col-md-6">
-{{ form.department_assigned|as_crispy_field }}
+{{ form.mechanic_name|as_crispy_field }}
 </div>
 </div>
 
 <div class="form-row">
 <div class="form-group col-md-6">
-{{ form.license_no|as_crispy_field }}
-</div>
-<div class="form-group col-md-6">
-{{ form.insurance_details|as_crispy_field }}
+{{ form.reported_by|as_crispy_field }}
 </div>
 </div>
-
-<div class="form-row">
-<div class="form-group col-md-6">
-{{ form.category|as_crispy_field }}
-</div>
-
-</div>
-
-
     
 </form>
 </div>
@@ -95,7 +71,7 @@
 
 <div class="modal-footer">
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-<button type="button" class="submit-btn btn btn-success ml-4 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i> Create Vehicle</button>
+<button type="button" class="submit-btn btn btn-success ml-4 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i> Record Repairs</button>
 
 </div>
 </div>

@@ -1,6 +1,6 @@
 {% extends 'base0.html'%}
 {% load static %}
-{% block title%}| Vehicle Requests {% endblock %}
+{% block title%}| Vehicle Repair Records {% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
@@ -21,20 +21,25 @@
 
       <!-- Main Content -->
       <div id="content">
-      <!-- Begin Page Content -->
+
+        <!-- Begin Page Content -->
         <div class="container-fluid">
 
+
           <!-- Page Heading -->
-         <br><br><br>
+         <br><br>
 
-         <h3 class="col-12 text-info">Assign Vehicle</h3>
+          <h3 class="col-12 text-info">Vehicle Repairs List</h3>
 
-         
 
-           <!-- DataTales Example -->
+
+          <button type="button" id="record-fueling" class="bs-modal btn btn-small btn-success mt-2" data-form-url="{% url 'fleet:record_repairs' %}"><i class="fa fa-list text-white"></i> Create Repair Record</button><br>
+          {% include 'partials/_alerts.html' %}
+
+          <!-- DataTales Example -->
           <div class="card shadow mb-2">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-info">Pending Vehicle Requests</h6>
+              <h6 class="m-0 font-weight-bold text-info">Manage Repair Records</h6>
             </div>
             <div class="card-body">
 
@@ -43,33 +48,31 @@
                   <thead class="text-info">
                     <tr>
                       <th>S/N</th>
-                      <th width="10%">Requisition No</th>
-                      <th width="10%">Requesting Staff</th>
-                      <th width="13%">Department</th>
-                      <th width="13%">Vehicle Name</th>
-                      <th width="13%">Destination</th>
-                      <th width="13%">Trip Duration</th>
-                      <th width="10%">Request Date</th>
-                      <th width="18%">Actions</th>
+                      <th width="10%">Vehicle Name</th>
+                      <th width="14%">Fualt</th>
+                      <th width="10%">Driver</th>
+                      <th width="12%">Current Mileage</th>
+                      <th width="14%">Repair Workshop</th>
+                      <th width="10%">Repair Date</th>
+                      <th width="10%">Authorized By:</th>
+                      <th width="20%">Actions</th> 
                     </tr>
                   </thead>
-
                 <tbody>
-                {% if request_qs %}
-                {% for object in request_qs %}
+                {% if repairs_qs %}
+                {% for object in repairs_qs %}
                 <tr>
                 <td>{{forloop.counter}}</td>
-                <td width="10%">{{object.request_no}}</td>
-                <td width="10%">{{object.requesting_staff.first_name}} {{object.requesting_staff.last_name}}</td>
-                <td width="13%">{{object.department}}</td>
-                <td width="13%">{{object.vehicle}}</td>
-                <td width="13%">{{object.destination}}</td>
-                <td width="13%">{{object.request_duration}}</td>
-                <td width="10%">{{object.request_date_pretty}}</td>
-                <td width="18%">
-
-                <a href="{% url 'fleet:vehicle_request_detail' object.pk %}" class="btn btn-outline-warning btn-sm">Assign Vehicle</a></td>
-
+                <td width="10%">{{object.vehicle}}</td>
+                <td width="14%">{{object.fault}}</td>
+                <td width="10%">{{object.driver}}</td>
+                <td width="12%">{{object.current_mileage}}</td>
+                <td width="14%">{{object.workshop}}</td>
+                <td width="10%">{{object.repair_date_pretty}}</td>
+                <td width="10%">{{object.authorised_by.first_name}} {{object.authorised_by.last_name}}</td>
+                <td width="20%">
+                  <a class="btn btn-success" href="{% url 'fleet:repairs_detail' object.pk %}"> View</a>
+                  <button type="button" id="update_repairs" class="bs-modal btn btn-small btn-primary mt-1" data-form-url="{% url 'fleet:repairs_update' object.pk %}"><i class="fa fa-list text-white"></i> Update</button>
                 </td>
                 </tr>
                 {% endfor %}
@@ -85,11 +88,16 @@
 
       </div>
       <!-- End of Main Content -->
+
+      
+
     </div>
     <!-- End of Content Wrapper -->
 
   </div>
   <!-- End of Page Wrapper -->
+
+
 <script src="{% static 'js/jquery.js' %}"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>

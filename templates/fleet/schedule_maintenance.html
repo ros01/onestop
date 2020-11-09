@@ -1,5 +1,8 @@
 {% load widget_tweaks %}
 {% load crispy_forms_tags %}
+{# Django Tempus Dominus assets are included in `{{ form.media }}` #}
+{{ form.media }}
+
 
 
 <!-- Content Wrapper -->
@@ -12,7 +15,7 @@
 <div class="container-fluid">
 
 <div class="modal-header">
-<h5 class="modal-title text-success">Add Vehicle</h5>
+<h5 class="modal-title text-success">Schedule Vehicle Maintenance</h5>
 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 <span aria-hidden="true">&times;</span>
 </button>
@@ -23,70 +26,52 @@
 <div class="col">
 <form method="POST" action="." enctype="multipart/form-data">
 {% csrf_token %}
-<input type="hidden" name="entered_by" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_entered_by">
+
+
+<input type="hidden" name="maintenance_scheduled_by" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_maintenance_scheduled_by">
+{{ form.schedule_no|as_crispy_field }}
 <div class="form-row">
 <div class="form-group col-md-6">
-{{ form.vehicle_name|as_crispy_field }}
+
+{{ form.vehicle|as_crispy_field }}
 </div>
 <div class="form-group col-md-6">
-{{ form.vehicle_type|as_crispy_field }}
+{{ form.driver|as_crispy_field }}
 </div>
 </div>
+<div class="form-row">
+<div class="form-group col-md-6">
+{{ form.last_maintenance_mileage|as_crispy_field }}
+</div>
+<div class="form-group col-md-6">
+{{ form.last_maintenance_date|as_crispy_field }}
+</div>
+</div>
+<div class="form-row">
+<div class="form-group col-md-6">
+{{ form.maintenance_due_date|as_crispy_field }}
+</div>
+<div class="form-group col-md-6">
+{{ form.workshop|as_crispy_field }}
+</div>
+</div>
+ 
 
 <div class="form-row">
 <div class="form-group col-md-6">
-{{ form.colour|as_crispy_field }}
+{{ form.mechanic_name|as_crispy_field }}
 </div>
 <div class="form-group col-md-6">
-{{ form.description|as_crispy_field }}
-</div>
-</div>
-
-<div class="form-row">
-<div class="form-group col-md-6">
-{{ form.model|as_crispy_field }}
-</div>
-<div class="form-group col-md-6">
-{{ form.purchase_year|as_crispy_field }}
-</div>
-</div>
-
-
-<div class="form-row">
-<div class="form-group col-md-6">
-{{ form.engine_number|as_crispy_field }}
-</div>
-<div class="form-group col-md-6">
-{{ form.chasis_number|as_crispy_field }}
-</div>
-</div>
-
-<div class="form-row">
-<div class="form-group col-md-6">
-{{ form.location|as_crispy_field }}
-</div>
-<div class="form-group col-md-6">
-{{ form.department_assigned|as_crispy_field }}
+{{ form.maintenance_cost_estimate|as_crispy_field }}
 </div>
 </div>
 
 <div class="form-row">
 <div class="form-group col-md-6">
-{{ form.license_no|as_crispy_field }}
-</div>
-<div class="form-group col-md-6">
-{{ form.insurance_details|as_crispy_field }}
-</div>
-</div>
-
-<div class="form-row">
-<div class="form-group col-md-6">
-{{ form.category|as_crispy_field }}
+{{ form.projected_maintenance|as_crispy_field }}
 </div>
 
 </div>
-
-
     
 </form>
 </div>
@@ -95,7 +80,7 @@
 
 <div class="modal-footer">
 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-<button type="button" class="submit-btn btn btn-success ml-4 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i> Create Vehicle</button>
+<button type="button" class="submit-btn btn btn-success ml-4 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i> Schedule Maintenance</button>
 
 </div>
 </div>

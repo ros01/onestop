@@ -101,7 +101,6 @@ class RequisitionsListView(ListView):
     def get_context_data(self, **kwargs):
         obj = super(RequisitionsListView, self).get_context_data(**kwargs)
         obj['requisition_qs'] = Requisition.objects.filter(requisition_status=1, requesting_staff=self.request.user)
-        obj['request_qs'] = Request.objects.filter(requesting_staff=self.request.user)
         return obj
 
 
@@ -115,7 +114,7 @@ class RequestListView(ListView):
 
     def get_context_data(self, **kwargs):
         obj = super(RequestListView, self).get_context_data(**kwargs)
-        obj['request_qs'] = Request.objects.filter(requesting_staff=self.request.user)
+        obj['request_qs'] = Request.objects.filter(request_status=1, requesting_staff=self.request.user)
         return obj
 
 class RequisitionObjectMixin(object):

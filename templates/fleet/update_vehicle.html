@@ -24,6 +24,7 @@
 <form method="POST" action="." enctype="multipart/form-data">
 {% csrf_token %}
 <input type="hidden" name="entered_by" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_entered_by">
+
 <div class="form-row">
 <div class="form-group col-md-6">
 {{ form.vehicle_name|as_crispy_field }}
@@ -32,14 +33,25 @@
 {{ form.vehicle_type|as_crispy_field }}
 </div>
 </div>
+
 <div class="form-row">
+<div class="form-group col-md-6">
+{{ form.colour|as_crispy_field }}
+</div>
 <div class="form-group col-md-6">
 {{ form.description|as_crispy_field }}
 </div>
+</div>
+
+<div class="form-row">
 <div class="form-group col-md-6">
-{{ form.category|as_crispy_field }}
+{{ form.model|as_crispy_field }}
+</div>
+<div class="form-group col-md-6">
+{{ form.purchase_year|as_crispy_field }}
 </div>
 </div>
+
 
 <div class="form-row">
 <div class="form-group col-md-6">
@@ -52,7 +64,7 @@
 
 <div class="form-row">
 <div class="form-group col-md-6">
-{{ form.colour|as_crispy_field }}
+{{ form.location|as_crispy_field }}
 </div>
 <div class="form-group col-md-6">
 {{ form.department_assigned|as_crispy_field }}
@@ -67,6 +79,17 @@
 {{ form.insurance_details|as_crispy_field }}
 </div>
 </div>
+
+<div class="form-row">
+<div class="form-group col-md-6">
+{{ form.category|as_crispy_field }}
+</div>
+
+</div>
+
+
+
+
 
     
 </form>

@@ -11,10 +11,10 @@ from django.views.generic import (
      DeleteView,
      TemplateView
 )
-from .models import Station, Workshop, Category, Vehicle, Assign, Release, Fueling, Repair, Maintenance
+from .models import Station, Workshop, Category, Vehicle, Assign, Release, Fueling, Repair, Maintenance, Schedule
 from rrbnstaff.models import Request
 
-from .forms import WorkshopModelForm, StationModelForm, CategoryModelForm, VehicleModelForm, IssueVehicleRequestModelForm
+from .forms import WorkshopModelForm, StationModelForm, CategoryModelForm, VehicleModelForm, IssueVehicleRequestModelForm, FinalizeTripModelForm, FuelingModelForm, RepairsModelForm, ScheduleModelForm
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from bootstrap_modal_forms.generic import BSModalCreateView
@@ -167,6 +167,7 @@ class RequestObjectMixin(object):
         if id is not None:
             obj = get_object_or_404(self.model, id=id)
         return obj 
+
 
 class VehicleRequestDetail(RequestObjectMixin, View):
     template_name = "fleet/vehicle_request_detail.html" 
@@ -409,14 +410,220 @@ class VehicleAssignmentList(ListView):
 
     def get_context_data(self, **kwargs):
         obj = super(VehicleAssignmentList, self).get_context_data(**kwargs)
-        obj['vehicle_assignment_qs'] = Assign.objects.all()
+        obj['vehicle_assignment_qs'] = Assign.objects.filter(trip_status="created")
         return obj
 
-class VehicleAllocationsDetail(DetailView):
-    template_name = "fleet/vehicle_allocation_details.html"
-    model = Assign
 
 
 
 
+class VehicleAllocationsDetail(AssignObjectMixin, View):
+    template_name = "fleet/vehicle_allocation_details.html" 
+    def get(self, request, id=None, *args, **kwargs):
+        context = {'object': self.get_object()}
+        return render(request, self.template_name, context)
 
+
+class FinalizeTrip(AssignObjectMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
+    template_name = 'fleet/finalize_trip.html'
+    template_name1 = 'fleet/finalized_trip_details.html'
+    def get(self, request,  *args, **kwargs):
+        context = {}
+        obj = self.get_object()
+        if obj is not None:
+            form = FinalizeTripModelForm(instance=obj)
+            context['object'] = obj
+            context['form'] = form
+
+        return render(request, self.template_name, context)
+
+
+    def post(self, request,  *args, **kwargs):
+        
+        form = FinalizeTripModelForm(request.POST)
+        if form.is_valid():
+            if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
+                form.save(commit=False)
+            else:
+                form.save(commit=True)
+            
+        context = {}
+
+        obj = self.get_object()
+        if obj is not None:
+            form = FinalizeTripModelForm(instance=obj)
+            context['object'] = obj
+            context['form'] = form
+            context['finalize'] = Release.objects.filter (request_no=obj.request_no)
+
+        return render(request, self.template_name1, context)
+
+class ReleaseObjectMixin(object):
+    model = Release
+    def get_object(self):
+        id = self.kwargs.get('id')
+        obj = None
+        if id is not None:
+            obj = get_object_or_404(self.model, id=id)
+        return obj 
+
+
+
+class UpdateTripFinalization(ReleaseObjectMixin, View):
+    template_name = "fleet/update_finalize_trip.html" 
+    template_name1 = "fleet/finalized_trip_details2.html" 
+    
+    def get(self, request, id=None, *args, **kwargs):
+        # GET method
+        context = {}
+        obj = self.get_object()
+        if obj is not None:
+            form = FinalizeTripModelForm(instance=obj)
+            context['object'] = obj
+            context['form'] = form
+        return render(request, self.template_name, context)
+
+    def post(self, request, id=None,  *args, **kwargs):
+        # POST method
+        context = {}
+        obj = self.get_object()
+        if obj is not None:
+            form = FinalizeTripModelForm(request.POST or None, instance=obj)
+            if form.is_valid():
+                form.save()
+            context['object'] = obj
+            context['form'] = form
+            context['issue'] = Assign.objects.filter (request_no=obj.request_no)
+        messages.success(request, ('Vehicle Assignment Update Successful'))
+        return render(request, self.template_name1, context)
+
+
+class TripHistoryList(ListView):
+    template_name = "fleet/trip_history.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return Assign.objects.all()
+        
+
+    def get_context_data(self, **kwargs):
+        obj = super(TripHistoryList, self).get_context_data(**kwargs)
+        obj['trip_history_qs'] = Assign.objects.all()
+        return obj
+
+
+class TripHistory(AssignObjectMixin, View):
+    template_name = "fleet/trip_history_details.html" 
+
+    def get(self, request, id=None,  *args, **kwargs):
+        context = {}
+        obj = self.get_object()
+        if obj is not None:
+            
+            context['object'] = obj
+            context['release'] = Release.objects.filter (request_no=obj.request_no)
+        return render(request, self.template_name, context)
+
+
+
+class FuelingRecordView(PassRequestMixin, SuccessMessageMixin, CreateView):
+    template_name = 'fleet/record_fueling.html'
+    form_class = FuelingModelForm
+    success_message = 'Fueling Records Entered Successfully.'
+
+    success_url = reverse_lazy('fleet:fueling_list')
+
+
+class FuelingListView(ListView):
+    template_name = "fleet/fueling_list.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return Fueling.objects.all()
+        
+
+    def get_context_data(self, **kwargs):
+        obj = super(FuelingListView, self).get_context_data(**kwargs)
+        obj['fueling_qs'] = Fueling.objects.all()
+        return obj
+
+
+class FuelingDetailView(DetailView):
+    template_name = "fleet/fueling_detail.html"
+    model = Fueling
+
+
+class FuelingUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
+    model = Fueling
+    template_name = 'fleet/update_fueling_record.html'
+    form_class = FuelingModelForm
+    success_message = 'Success: Fueling Details Successfully Updated.'
+    success_url = reverse_lazy('fleet:fueling_list')
+
+
+class RepairsRecordView(PassRequestMixin, SuccessMessageMixin, CreateView):
+    template_name = 'fleet/record_repairs.html'
+    form_class = RepairsModelForm
+    success_message = 'Repairs Records Entered Successfully.'
+
+    success_url = reverse_lazy('fleet:repairs_list')
+
+class RepairsListView(ListView):
+    template_name = "fleet/repairs_list.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return Repair.objects.all()
+        
+
+    def get_context_data(self, **kwargs):
+        obj = super(RepairsListView, self).get_context_data(**kwargs)
+        obj['repairs_qs'] = Repair.objects.all()
+        return obj
+
+class RepairsDetailView(DetailView):
+    template_name = "fleet/repairs_detail.html"
+    model = Repair
+
+
+class RepairsUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
+    model = Repair
+    template_name = 'fleet/update_repair_records.html'
+    form_class = RepairsModelForm
+    success_message = 'Success: Repairs Details Successfully Updated.'
+    success_url = reverse_lazy('fleet:repairs_list')
+
+
+    
+    
+class ScheduleMaintenance(PassRequestMixin, SuccessMessageMixin, CreateView):
+    template_name = 'fleet/schedule_maintenance.html'
+    form_class = ScheduleModelForm
+    success_message = 'Vehicle Maintenance Scheduled Successfully.'
+
+    success_url = reverse_lazy('fleet:schedule_list')
+
+class ScheduleListView(ListView):
+    template_name = "fleet/schedule_list.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return Schedule.objects.all()
+        
+
+    def get_context_data(self, **kwargs):
+        obj = super(ScheduleListView, self).get_context_data(**kwargs)
+        obj['schedule_qs'] = Schedule.objects.all()
+        return obj
+        
+class ScheduleDetailView(DetailView):
+    template_name = "fleet/schedule_details.html"
+    model = Schedule
+
+
+class ScheduleUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
+    model = Schedule
+    template_name = 'fleet/update_maintenance_schedule.html'
+    form_class = ScheduleModelForm
+    success_message = 'Success: Schedule Details Successfully Updated.'
+    success_url = reverse_lazy('fleet:schedule_list')

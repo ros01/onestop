@@ -1,6 +1,6 @@
 {% extends 'base0.html'%}
 {% load static %}
-{% block title%}| Vehicle Requests {% endblock %}
+{% block title%}| Vehicle Allocations History {% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
@@ -27,14 +27,14 @@
           <!-- Page Heading -->
          <br><br><br>
 
-         <h3 class="col-12 text-info">Assign Vehicle</h3>
+         <h3 class="col-12 text-info">Vehicle Assignment & Trip History</h3>
 
          
 
            <!-- DataTales Example -->
           <div class="card shadow mb-2">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-info">Pending Vehicle Requests</h6>
+              <h6 class="m-0 font-weight-bold text-info">Trip Details</h6>
             </div>
             <div class="card-body">
 
@@ -43,32 +43,34 @@
                   <thead class="text-info">
                     <tr>
                       <th>S/N</th>
-                      <th width="10%">Requisition No</th>
-                      <th width="10%">Requesting Staff</th>
-                      <th width="13%">Department</th>
-                      <th width="13%">Vehicle Name</th>
-                      <th width="13%">Destination</th>
-                      <th width="13%">Trip Duration</th>
-                      <th width="10%">Request Date</th>
-                      <th width="18%">Actions</th>
+                      <th width="10%">Request No</th>
+                      <th width="12%">Requesting Staff</th>
+                      <th width="10%">Department</th>
+                      <th width="12%">Vehicle Name</th>
+                      <th width="10%">Destination</th>
+                      <th width="12%">Trip Start Date</th>
+                      <th width="12%">Trip End Date</th>
+                      <th width="12%">Approval Date</th>
+                      <th width="10%">Actions</th>
                     </tr>
                   </thead>
 
                 <tbody>
-                {% if request_qs %}
-                {% for object in request_qs %}
+                {% if trip_history_qs %}
+                {% for object in trip_history_qs %}
                 <tr>
                 <td>{{forloop.counter}}</td>
                 <td width="10%">{{object.request_no}}</td>
-                <td width="10%">{{object.requesting_staff.first_name}} {{object.requesting_staff.last_name}}</td>
-                <td width="13%">{{object.department}}</td>
-                <td width="13%">{{object.vehicle}}</td>
-                <td width="13%">{{object.destination}}</td>
-                <td width="13%">{{object.request_duration}}</td>
-                <td width="10%">{{object.request_date_pretty}}</td>
-                <td width="18%">
+                <td width="12%">{{object.requesting_staff.first_name}} {{object.requesting_staff.last_name}}</td>
+                <td width="10%">{{object.department}}</td>
+                <td width="12%">{{object.vehicle}}</td>
+                <td width="10%">{{object.destination}}</td>
+                <td width="12%">{{object.start_date_pretty}}</td>
+                <td width="12%">{{object.end_date_pretty}}</td>
+                <td width="12%">{{object.approved_date_pretty}}</td>
+                <td width="10%">
 
-                <a href="{% url 'fleet:vehicle_request_detail' object.pk %}" class="btn btn-outline-warning btn-sm">Assign Vehicle</a></td>
+                <a href="{% url 'fleet:trip_history_details' object.id %}" class="btn btn-outline-warning btn-sm">View Trip History</a></td>
 
                 </td>
                 </tr>

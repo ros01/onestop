@@ -1,0 +1,80 @@
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{{ form.media }}        
+
+
+<form method="post" action="">
+  {% csrf_token %}
+
+  {{ form.request_date|as_crispy_field }}
+  {{ form.department|as_crispy_field }}
+
+ <div class="modal-header">
+    <h5 class="modal-title text-success">Update Trip Finalization</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row">
+
+    <input type="hidden" name="released_by" class="form-control" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_released_by"  id="div_id_released_by">
+    <div class="form-group col-md-4">
+    {{ form.request_no|as_crispy_field }}
+    </div>
+
+    <div class="form-group col-md-4">
+    {{ form.vehicle|as_crispy_field }}
+    </div>
+
+    <div class="form-group col-md-4">
+    {{ form.requesting_staff|as_crispy_field }}
+    </div>
+    </div>
+
+    <div class="row">
+    <div class="form-group col-md-4">
+    {{ form.driver|as_crispy_field }}
+    </div>
+
+    <div class="form-group col-md-4">
+    {{ form.start_date|as_crispy_field }}
+    </div>
+    <div class="form-group col-md-4">
+    {{ form.end_date|as_crispy_field }}
+    </div>
+    </div>
+
+    <div class="row">
+    <div class="form-group col-md-4">
+    {{ form.trip_start_mileage|as_crispy_field }}
+    </div>
+    <div class="form-group col-md-4">
+    {{ form.trip_end_mileage|as_crispy_field }}
+    </div>
+  
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times text-white"></i>  Close</button>
+    <button type="button" class="submit-btn btn btn-success ml-2 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i>  Update Trip Finalization</button>
+
+  </div>
+
+</form>
+
+
+
+
+
+
+
+
+     
+
+    

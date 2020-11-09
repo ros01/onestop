@@ -40,7 +40,7 @@ urlpatterns = [
 	path('<uuid:pk>/vehicle_request_detail/', VehicleRequestDetailView.as_view(), name='vehicle_request_detail'),
 	path('<uuid:pk>/vehicle_request_update/', VehicleRequestUpdateView.as_view(), name='vehicle_request_update'),
 	path('<uuid:id>/vehicle_request_delete/', VehicleRequestDeleteView.as_view(), name='vehicle_request_delete'),
-	path('<uuid:pk>/assigned_vehicle_details/', AssignedVehicleDetails.as_view(), name='assigned_vehicle_details'),
+	path('<uuid:pk>/allocated_vehicle_details/', AssignedVehicleDetails.as_view(), name='allocated_vehicle_details'),
 	
     
     ]

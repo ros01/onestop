@@ -41,7 +41,7 @@
 
                      <div class="row">
                         <span class="col-5"><strong>Vehicle Name:</strong></span>
-                        <span class="col-6 ">{{object.name}}</span>
+                        <span class="col-6 ">{{object.vehicle}}</span>
                     </div> 
                    <div class="row">
                       <span class="col-5"><strong>Vehicle Type:</strong></span>
@@ -107,8 +107,12 @@
              
               <hr> 
               <div class="d-flex justify-content-end">  
-              <a href="{% url 'fleet:vehicles_allocations_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Vehicle Assignment List</a>  
-            </div>  
+                 <button type="button" id="finalize-trip" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'fleet:finalize_trip' object.id %}"><i class="fa fa-list text-white"></i> Finalize Trip</button>
+              <a href="{% url 'fleet:vehicles_allocations_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Assigned Vehicles List</a>  
+             
+             </div>  
+
+            
             </div>
 
 
