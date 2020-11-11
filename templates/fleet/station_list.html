@@ -1,5 +1,6 @@
 {% extends 'base0.html'%}
 {% load static %}
+{% load humanize %}
 {% block title%}| Stations {% endblock %}
 
 {% block styles %}
@@ -48,13 +49,14 @@
                   <thead class="text-info">
                     <tr>
                       <th>S/N</th>
-                      <th width="12%">Station Name</th>
+                      <th width="17%">Station Name</th>
                       <th width="12%">Contact Name</th>
                       <th width="16%">Address</th>
                       <th width="10%">Phone</th>
-                      <th width="14%">Email</th>
+                      <th width="10%">Email</th>
+                       <th width="10%">Station Credit</th>
                       <th width="10%">Created On</th>
-                      <th width="26%">Actions</th> 
+                      <th width="15%">Actions</th> 
                     </tr>
                   </thead>
 
@@ -63,16 +65,20 @@
                 {% for object in station_qs %}
                 <tr>
                 <td>{{forloop.counter}}</td>
-                <td width="12%">{{object.station_name}}</td>
+                <td width="17%">{{object.station_name}}</td>
                 <td width="12%">{{object.contact_name}}</td>
                 <td width="16%">{{object.address}}</td>
                 <td width="10%">{{object.phone}}</td>
-                <td width="14%">{{object.email}}</td>
+                <td width="10%">{{object.email}}</td>
+                <td width="10%">N {{object.station_credit| intcomma}}</td>
                 <td width="10%">{{object.date_created_pretty}}</td>
-                <td width="26%">
-                  <a class="btn btn-success" href="{% url 'fleet:station_detail' object.pk %}"> View</a>
-                  <button type="button" id="update_station" class="bs-modal btn btn-small btn-primary mt-1" data-form-url="{% url 'fleet:station_update' object.pk %}"><i class="fa fa-list text-white"></i> Update</button>
-                   <button type="button" id="delete-station" class="bs-modal btn btn-small btn-danger mt-1" data-form-url="{% url 'fleet:station_delete' object.id %}"><i class="fa fa-list text-white"></i>  Delete</button> 
+                <td width="15%">
+                  <a class="btn btn-success" href="{% url 'fleet:station_detail' object.pk %}"> <i class="fa fa-folder-open text-white"></i></a>
+                  
+                  <button type="button" id="update_station" class="bs-modal btn btn-small btn-primary mt-1" data-form-url="{% url 'fleet:station_update' object.pk %}"><i class="fa fa-edit text-white"></i></button>
+                   
+                  <button type="button" id="delete-station" class="bs-modal btn btn-small btn-danger mt-1" data-form-url="{% url 'fleet:station_delete' object.id %}"><i class="fa fa-cogs text-white"></i></button> 
+
                 </td>
                 </tr>
                 {% endfor %}

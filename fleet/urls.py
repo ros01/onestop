@@ -43,7 +43,11 @@ from .views import (
     ScheduleMaintenance,
     ScheduleListView,
     ScheduleDetailView,
-    ScheduleUpdateView,    
+    ScheduleUpdateView,
+    RecordMaintenance, 
+    UpdateMaintenance, 
+    MaintenanceList,
+    MaintenanceDetailView,     
 
 )
 
@@ -96,6 +100,11 @@ urlpatterns = [
     path('schedule_list/', ScheduleListView.as_view(), name='schedule_list'),
     path('<uuid:pk>/schedule_details/', ScheduleDetailView.as_view(), name='schedule_details'),
     path('<uuid:pk>/schedule_update/', ScheduleUpdateView.as_view(), name='schedule_update'),
+
+    path('<uuid:id>/manage_schedule', RecordMaintenance.as_view(), name='create_maintenance_record'),
+    path('<uuid:id>/update_maintenance/', UpdateMaintenance.as_view(), name='update_maintenance'),
+    path('<uuid:pk>/maintenance_detail/', MaintenanceDetailView.as_view(), name='maintenance_detail'),
+    path('maintenance_list/', MaintenanceList.as_view(), name='maintenance_list'),
 	
     
     ]

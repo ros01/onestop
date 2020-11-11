@@ -92,7 +92,49 @@ button.danger:hover{
     color: #fff !important;
 }
 
+@font-face {
+    font-family: 'helveticaneuethin';
+    src: url('/static/fonts/helveticaneue_thin-webfont.woff2') format('woff2'),
+         url('/static/fonts/helveticaneue_thin-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 
+}
+
+@font-face {
+    font-family: 'helveticaneuelight';
+    src: url('/static/fonts/helveticaneue_light-webfont.woff2') format('woff2'),
+         url('/static/fonts/helveticaneue_light-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+p {
+  font-family: "helveticaneuelight";
+
+}
+
+
+.paragraph {
+  font-size: 2.5rem;
+
+}
+.paragraph2 {
+  font-size: 2.0rem;
+
+}
+.paragraph3 {
+  font-size: 1.5rem;
+
+}
+
+h1 {
+  font-family: "Helvetica Neue";
+}
+h3 {
+  font-family: "Helvetica Neue";
+}
 
 
 

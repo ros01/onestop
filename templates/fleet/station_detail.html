@@ -1,5 +1,6 @@
 {% extends 'base0.html'%}
 {% load static %}
+{% load humanize %}
 {% block title%}| Station Details {% endblock %}
 
 {% block styles %}
@@ -26,43 +27,52 @@
         <div class="container-fluid">
            <br>
 
-        <div class="row mr-4 mt-4">
-            <div class="col-md-5 mt-0">
-                <div class="col-md-12">
-                    <div class="row">
-                      <h3 class="col-12 text-info">Manage Station Details</h3>
-                      <br>
-                        <p class="col-12 text-success lead">Station Details</p>
-                    </div>
+        <div class="row ml-4 mt-4 pt-4">
+            
+          <h3 class="col-12 text-info">Manage Station Details</h3>
+          </div>
+
+        <div class="row mx-4 mt-2 pt-3 bg-white">
+        <div class="col-md-7 mt-0">
+        <div class="col-md-12">
+        <div class="row">
+                      
+        <br>
+        <p class="col-12 text-success lead">Station Details</p>
+        </div>
 
                      <div class="row">
                         <span class="col-4"><strong>Station Name:</strong></span>
-                        <span class="col-5 ">{{object.station_name}}</span>
+                        <span class="col-6 ">{{object.station_name}}</span>
                     </div>
                 
 
                     <div class="row">
                       <span class="col-4"><strong>Contact Name:</strong></span>
-                      <span class="col-5">{{object.contact_name}}</span>
+                      <span class="col-6">{{object.contact_name}}</span>
                   </div>
                  
                   <div class="row">
                       <span class="col-4"><strong>Address:</strong></span>
-                      <span class="col-5">{{object.address}}</span>
+                      <span class="col-6">{{object.address}}</span>
                   </div>
                   <div class="row">
                       <span class="col-4"><strong>Phone:</strong></span>
-                      <span class="col-5">{{object.phone}}</span>
+                      <span class="col-6">{{object.phone}}</span>
                   </div>
                   <div class="row">
                       <span class="col-4"><strong>Email:</strong></span>
-                      <span class="col-5">{{object.email}}</span>
-                    </div>  
+                      <span class="col-6">{{object.email}}</span>
+                  </div> 
+                  <div class="row">
+                      <span class="col-4"><strong>Station Credit:</strong></span>
+                      <span class="col-6">N {{object.station_credit | intcomma}}</span>
+                  </div>   
                 </div>
                 <br>
               </div>   
 
-            <div class="col-md-5 mt-5">
+            <div class="col-md-5 mt-0">
             <p class="text-success lead">Control Details</p>
             <div class="row">
             <span class="col-4"><strong>Entered by:</strong></span>
@@ -83,29 +93,17 @@
             </div>  
             </div>
 
-
+ 
       </div>
         <!-- /.container-fluid -->
       </div>
-
-
-
-
-
-
-
-
       </div>
       <!-- End of Main Content -->
-
-      
-
     </div>
     <!-- End of Content Wrapper -->
 
   </div>
   <!-- End of Page Wrapper -->
-
 
 <script src="{% static 'js/jquery.js' %}"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>

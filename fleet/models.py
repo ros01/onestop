@@ -25,6 +25,7 @@ class Station(models.Model):
 	address = models.CharField(max_length=200)
 	phone = models.CharField(max_length=100, null=True, blank=True)
 	email = models.EmailField(max_length=100, null=True, blank=True)
+	station_credit = models.DecimalField(decimal_places=2, max_digits=20)
 	entered_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
 	date_created = models.DateTimeField(auto_now_add=True, auto_now=False)
 	
@@ -267,10 +268,31 @@ class Fueling(models.Model):
 	fueling_date = models.DateTimeField(default=datetime.now, blank=True)
 
 	def __str__(self):
-		return self.vehicle
+		return str(self.vehicle)
 
 	def fueling_date_pretty(self):
 		return self.fueling_date.strftime('%b %e %Y')
+
+	def save(self, *args, **kwargs):
+		super(Fueling, self).save(*args, **kwargs)
+        
+        #try:
+            #requisition = Requisition.objects.get(
+                #requisition_no=self.requisition_no,
+                #requesting_staff=self.requesting_staff,
+                
+                #)
+        #except Requisition.DoesNotExist:
+            #pass
+        
+       
+        #if self.id is not None:
+            #requisition.requisition_status = 2
+            #requisition.save()
+
+		p = Station.objects.get(station_name=self.station)
+		p.station_credit -= self.fuel_cost
+		p.save()
 
 
 class Repair(models.Model):
@@ -291,7 +313,7 @@ class Repair(models.Model):
 	authorised_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='protocol_officer', on_delete=models.DO_NOTHING)
 
 	def __str__(self):
-		return self.vehicle
+		return str(self.vehicle)
 
 	def repair_date_pretty(self):
 		return self.repair_date.strftime('%b %e %Y')
@@ -301,14 +323,14 @@ class Schedule(models.Model):
 	schedule_no = models.CharField(max_length=500, null=True, blank=True, 
         default=increment_schedule_no)
 	vehicle = models.ForeignKey('Vehicle', null=True, blank=True, on_delete=models.DO_NOTHING)
-	driver = models.CharField(max_length=200)
-	last_maintenance_mileage = models.DecimalField(max_digits=50, decimal_places=2,)
-	last_maintenance_date = models.DateTimeField(default=datetime.now, blank=True)
+	current_mileage = models.DecimalField(max_digits=50, decimal_places=2,)
+	#last_maintenance_date = models.DateTimeField(default=datetime.now, blank=True)
 	maintenance_due_date = models.DateTimeField(default=datetime.now, blank=True)
 	workshop = models.ForeignKey('Workshop', null=True, blank=True, on_delete=models.DO_NOTHING)
 	mechanic_name = models.ForeignKey('Workshop', null=True, blank=True, related_name='workshop_mechanic', on_delete=models.DO_NOTHING)
-	maintenance_cost_estimate = models.DecimalField(max_digits=50, decimal_places=2,)
-	projected_maintenance = models.TextField(null=True, blank=True)
+	#maintenance_cost_estimate = models.DecimalField(max_digits=50, decimal_places=2,)
+	#projected_maintenance = models.TextField(null=True, blank=True)
+	schedule_status = models.IntegerField(default=1)
 	maintenance_scheduled_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='maintenance_scheduler', on_delete=models.DO_NOTHING)
 	scheduled_on = models.DateTimeField(default=datetime.now, blank=True)
 	
@@ -316,7 +338,7 @@ class Schedule(models.Model):
 
 
 	def __str__(self):
-		return self.vehicle
+		return str(self.vehicle)
 
 	class Meta:
 		unique_together = ('schedule_no','vehicle')
@@ -334,15 +356,15 @@ class Maintenance(models.Model):
 	schedule_no = models.CharField(max_length=500, null=True, blank=True, default=increment_schedule_no)
 	vehicle = models.ForeignKey('Vehicle', null=True, blank=True, on_delete=models.DO_NOTHING)
 	driver = models.CharField(max_length=200)
-	last_maintenance_mileage = models.DecimalField(max_digits=50, decimal_places=2,)
-	last_maintenance_date = models.DateTimeField(default=datetime.now, blank=True)
+	#last_maintenance_mileage = models.DecimalField(max_digits=50, decimal_places=2,)
+	#last_maintenance_date = models.DateTimeField(default=datetime.now, blank=True)
 	maintenance_due_date = models.DateTimeField(default=datetime.now, blank=True)
 	workshop = models.ForeignKey('Workshop', null=True, blank=True, on_delete=models.DO_NOTHING)
 	mechanic_name = models.ForeignKey('Workshop', null=True, blank=True, related_name='maintenance_mechanic', on_delete=models.DO_NOTHING)
-	maintenance_cost_estimate = models.DecimalField(max_digits=50, decimal_places=2,)
-	projected_maintenance = models.TextField(null=True, blank=True)
+	#maintenance_cost_estimate = models.DecimalField(max_digits=50, decimal_places=2,)
+	#projected_maintenance = models.TextField(null=True, blank=True)
 	maintenance_scheduled_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
-	schduled_on = models.DateTimeField(default=datetime.now, blank=True)
+	scheduled_on = models.DateTimeField(default=datetime.now, blank=True)
 	current_maintenance_mileage = models.DecimalField(max_digits=50, decimal_places=2,)
 	actual_maintenance_cost = models.DecimalField(max_digits=50, decimal_places=2,)
 	actual_maintenance_details = models.TextField(null=True, blank=True)
@@ -350,8 +372,29 @@ class Maintenance(models.Model):
 	maintenance_recorded_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='maintenance_recorded_by', on_delete=models.DO_NOTHING)
 	actual_maintenance_date = models.DateTimeField(default=datetime.now, blank=True)
 
+	class Meta:
+	   unique_together = ('schedule_no', 'vehicle')
+	   ordering = ["-actual_maintenance_date"]
+
 	def __str__(self):
-		return self.vehicle
+		return self.driver
+
+	def save(self, *args, **kwargs):
+		super(Maintenance, self).save(*args, **kwargs)
+		
+		try:
+			schedule = Schedule.objects.get(
+				schedule_no=self.schedule_no,
+				vehicle=self.vehicle,
+				
+				)
+		except Schedule.DoesNotExist:
+			pass
+		
+	   
+		if self.id is not None:
+			schedule.schedule_status = 2
+			schedule.save()
 	
 	
 

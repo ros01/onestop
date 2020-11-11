@@ -26,99 +26,91 @@
         <div class="container-fluid">
            <br>
 
-        <div class="row mr-4 mt-4">
-            <div class="col-md-5 mt-0">
-                <div class="col-md-12">
-                    <div class="row">
-                      <h4 class="col-12 text-info">Vehicle Maintenance Schedule Records</h4>
-                      <br>
-                        <p class="col-12 text-success lead">Vehicle Maintenance Schedule Details</p>
-                    </div>
-                     <div class="row">
-                        <span class="col-6"><strong>Schedule No:</strong></span>
-                        <span class="col-6 ">{{object.schedule_no}}</span>
-                    </div>
-                    <div class="row">
-                      <span class="col-6"><strong>Vehicle Name:</strong></span>
-                      <span class="col-6">{{object.vehicle}}</span>
-                  </div>
+        <div class="row ml-4 mt-4 pt-4">
+            
+        <h4 class="col-12 text-info">Vehicle Maintenance Schedule Records</h4>
+        </div>
+
+        <div class="row mx-4 mt-2 pt-3 bg-white">
+        <div class="col-md-6 mt-0">
+        <div class="col-md-12">
+        <div class="row">
+                      
+        <br>
+        
+        <p class="col-12 text-success lead">Vehicle Maintenance Schedule Details</p>
+        </div>
+        
+        <div class="row">
+        <span class="col-6"><strong>Schedule No:</strong></span>
+        <span class="col-6 ">{{object.schedule_no}}</span>
+        </div>
+        
+
+        <div class="row">
+        <span class="col-6"><strong>Vehicle Name:</strong></span>
+        <span class="col-6">{{object.vehicle}}</span>
+        </div>
                  
-                  <div class="row">
-                      <span class="col-6"><strong>Driver:</strong></span>
-                      <span class="col-6">{{object.driver}}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-6"><strong>Mileage at Last Maintenance:</strong></span>
-                      <span class="col-6">{{object.last_maintenance_mileage}}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-6"><strong>Last Maintenance Date:</strong></span>
-                      <span class="col-6">{{object.last_maintenance_date}}</span>
-                    </div>  
-                    <div class="row">
-                      <span class="col-6"><strong>Maintenance Due Date:</strong></span>
-                      <span class="col-6">{{object.maintenance_due_date}}</span>
-                    </div> 
-                    <div class="row">
-                      <span class="col-6"><strong>Repair Workshop:</strong></span>
-                      <span class="col-6">{{object.workshop}}</span>
-                    </div> 
-                    <div class="row">
-                      <span class="col-6"><strong>Mechanic Name:</strong></span>
-                      <span class="col-6">{{object.workshop.mechanic_name}}</span>
-                    </div> 
-                    <div class="row">
-                      <span class="col-6"><strong>Maintenance Estimate:</strong></span>
-                      <span class="col-6">{{object.maintenance_cost_estimate}}</span>
-                    </div> 
-                    <div class="row">
-                      <span class="col-6"><strong>Projected Maintenance:</strong></span>
-                      <span class="col-6">{{object.projected_maintenance}}</span>
-                    </div> 
-                </div>
-                <br>
-              </div>   
+        
+        <div class="row">
+        <span class="col-6"><strong>Current Mileage:</strong></span>
+        <span class="col-6">{{object.current_mileage}}</span>
+        </div>
+                  
+                    
+        <div class="row">
+        <span class="col-6"><strong>Maintenance Due Date:</strong></span>
+        <span class="col-6">{{object.maintenance_due_date}}</span>
+        </div> 
+                    
+        <div class="row">
+        <span class="col-6"><strong>Repair Workshop:</strong></span>
+        <span class="col-6">{{object.workshop}}</span>
+        </div> 
+                    
+        <div class="row">
+        <span class="col-6"><strong>Mechanic Name:</strong></span>
+        <span class="col-6">{{object.workshop.mechanic_name}}</span>
+        </div> 
+                
+        </div>
+        <br>
+        </div>   
                
     
-            <div class="col-md-5 mt-5">
-            <p class="text-success lead">Control Details</p>
-            <div class="row">
-            <span class="col-6"><strong>Schedule Created By:</strong></span>
-            <span class="col-6">{{object.maintenance_scheduled_by.first_name}} {{object.maintenance_scheduled_by.last_name}}
-            </span>
-            </div>
-            <div class="row">
-            <span class="col-6"><strong>Schedule Created On:</strong></span>
-            <span class="col-6">{{object.scheduled_on_pretty}} 
-            </span>
-            </div>
+        <div class="col-md-5 mt-0">
+        <p class="text-success lead">Control Details</p>
+        <div class="row">
+        <span class="col-6"><strong>Schedule Created By:</strong></span>
+        <span class="col-6">{{object.maintenance_scheduled_by.first_name}} {{object.maintenance_scheduled_by.last_name}}
+        </span>
+        </div>
+        <div class="row">
+        <span class="col-6"><strong>Schedule Created On:</strong></span>
+        <span class="col-6">{{object.scheduled_on}} 
+        </span>
+        </div>
 
            
-              <hr> 
-              <div class="d-flex justify-content-end">  
+        <hr> 
+        <div class="d-flex justify-content-end">  
               
-              <button type="button" id="update_repairs" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'fleet:schedule_update' object.pk %}"><i class="fa fa-list text-white"></i> Update Repair Details</button>
-              <a href="{% url 'fleet:schedule_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Repairs List</a>  
-            </div>  
-            </div>
+        
+
+        <a href="{% url 'fleet:schedule_update' object.pk %}" class="btn btn-primary text-white py-1 px-3 mt-1 mb-3 mr-3"><i class="fa fa-list text-white"></i> Update Details</a> 
+
+
+        <a href="{% url 'fleet:schedule_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Schedules List</a>  
+        </div>  
+        </div>
 
 
       </div>
         <!-- /.container-fluid -->
       </div>
-
-
-
-
-
-
-
-
       </div>
       <!-- End of Main Content -->
-
-      
-
     </div>
     <!-- End of Content Wrapper -->
 

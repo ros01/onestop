@@ -1,7 +1,6 @@
 {% extends 'base0.html'%}
 {% load static %}
-{% load humanize %}
-{% block title%}| Fueling Records {% endblock %}
+{% block title%}| Vehicles Maintenance History {% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
@@ -22,25 +21,20 @@
 
       <!-- Main Content -->
       <div id="content">
-
-        <!-- Begin Page Content -->
+      <!-- Begin Page Content -->
         <div class="container-fluid">
 
-
           <!-- Page Heading -->
-         <br><br>
+         <br><br><br>
 
-          <h3 class="col-12 text-info">Fueling Records List</h3>
+         <h3 class="col-12 text-info">Vehicle Maintenance History</h3>
 
+         
 
-
-          <button type="button" id="record-fueling" class="bs-modal btn btn-small btn-success mt-2" data-form-url="{% url 'fleet:record_fueling' %}"><i class="fa fa-list text-white"></i> Add Fueling Record</button><br>
-          {% include 'partials/_alerts.html' %}
-
-          <!-- DataTales Example -->
+           <!-- DataTales Example -->
           <div class="card shadow mb-2">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-info">Manage Fueling Records</h6>
+              <h6 class="m-0 font-weight-bold text-info">Maintenance Details</h6>
             </div>
             <div class="card-body">
 
@@ -49,33 +43,35 @@
                   <thead class="text-info">
                     <tr>
                       <th>S/N</th>
-                      <th width="10%">Vehicle Name</th>
-                      <th width="10%">Driver</th>
+                      <th width="10%">Schedule No</th>
+                      <th width="12%">Vehicle Name</th>
+                      <th width="10%">Workshop</th>
+                      <th width="16%">Maintenance Due On</th>
                       <th width="12%">Current Mileage</th>
-                      <th width="10%">Fuel Quantity</th>
-                      <th width="10%">Fuel Cost</th>
-                      <th width="16%">Station</th>
-                      <th width="12%">Authorized By</th>
-                      <th width="10%">Date</th>
-                      <th width="10%">Actions</th> 
+                      <th width="16%">Next Maintenance Date</th>
+                      <th width="18%">Actual Maintenance Date</th>
+                      <th width="6%">Actions</th>
                     </tr>
                   </thead>
+
                 <tbody>
-                {% if fueling_qs %}
-                {% for object in fueling_qs %}
+                {% if maintenance_qs %}
+                {% for object in maintenance_qs %}
                 <tr>
                 <td>{{forloop.counter}}</td>
-                <td width="10%">{{object.vehicle}}</td>
-                <td width="10%">{{object.driver}}</td>
-                <td width="12%">{{object.current_mileage}}</td>
-                <td width="10%">{{object.fuel_input}}</td>
-                <td width="10%">N{{object.fuel_cost | intcomma}}</td>
-                <td width="16%">{{object.station}}</td>
-                <td width="12%">{{object.authorised_by.first_name}} {{object.authorised_by.last_name}}</td>
-                <td width="10%">{{object.fueling_date_pretty}}</td>
-                <td width="10%">
-                  <a class="btn btn-success" href="{% url 'fleet:fueling_detail' object.pk %}"><i class="fa fa-list text-white"></i> View</a>
-                  <!--<button type="button" id="update_station" class="bs-modal btn btn-small btn-primary mt-1" data-form-url="{% url 'fleet:fueling_update' object.pk %}"><i class="fa fa-list text-white"></i> Update</button> -->
+                <td width="10%">{{object.schedule_no}}</td>
+                <td width="12%">{{object.vehicle}}</td>
+                <td width="10%">{{object.workshop}}</td>
+                <td width="16%">{{object.maintenance_due_date}}</td>
+                <td width="12%">{{object.current_maintenance_mileage}}</td>
+                <td width="16%">{{object.next_maintenance_date}}</td>
+                <td width="18%">{{object.actual_maintenance_date}}</td>
+                <td width="6%">
+
+                <a class="btn btn-success" href="{% url 'fleet:maintenance_detail' object.pk %}"><i class="fa fa-folder-open text-white"></i></a>
+
+                </td>
+
                 </td>
                 </tr>
                 {% endfor %}
@@ -91,16 +87,11 @@
 
       </div>
       <!-- End of Main Content -->
-
-      
-
     </div>
     <!-- End of Content Wrapper -->
 
   </div>
   <!-- End of Page Wrapper -->
-
-
 <script src="{% static 'js/jquery.js' %}"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>

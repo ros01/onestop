@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Assign, Release
+from .models import Category, Station, Fueling, Assign, Release, Schedule, Maintenance
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -12,6 +12,27 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Category, CategoryAdmin)
+
+
+class StationAdmin(admin.ModelAdmin):
+  list_display = ('station_name', 'contact_name', 'address', 'phone', 'email', 'entered_by', 'date_created')
+  list_display_links = ('station_name', 'contact_name', 'phone', 'email','date_created')
+  list_filter = ('station_name', 'phone', 'email', 'date_created')
+  search_fields = ('station_name', 'contact_name', 'active', 'address', 'phone', 'email', 'date_created')
+  list_per_page = 25
+
+
+admin.site.register(Station, StationAdmin)
+
+class FuelingAdmin(admin.ModelAdmin):
+  list_display = ('vehicle', 'driver', 'fuel_input', 'fuel_cost', 'station', 'authorised_by', 'fueling_date')
+  list_display_links = ('vehicle', 'driver', 'fuel_cost', 'station','fueling_date')
+  list_filter = ('vehicle', 'fuel_cost', 'station', 'fueling_date')
+  search_fields = ('vehicle', 'driver', 'active', 'fuel_input', 'fuel_cost', 'station', 'fueling_date')
+  list_per_page = 25
+
+
+admin.site.register(Fueling, FuelingAdmin)
 
 
 
@@ -36,3 +57,24 @@ class ReleaseAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Release, ReleaseAdmin)
+
+class ScheduleAdmin(admin.ModelAdmin):
+  list_display = ('schedule_no', 'vehicle', 'maintenance_due_date', 'current_mileage', 'maintenance_scheduled_by', 'scheduled_on')
+  list_display_links = ('schedule_no', 'vehicle', 'maintenance_due_date', 'current_mileage', 'maintenance_scheduled_by', 'scheduled_on')
+  list_filter = ('schedule_no', 'maintenance_due_date', 'current_mileage', 'maintenance_scheduled_by', 'scheduled_on')
+  search_fields = ('schedule_no', 'vehicle', 'maintenance_due_date', 'current_mileage', 'maintenance_scheduled_by', 'scheduled_on')
+  list_per_page = 25
+
+
+admin.site.register(Schedule, ScheduleAdmin)
+
+
+class MaintenanceAdmin(admin.ModelAdmin):
+  list_display = ('schedule_no', 'vehicle', 'maintenance_due_date', 'current_maintenance_mileage', 'actual_maintenance_cost', 'next_maintenance_date', 'maintenance_recorded_by')
+  list_display_links = ('schedule_no', 'vehicle', 'maintenance_due_date', 'current_maintenance_mileage', 'actual_maintenance_cost', 'next_maintenance_date')
+  list_filter = ('schedule_no', 'maintenance_due_date', 'current_maintenance_mileage', 'actual_maintenance_cost', 'next_maintenance_date')
+  search_fields = ('schedule_no', 'vehicle', 'maintenance_due_date', 'current_maintenance_mileage', 'actual_maintenance_cost', 'next_maintenance_date')
+  list_per_page = 25
+
+
+admin.site.register(Maintenance, MaintenanceAdmin)

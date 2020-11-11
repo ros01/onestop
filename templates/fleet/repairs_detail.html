@@ -26,100 +26,101 @@
         <div class="container-fluid">
            <br>
 
-        <div class="row mr-4 mt-4">
-            <div class="col-md-5 mt-0">
-                <div class="col-md-12">
-                    <div class="row">
-                      <h3 class="col-12 text-info">Repair Records</h3>
-                      <br>
-                        <p class="col-12 text-success lead">Repair Details</p>
-                    </div>
-                     <div class="row">
-                        <span class="col-4"><strong>Vehicle Name:</strong></span>
-                        <span class="col-5 ">{{object.vehicle}}</span>
-                    </div>
-                    <div class="row">
-                      <span class="col-4"><strong>Driver Name:</strong></span>
-                      <span class="col-5">{{object.driver}}</span>
-                  </div>
+        <div class="row ml-4 mt-4 pt-4">
+            
+        <h3 class="col-12 text-info">Repair Records</h3>
+        </div>
+
+        <div class="row mx-4 mt-2 pt-3 bg-white">
+        <div class="col-md-6 mt-0">
+        <div class="col-md-12">
+        <div class="row">
+                      
+        <br>
+        <p class="col-12 text-success lead">Repair Details</p>
+        </div>
+        
+        <div class="row">
+        <span class="col-4"><strong>Vehicle Name:</strong></span>
+        <span class="col-5 ">{{object.vehicle}}</span>
+        </div>
+        <div class="row">
+        <span class="col-4"><strong>Driver Name:</strong></span>
+        <span class="col-5">{{object.driver}}</span>
+        </div>
                  
-                  <div class="row">
-                      <span class="col-4"><strong>Current Mileage:</strong></span>
-                      <span class="col-5">{{object.current_mileage}}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-4"><strong>Fault Details:</strong></span>
-                      <span class="col-5">{{object.fault}}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-4"><strong>Repair Details:</strong></span>
-                      <span class="col-5">{{object.repair_details}}</span>
-                    </div>  
-                    <div class="row">
-                      <span class="col-4"><strong>Repair Cost:</strong></span>
-                      <span class="col-5">{{object.repair_cost}}</span>
-                    </div> 
-                    <div class="row">
-                      <span class="col-4"><strong>Repair Workshop:</strong></span>
-                      <span class="col-5">{{object.workshop}}</span>
-                    </div> 
-                    <div class="row">
-                      <span class="col-4"><strong>Mechanic Name:</strong></span>
-                      <span class="col-5">{{object.workshop.mechanic_name}}</span>
-                    </div> 
-                </div>
-                <br>
-              </div>   
+        <div class="row">
+        <span class="col-4"><strong>Current Mileage:</strong></span>
+        <span class="col-5">{{object.current_mileage}}</span>
+        </div>
+                  
+        <div class="row">
+        <span class="col-4"><strong>Fault Details:</strong></span>
+        <span class="col-5">{{object.fault}}</span>
+        </div>
+        
+
+        <div class="row">
+        <span class="col-4"><strong>Repair Details:</strong></span>
+        <span class="col-5">{{object.repair_details}}</span>
+        </div>  
+        
+        <div class="row">
+        <span class="col-4"><strong>Repair Cost:</strong></span>
+        <span class="col-5">{{object.repair_cost}}</span>
+        </div> 
+        
+        <div class="row">
+        <span class="col-4"><strong>Repair Workshop:</strong></span>
+        <span class="col-5">{{object.workshop}}</span>
+        </div> 
+        
+        <div class="row">
+        <span class="col-4"><strong>Mechanic Name:</strong></span>
+        <span class="col-5">{{object.workshop.mechanic_name}}</span>
+        </div> 
+        </div>
+        <br>
+        </div>   
                
              
-            <div class="col-md-5 mt-5">
-            <p class="text-success lead">Control Details</p>
-            <div class="row">
-            <span class="col-4"><strong>Fault Reported By:</strong></span>
-            <span class="col-5">{{object.reported_by}} 
-            </span>
-            </div>
-            <div class="row">
-            <span class="col-4"><strong>Authorised By:</strong></span>
-            <span class="col-5">{{object.authorised_by.first_name}} {{object.authorised_by.last_name}}
-            </span>
-            </div>
+        <div class="col-md-5 mt-0">
+        <p class="text-success lead">Control Details</p>
+        <div class="row">
+        <span class="col-4"><strong>Fault Reported By:</strong></span>
+        <span class="col-5">{{object.reported_by}} 
+        </span>
+        </div>
+        <div class="row">
+        <span class="col-4"><strong>Authorised By:</strong></span>
+        <span class="col-5">{{object.authorised_by.first_name}} {{object.authorised_by.last_name}}
+        </span>
+        </div>
 
-            <div class="row">
-            <span class="col-4"><strong>Repair Date:</strong></span>
-            <span class="col-5">{{object.repair_date_pretty}}</span>
+        <div class="row">
+        <span class="col-4"><strong>Repair Date:</strong></span>
+        <span class="col-5">{{object.repair_date_pretty}}</span>
                    
-              </div> 
-              <hr> 
-              <div class="d-flex justify-content-end">  
+        </div> 
+        <hr> 
+        <div class="d-flex justify-content-end">  
               
-              <button type="button" id="update_repairs" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'fleet:repairs_update' object.pk %}"><i class="fa fa-list text-white"></i> Update Repair Details</button>
-              <a href="{% url 'fleet:repairs_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Repairs List</a>  
-            </div>  
-            </div>
+        <button type="button" id="update_repairs" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'fleet:repairs_update' object.pk %}"><i class="fa fa-list text-white"></i> Update Repair Details</button>
+        <a href="{% url 'fleet:repairs_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Repairs List</a>  
+        </div>  
+        </div>
 
 
-      </div>
+        </div>
         <!-- /.container-fluid -->
-      </div>
+        </div>
+        </div>
+        <!-- End of Main Content -->
+        </div>
+        <!-- End of Content Wrapper -->
 
-
-
-
-
-
-
-
-      </div>
-      <!-- End of Main Content -->
-
-      
-
-    </div>
-    <!-- End of Content Wrapper -->
-
-  </div>
-  <!-- End of Page Wrapper -->
+        </div>
+        <!-- End of Page Wrapper -->
 
 
 <script src="{% static 'js/jquery.js' %}"></script>

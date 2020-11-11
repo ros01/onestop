@@ -14,7 +14,7 @@ from django.views.generic import (
 from .models import Station, Workshop, Category, Vehicle, Assign, Release, Fueling, Repair, Maintenance, Schedule
 from rrbnstaff.models import Request
 
-from .forms import WorkshopModelForm, StationModelForm, CategoryModelForm, VehicleModelForm, IssueVehicleRequestModelForm, FinalizeTripModelForm, FuelingModelForm, RepairsModelForm, ScheduleModelForm
+from .forms import WorkshopModelForm, StationModelForm, CategoryModelForm, VehicleModelForm, IssueVehicleRequestModelForm, FinalizeTripModelForm, FuelingModelForm, RepairsModelForm, ScheduleModelForm, RecordMaintenanceModelForm
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from bootstrap_modal_forms.generic import BSModalCreateView
@@ -596,8 +596,8 @@ class RepairsUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
 
     
     
-class ScheduleMaintenance(PassRequestMixin, SuccessMessageMixin, CreateView):
-    template_name = 'fleet/schedule_maintenance.html'
+class ScheduleMaintenance(SuccessMessageMixin, CreateView):
+    template_name = 'fleet/schedule_maintenance2.html'
     form_class = ScheduleModelForm
     success_message = 'Vehicle Maintenance Scheduled Successfully.'
 
@@ -613,7 +613,7 @@ class ScheduleListView(ListView):
 
     def get_context_data(self, **kwargs):
         obj = super(ScheduleListView, self).get_context_data(**kwargs)
-        obj['schedule_qs'] = Schedule.objects.all()
+        obj['schedule_qs'] = Schedule.objects.filter(schedule_status=1)
         return obj
         
 class ScheduleDetailView(DetailView):
@@ -621,9 +621,111 @@ class ScheduleDetailView(DetailView):
     model = Schedule
 
 
-class ScheduleUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
+class ScheduleUpdateView(SuccessMessageMixin, UpdateView):
     model = Schedule
-    template_name = 'fleet/update_maintenance_schedule.html'
+    template_name = 'fleet/update_maintenance_schedule2.html'
     form_class = ScheduleModelForm
     success_message = 'Success: Schedule Details Successfully Updated.'
     success_url = reverse_lazy('fleet:schedule_list')
+
+
+
+
+class ScheduleObjectMixin(object):
+    model = Schedule
+    def get_object(self):
+        id = self.kwargs.get('id')
+        obj = None
+        if id is not None:
+            obj = get_object_or_404(self.model, id=id)
+        return obj 
+
+
+
+class RecordMaintenance(ScheduleObjectMixin, View):
+    template_name = 'fleet/record_maintenance.html'
+    template_name1 = 'fleet/maintenance_details.html'
+    def get(self, request,  *args, **kwargs):
+        context = {}
+        obj = self.get_object()
+        if obj is not None:
+            form = RecordMaintenanceModelForm(instance=obj)
+            context['object'] = obj
+            context['form'] = form
+
+        return render(request, self.template_name, context)
+
+    def post(self, request,  *args, **kwargs):
+        form = RecordMaintenanceModelForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+        context = {}
+        obj = self.get_object()
+        if obj is not None:
+          
+           context['object'] = obj
+           context['form'] = form 
+           context['schedule'] = Maintenance.objects.filter (schedule_no=obj.schedule_no)
+        
+        return render(request, self.template_name1, context)
+     
+    
+
+
+
+class MaintenanceObjectMixin(object):
+    model = Maintenance
+    def get_object(self):
+        id = self.kwargs.get('id')
+        obj = None
+        if id is not None:
+            obj = get_object_or_404(self.model, id=id)
+        return obj 
+
+class UpdateMaintenance(MaintenanceObjectMixin, SuccessMessageMixin, View):
+    template_name = "fleet/update_maintenance.html" 
+    template_name1 = "fleet/maintenance_detail.html" 
+    
+    def get(self, request, id=None, *args, **kwargs):
+        # GET method
+        context = {}
+        obj = self.get_object()
+        if obj is not None:
+            form = RecordMaintenanceModelForm(instance=obj)
+            context['object'] = obj
+            context['form'] = form
+        return render(request, self.template_name, context)
+
+    def post(self, request, id=None,  *args, **kwargs):
+        # POST method
+        context = {}
+        obj = self.get_object()
+        if obj is not None:
+            form = RecordMaintenanceModelForm(request.POST or None, instance=obj)
+            if form.is_valid():
+                form.save()
+            context['object'] = obj
+            context['form'] = form
+            context['schedule'] = Maintenance.objects.filter (schedule_no=obj.schedule_no)
+        messages.success(request, ('Maintenance Details Successfully Updated'))
+        return render(request, self.template_name1, context)
+
+
+class MaintenanceList(SuccessMessageMixin, ListView):
+    template_name = "fleet/maintenance_list.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return Maintenance.objects.all()
+        
+
+    def get_context_data(self, **kwargs):
+        obj = super(MaintenanceList, self).get_context_data(**kwargs)
+        obj['maintenance_qs'] = Maintenance.objects.all()
+        return obj
+
+
+class MaintenanceDetailView(DetailView):
+    template_name = "fleet/maintenance_detail.html"
+    model = Maintenance

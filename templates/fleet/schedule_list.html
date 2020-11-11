@@ -33,7 +33,14 @@
 
 
 
-        <button type="button" id="create-schedule" class="bs-modal btn btn-small btn-success mt-2" data-form-url="{% url 'fleet:create_maintenance_schedule' %}"><i class="fa fa-list text-white"></i> Schedule Vehicle Maintenance</button><br> 
+        <!-- <button type="button" id="create-schedule" class="bs-modal btn btn-small btn-success mt-2" data-form-url="{% url 'fleet:create_maintenance_schedule' %}"><i class="fa fa-list text-white"></i> Schedule Vehicle Maintenance</button> -->
+
+
+        <a class="btn btn-small btn-success mt-2" href="{% url 'fleet:create_maintenance_schedule' %}"><i class="fa fa-list text-white"></i> Schedule Vehicle Maintenance</a>
+
+
+
+        <br> 
 
          
          <!-- 
@@ -58,7 +65,7 @@
                       <th>S/N</th>
                       <th width="10%">Schedule No</th>
                       <th width="11%">Vehicle Name</th>
-                      <th width="10%">Driver</th>
+                      <th width="10%">Current Mileage</th>
                       <th width="14%">Repair Workshop</th>
                       <th width="14%">Maintenance Due</th>
                       <th width="12%">Scheduled By:</th>
@@ -73,14 +80,17 @@
                 <td>{{forloop.counter}}</td>
                 <td width="10%">{{object.schedule_no}}</td>
                 <td width="11%">{{object.vehicle}}</td>
-                <td width="10%">{{object.driver}}</td>
+                <td width="10%">{{object.current_mileage}}</td>
                 <td width="14%">{{object.workshop}}</td>
                 <td width="14%">{{object.maintenance_due_date_pretty}}</td>
                 <td width="12%">{{object.maintenance_scheduled_by.first_name}} {{object.maintenance_scheduled_by.last_name}}</td>
                 <td width="12%">{{object.scheduled_on_pretty}}</td>
                 <td width="17%">
-                  <a class="btn btn-success" href="{% url 'fleet:schedule_details' object.pk %}"> View</a>
-                  <button type="button" id="update_repairs" class="bs-modal btn btn-small btn-primary mt-1" data-form-url="{% url 'fleet:schedule_update' object.pk %}"><i class="fa fa-list text-white"></i> Update</button>
+                  <a class="btn btn-success" href="{% url 'fleet:schedule_details' object.pk %}"><i class="fa fa-folder-open text-white"></i></a>
+                  
+                 
+
+                  <a class="btn btn-warning" href="{% url 'fleet:create_maintenance_record' object.id %}"><i class="fa fa-cogs text-white"></i></a>
                 </td>
                 </tr>
                 {% endfor %}

@@ -24,121 +24,120 @@
 
       <!-- Begin Page Content -->
         <div class="container-fluid">
-           <br>
+        <br>
 
-        <div class="row mr-4 mt-4">
-            <div class="col-md-5 mt-0">
-                <div class="col-md-12">
-                    <div class="row">
-                      <h3 class="col-12 text-info">Manage Vehicle Details</h3>
-                      <br>
-                        <p class="col-12 text-success lead">Vehicle Details</p>
-                    </div>
+        <div class="row ml-4 mt-4 pt-4">
+        <h3 class="col-12 text-info">Manage Vehicle Details</h3>
+        </div>
 
-                     <div class="row">
-                        <span class="col-4"><strong>Vehicle Name:</strong></span>
-                        <span class="col-5 ">{{object.vehicle_name}}</span>
-                    </div>
+        <div class="row mx-4 mt-2 pt-3 bg-white">
+        <div class="col-md-6 mt-0">
+        <div class="col-md-12">
+        <div class="row">
+        <br>
+        <p class="col-12 text-success lead">Vehicle Details</p>
+        </div>
+
+        <div class="row">
+        <span class="col-6"><strong>Vehicle Name:</strong></span>
+        <span class="col-6 ">{{object.vehicle_name}}</span>
+        </div>
   
-                    <div class="row">
-                      <span class="col-4"><strong>Vehicle Description:</strong></span>
-                      <span class="col-5">{{object.description}}</span>
-                  </div>
+        <div class="row">
+        <span class="col-6"><strong>Vehicle Description:</strong></span>
+        <span class="col-6">{{object.description}}</span>
+        </div>
                  
-                  <div class="row">
-                      <span class="col-4"><strong>Vehicle Type:</strong></span>
-                      <span class="col-5">{{object.vehicle_type}}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-4"><strong>Year of Manufacture:</strong></span>
-                      <span class="col-5">{{object.model}}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-4"><strong>Year of Purchase:</strong></span>
-                      <span class="col-5">{{object.purchase_year}}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-4"><strong>Vehicle Category:</strong></span>
-                      <span class="col-5">{{object.category}}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-4"><strong>Engine Number:</strong></span>
-                      <span class="col-5">{{object.engine_number}}</span>
-                  </div>  
-                  <div class="row">
-                      <span class="col-4"><strong>Chasis Number:</strong></span>
-                      <span class="col-5">{{object.chasis_number}}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-4"><strong>Vehicle Colour:</strong></span>
-                      <span class="col-5">{{object.colour}}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-4"><strong>Location:</strong></span>
-                      <span class="col-5">{{object.location}}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-4"><strong>User Department:</strong></span>
-                      <span class="col-5">{{object.department_assigned}}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-4"><strong>License Number:</strong></span>
-                      <span class="col-5">{{object.license_no}}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-4"><strong>Insurance Certificate No:</strong></span>
-                      <span class="col-5">{{object.insurance_details}}</span>
-                  </div>
+        <div class="row">
+        <span class="col-6"><strong>Vehicle Type:</strong></span>
+        <span class="col-6">{{object.vehicle_type}}</span>
+        </div>
+        
+        <div class="row">
+        <span class="col-6"><strong>Year of Manufacture:</strong></span>
+        <span class="col-6">{{object.model}}</span>
+        </div>
+        
+        <div class="row">
+        <span class="col-6"><strong>Year of Purchase:</strong></span>
+        <span class="col-6">{{object.purchase_year}}</span>
+        </div>
+                  
+        <div class="row">
+        <span class="col-6"><strong>Vehicle Category:</strong></span>
+        <span class="col-6">{{object.category}}</span>
+        </div>
+                  
+        <div class="row">
+        <span class="col-6"><strong>Engine Number:</strong></span>
+        <span class="col-6">{{object.engine_number}}</span>
+        </div>  
+                  
+        <div class="row">
+        <span class="col-6"><strong>Chasis Number:</strong></span>
+        <span class="col-6">{{object.chasis_number}}</span>
+        </div>
+        
+        <div class="row">
+        <span class="col-6"><strong>Vehicle Colour:</strong></span>
+        <span class="col-6">{{object.colour}}</span>
+        </div>
+        
+        <div class="row">
+        <span class="col-6"><strong>Location:</strong></span>
+        <span class="col-6">{{object.location}}</span>
+        </div>
+        
+        <div class="row">
+        <span class="col-6"><strong>User Department:</strong></span>
+        <span class="col-6">{{object.department_assigned}}</span>
+        </div>
+        
+        <div class="row">
+        <span class="col-6"><strong>License Number:</strong></span>
+        <span class="col-6">{{object.license_no}}</span>
+        </div>
+        
+        <div class="row">
+        <span class="col-6"><strong>Insurance Certificate No:</strong></span>
+        <span class="col-6">{{object.insurance_details}}</span>
+        </div>
+        
+        </div>
+        <br>
+        </div>   
 
+        <div class="col-md-5 mt-0">
+        <p class="text-success lead">Control Details</p>
+        <div class="row">
+        <span class="col-4"><strong>Entered by:</strong></span>
+        <span class="col-5">{{object.entered_by.first_name}} {{object.entered_by.last_name}}
+        </span>
+        </div>
 
-
-                </div>
-                <br>
-              </div>   
-
-            <div class="col-md-5 mt-5">
-            <p class="text-success lead">Control Details</p>
-            <div class="row">
-            <span class="col-4"><strong>Entered by:</strong></span>
-            <span class="col-5">{{object.entered_by.first_name}} {{object.entered_by.last_name}}
-            </span>
-            </div>
-
-            <div class="row">
-            <span class="col-4"><strong>Entry Date:</strong></span>
-            <span class="col-5">{{object.date_created_pretty}}</span>
+        <div class="row">
+        <span class="col-4"><strong>Entry Date:</strong></span>
+        <span class="col-5">{{object.date_created_pretty}}</span>
                    
-              </div> 
-              <hr> 
-              <div class="d-flex justify-content-end">  
+        </div> 
+        <hr> 
+        <div class="d-flex justify-content-end">  
               
-              <button type="button" id="update_vehicle" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'fleet:vehicle_update' object.pk %}"><i class="fa fa-list text-white"></i> Update Vehicle</button>
-              <a href="{% url 'fleet:vehicle_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Vehicles List</a>  
-            </div>  
-            </div>
+        <button type="button" id="update_vehicle" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'fleet:vehicle_update' object.pk %}"><i class="fa fa-list text-white"></i> Update Vehicle</button>
+        <a href="{% url 'fleet:vehicle_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Vehicles List</a>  
+        </div>  
+        </div>
 
-
-      </div>
+        </div>
         <!-- /.container-fluid -->
-      </div>
+        </div>
+        </div>
+        <!-- End of Main Content -->
+        </div>
+        <!-- End of Content Wrapper -->
 
-
-
-
-
-
-
-
-      </div>
-      <!-- End of Main Content -->
-
-      
-
-    </div>
-    <!-- End of Content Wrapper -->
-
-  </div>
-  <!-- End of Page Wrapper -->
+        </div>
+        <!-- End of Page Wrapper -->
 
 
 <script src="{% static 'js/jquery.js' %}"></script>
