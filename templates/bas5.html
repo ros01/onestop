@@ -3,41 +3,123 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.8.2-web/css/all.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
 
-{% block styles %} 
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles-reg.css' %}">
+
+    
+
+    {% block styles %} 
     
 
 
 
-{% endblock %}
-    
+    {% endblock %}
+    <title>RRBN Monitoring Portal {% block title %}{% endblock %}</title>
 </head>
 
 <body>
+    <header>
+
+        <section>
+        <div class="container">
+        <div class="row">
+        <div class="col-md-5 my-3 mx-sm-1">
+        <div class="col-md-12">
+        <div class="row">                
+        <img src="{% static 'img/rrbn-logo.png' %}" alt="">
+        </div>    
+        </div>
+        </div>
+        </section>
+
+
+        <div class="container justify-content-center">
+         <!-- Alerts -->
+        {% include 'partials/_alerts.html' %}
+        </div>
+    </header>
 
 
 
-{% block content%} 
+
+
+    {% block content%} 
 
    
 
 
-{%endblock%}
 
-{% block scripts %}
+    {%endblock%}
 
-<script src="{% static 'js/jquery.slim.min.js' %}"></script>
-<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-<script src="{% static 'js/popper.min.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+
+
+   
+    <footer class="gcolor">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <p class="text-white">RRBN</p>
+                    <p class="text-white">
+                        RRBN's key mandate is to regulate the practice of radiography in Nigeria.
+                    </p>
+                    <p class="text-white">
+                        RRBN Monitoring and Emforcement portal Automates all processes in RRBN M&E processes.
+                    </p>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <p class="text-white">Home Links</p>
+                    <p class="text-white " href="index.html">Home</p>
+                    <p class="text-white " href="about-us.html">About</p>
+                    <p class="text-white " href="services.html">Services</p>
+                    <p class="text-white " href="help.html">Help</p>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <p class="text-white ">External Links</p>
+                    <p class="text-white " href="#">RRBN</p>
+                    <p class="text-white " href="#">ARN</p>
+                    <p class="text-white " href="#">NJIRT</p>
+                    <p class="text-white " href="#">MINISTRY OF HEALTH</p>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <p class="text-white">Contact Us</p>
+                    <p class="text-white">
+                        Federal Secretariat Complex, Phase I, Annex III, 4th Floor, <br>Central Area - Abuja, Nigeria.
+                    </p>
+                    <p class="text-white">+234 092914928</p>
+                    <p class="text-white">info@rrbn.gov.ng</p>
+                    <p class="text-white">www.rrbn.gov.ng</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <div class="copyright">
+        <div class="copyright-container">
+            <center>
+                <p>
+                    &copy All Rights Reserved RRBN 2019</p>
+            </center>
+        </div>
+    </div>
+
+    {% block scripts %}
+
+     <script src="{% static 'js/jquery.slim.min.js' %}"></script>
      
-{% endblock scripts %}
+    </script>
+      <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+      <script src="{% static 'js/popper.min.js' %}"></script>
+      <script src="{% static 'js/bootstrap.min.js' %}"></script>
+      <!-- You can alternatively load the minified version -->
+      <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+    {% endblock scripts %}
 
-{% block extrascripts %}{% endblock extrascripts %}
+    {% block extrascripts %}{% endblock extrascripts %}
 
 
 </body>
