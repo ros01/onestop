@@ -189,6 +189,9 @@ class Assign(models.Model):
 	def end_date_pretty(self):
 		return self.end_date.strftime('%b %e %Y')
 
+	def request_date_pretty(self):
+		return self.request_date.strftime('%b %e %Y')
+
 	def approved_date_pretty(self):
 		return self.approved_date.strftime('%b %e %Y')
 

@@ -92,7 +92,12 @@
             <p class="text-success lead">Actions</p>
             <hr> 
             <div class="d-flex justify-content-end">   
-            <button type="button" id="issue-request" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'fleet:issue_vehicle_request' object.id %}"><i class="fa fa-list text-white"></i> Assign Vehicle</button>
+           
+
+            <a class="btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" href="{% url 'fleet:issue_vehicle_request' object.id %}"><i class="fa fa-list text-white"></i> Assign Vehicle</a>
+
+
+
             <a href="{% url 'fleet:vehicle_request_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Vehicle Requests List</a>  
 
             </div>  

@@ -328,7 +328,7 @@ class CategoryDeleteView(CategoryObjectMixin, View):
         return render(request, self.template_name, context)
 
 
-class IssueVehicleRequest(RequestObjectMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
+class IssueVehicleRequest(RequestObjectMixin, SuccessMessageMixin, CreateView):
     template_name = 'fleet/assign_vehicle.html'
     template_name1 = 'fleet/assigned_vehicle_details.html'
     def get(self, request,  *args, **kwargs):
@@ -346,10 +346,7 @@ class IssueVehicleRequest(RequestObjectMixin, PassRequestMixin, SuccessMessageMi
         
         form = IssueVehicleRequestModelForm(request.POST)
         if form.is_valid():
-            if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
-                form.save(commit=False)
-            else:
-                form.save(commit=True)
+            form.save()
             
         context = {}
 

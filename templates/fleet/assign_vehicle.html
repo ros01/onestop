@@ -1,8 +1,36 @@
-{% load widget_tweaks %}
-{% load crispy_forms_tags %}
+{% extends 'base10.html'%}
 {% load static %}
+{% load crispy_forms_tags %}
+{% block title%}| Assign Vehicle {% endblock %}
 
-{{ form.media }}        
+
+
+{% block styles %}
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
+<link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
+
+{% load bootstrap4 %}       
+{% bootstrap_css %}        
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container bg-light">
+<div class="row ml-1 my-2">
+<div class="col col-lg-12">
+<br>
+<br>
+<p class="mt-2 mb-0 pb-0 text-info paragraph3">Assign Vehicle</p>
+<hr>
+</div>
+</div>     
+
 
 
 <form method="post" action="">
@@ -12,12 +40,9 @@
   {{ form.requesting_staff|as_crispy_field }}
   {{ form.department|as_crispy_field }}
 
- <div class="modal-header">
-    <h5 class="modal-title text-success">Assign Vehicle</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
+  <input type="hidden" name="assigned_by" class="form-control" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_assigned_by"  id="div_id_assigned_by">
+
+ 
 
   <div class="modal-body">
     <div class="row">
@@ -48,7 +73,7 @@
     </div>
 
     <div class="form-group col-md-4">
-    <input type="hidden" name="assigned_by" class="form-control" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_assigned_by"  id="div_id_assigned_by">
+    
     </div> 
     </div>
 
@@ -62,17 +87,27 @@
   
     </div>
 
-  </div>
+    <hr> 
+    <div class="d-flex justify-content-end"> 
+    
+    <a href="{% url 'fleet:vehicle_request_list' %}" class="btn btn-danger mr-3"><i class="fa fa-times text-white"></i> Close</a>
+     <button type="submit" class="btn btn btn-primary pt-2 pb-1"><i class="fa fa-list"></i> Assign Vehicle</button>
+    
+   
 
-  <div class="modal-footer">
-    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times text-white"></i>  Close</button>
-    <button type="button" class="submit-btn btn btn-success ml-2 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i>  Assign Vehicle</button>
+    </div>
 
-  </div>
+
 
 </form>
+<br>
+</div>
 
 
+
+
+
+{% endblock %}
 
 
 

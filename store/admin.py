@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Vendor, Item, Category, Issue
+from .models import Vendor, Item, Category, Issue, Restock
 
 
 class VendorAdmin(admin.ModelAdmin):
@@ -50,3 +50,16 @@ class IssueAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Issue, IssueAdmin)
+
+
+class RestockAdmin(admin.ModelAdmin):
+  list_display = ('restock_no', 'item_name', 'stock_code', 'vendor', 'quantity_ordered',
+                  'unit_price', 'quantity_received', 'received_on')
+  list_display_links = ('restock_no', 'item_name', 'stock_code', 'vendor', 'quantity_received')
+  list_filter = ('restock_no', 'item_name', 'unit_price', 'vendor', 'quantity_received')
+  search_fields = ('restock_no', 'item_name', 'vendor', 'quantity_ordered',
+                   'unit_price', 'quantity_received')
+  list_per_page = 25
+
+
+admin.site.register(Restock, RestockAdmin)

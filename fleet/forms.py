@@ -188,12 +188,13 @@ class IssueVehicleRequestModelForm(forms.ModelForm):
         'department': forms.HiddenInput(),
         'request_date': forms.HiddenInput(),   
         'requesting_staff': forms.HiddenInput(),
-        'vehicle': forms.TextInput(attrs={'readonly': True}),
+        
         'request_no': forms.TextInput(attrs={'readonly': True}), 
         'request_reason': forms.TextInput(attrs={'readonly': True}),
         'destination': forms.TextInput(attrs={'readonly': True}),
-        'start_date': DatePickerInput(format='%Y-%m-%d'),
-        'end_date': DatePickerInput(format='%Y-%m-%d'), 
+        'start_date': DateTimePickerInput(),
+        'end_date': DateTimePickerInput(), 
+
 
         }
 
@@ -206,7 +207,9 @@ class IssueVehicleRequestModelForm(forms.ModelForm):
       
       
        self.fields['request_no'].label = "Request No"
-       self.fields['vehicle'].label = "Vehicle ID"
+       self.fields['vehicle'].widget.attrs['value'] = self.instance.vehicle
+       self.fields['vehicle'].widget.attrs['readonly'] = 'readonly'
+       self.fields['vehicle'].label = "Vehicle Name"
        self.fields['department'].label = "Department"
        self.fields['driver'].label = "Driver"
        self.fields['start_date'].label = "Trip Start Date"

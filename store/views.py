@@ -8,10 +8,10 @@ from django.views.generic import (
      DeleteView,
      TemplateView
 )
-from .models import Category, Item, Vendor, Issue
+from .models import Category, Item, Vendor, Issue, Restock
 from rrbnstaff.models import Requisition
 
-from .forms import ItemModelForm, CategoryModelForm, VendorModelForm, IssueRequisitionModelForm
+from .forms import ItemModelForm, CategoryModelForm, VendorModelForm, IssueRequisitionModelForm, RestockModelForm
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from bootstrap_modal_forms.generic import BSModalCreateView
@@ -19,6 +19,8 @@ from bootstrap_modal_forms.mixins import PassRequestMixin, CreateUpdateAjaxMixin
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 
@@ -30,6 +32,111 @@ class DashboardTemplateView(TemplateView):
         context = super(DashboardTemplateView, self).get_context_data(*args, **kwargs)
         #context["inspection"] = Schedule.objects.all()
         return context
+
+
+class ItemCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
+    template_name = 'store/create_item2.html'
+    form_class = ItemModelForm
+    success_message = 'Item created Successfully.'
+
+    success_url = reverse_lazy('store:items_list')
+
+
+def retrieve_item(request):
+    return render(request, 'store/retrieve_item.html')
+
+def get_queryset(self): 
+        query = self.request.GET.get('q')
+        object_list = License.objects.filter(
+            Q(license_no__iexact=query) | Q(hospital_name__iexact=query)
+        )
+        return object_list
+
+def restock(request):
+    try:
+        query = request.GET.get('q')
+        object = 0
+
+    except ValueError:
+        query = None
+        object = None
+    try:
+        object = Item.objects.get(
+            Q(stock_code=query) | Q(item_name__icontains=query)
+        )
+
+    except ObjectDoesNotExist:
+        messages.error(request, ('Stock Code is Invalid.  Enter a Valid Stock Code'))
+        pass
+
+    return render(request, 'store/results.html', {"object": object})
+
+
+class ItemObjectMixin(object):
+    model = Item
+    def get_object(self):
+        id = self.kwargs.get('id')
+        obj = None
+        if id is not None:
+            obj = get_object_or_404(self.model, id=id)
+        return obj 
+
+
+class RestockItem(ItemObjectMixin, View):
+    template_name = "store/restock_item.html"
+    template_name1 = "store/restock_item_details.html"
+    
+    def get(self, request,  *args, **kwargs):
+        context = {}
+        obj = self.get_object()
+        if obj is not None:
+            form = RestockModelForm(instance=obj)
+            context['object'] = obj
+            context['form'] = form
+
+        return render(request, self.template_name, context)
+
+
+
+    def post(self, request,  *args, **kwargs):
+        
+        form = RestockModelForm(request.POST)
+        if form.is_valid():
+            if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
+                form.save(commit=False)
+            else:
+                form.save(commit=True)
+            
+        context = {}
+
+        obj = self.get_object()
+        if obj is not None:
+            form = RestockModelForm(instance=obj)
+            context['object'] = obj
+            context['form'] = form
+            context['restock'] = Restock.objects.filter (stock_code=obj.stock_code, restock_no= request.POST['restock_no'])
+
+        return render(request, self.template_name1, context)
+
+
+class ReceivedItemsList(ListView):
+    template_name = "store/restock_list.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return Restock.objects.all()
+        
+
+    def get_context_data(self, **kwargs):
+        obj = super(ReceivedItemsList, self).get_context_data(**kwargs)
+        obj['restock_qs'] = Restock.objects.order_by('-received_on')
+        return obj
+
+
+class ItemRestockDetails(DetailView):
+    template_name = "store/restock_details.html"
+    model = Restock
+
 
 class VendorListView(ListView):
     template_name = "store/vendors_list2.html"
@@ -45,7 +152,7 @@ class VendorListView(ListView):
         return obj
 
 class ItemCategoyListView(ListView):
-    template_name = "store/items_category_list2.html"
+    template_name = "store/items_category_list.html"
     context_object_name = 'object'
 
     def get_queryset(self):
@@ -126,12 +233,7 @@ class CategoryCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
 
     success_url = reverse_lazy('store:category_list')
 
-class ItemCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
-    template_name = 'store/create_item2.html'
-    form_class = ItemModelForm
-    success_message = 'Item created Successfully.'
 
-    success_url = reverse_lazy('store:items_list')
 
 class VendorObjectMixin(object):
     model = Vendor
@@ -151,14 +253,7 @@ class CategoryObjectMixin(object):
             obj = get_object_or_404(self.model, id=id)
         return obj 
 
-class ItemObjectMixin(object):
-    model = Item
-    def get_object(self):
-        id = self.kwargs.get('id')
-        obj = None
-        if id is not None:
-            obj = get_object_or_404(self.model, id=id)
-        return obj 
+
    
 
 class RequisitionObjectMixin(object):
@@ -335,6 +430,7 @@ class RequisitionDetailsView(RequisitionObjectMixin, View):
     def get(self, request, id=None, *args, **kwargs):
         context = {'object': self.get_object()}
         return render(request, self.template_name, context)
+
 
 
 class IssueRequisitionDetail(IssueObjectMixin, View):

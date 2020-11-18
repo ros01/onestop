@@ -4,6 +4,8 @@
 <form method="post" action="" >
   {% csrf_token %}
 
+  <input type="hidden" name="requesting_staff" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_requesting_staff">
+
   
 
 
@@ -24,34 +26,26 @@
     {{ form.request_reason|as_crispy_field }}
     </div>
 
-    <div class="form-group col-md-4 mt-2 pt-2">
-    <label for="id_department" class=" requiredField">Department<span class="asteriskField">*</span></label>
-    <input type="text" name="department" class="form-control"  value="{{ user.department }}"  required id="id_department"  id="div_id_department" readonly>
-
-    <input type="hidden" name="requesting_staff" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_requesting_staff">
-    </div>
-    </div>
-
-    <div class="row">
     <div class="form-group col-md-4">
     {{ form.destination|as_crispy_field }}
     </div>
 
+    </div>
+
+    <div class="row">
     <div class="form-group col-md-4">
     {{ form.request_duration|as_crispy_field }}
     </div>
 
-    
+    <div class="form-group col-md-4 mt-2 pt-2">
+    <input type="hidden" name="department" class="form-control"  value="{{ user.department }}"  required id="id_department"  id="div_id_department">
     </div>
-
-
-
-
+    </div>
 
 
   <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-    <button type="button" class="submit-btn btn btn-success ml-4 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i> Create Vehicle Request</button>
+    <button type="button" class="submit-btn btn btn-success ml-4 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i>&nbsp;Create Vehicle Request</button>
 
   </div>
 

@@ -191,16 +191,14 @@
           <div class="navbar-wrapper">
 
       {% if "dashboard" in request.path %}
-			<a class="navbar-brand" href="javascript:;">Dashboard</a>
+			<a class="navbar-brand" href="javascript:;"><h4>Dashboard</h4></a>
 
 			{% elif "profile" in request.path %}
 			<a class="navbar-brand" href="javascript:;">Edit Profile</a>
 
-      {% elif "requisition_list" in request.path %}
-      <a class="navbar-brand" href="javascript:;">Requisitions Management</a>
+      
 
-      {% elif "my_issued_requisitions" in request.path %}
-      <a class="navbar-brand" href="javascript:;">Issued Requisitions</a>
+      
 
 			{% else %}
 
@@ -219,6 +217,17 @@
           <div class="collapse navbar-collapse justify-content-end">
             
             <ul class="navbar-nav">
+
+              <li class="nav-item dropdown">
+                <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="material-icons">notifications_active</i>
+                  <span class="notification">5</span>
+                  <p class="d-lg-none d-md-block">
+                    Some Actions
+                  </p>
+                </a>
+                
+              </li>
 
 
              

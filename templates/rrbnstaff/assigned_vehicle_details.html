@@ -21,100 +21,106 @@
       <!-- Main Content -->
       <div id="content">
 
+
       <!-- Begin Page Content -->
         <div class="container-fluid">
-           <br>
+        <br>
 
-        <div class="row mr-4 mt-4">
-            <div class="col-md-6 mt-0">
-                <div class="col-md-12">
-                    <div class="row">
-                      <h3 class="col-12 text-info">My Vehicle Allocation Details</h3>
-                      <br>
-                        <p class="col-12 text-success lead">Allocation Details</p>
-                    </div>
+        <div class="row ml-4 mt-4 pt-4">
+        <h3 class="col-12 text-info">My Vehicle Allocation Details</h3>
+        </div>
 
-                  <div class="row">
-                        <span class="col-5"><strong>Request No:</strong></span>
-                        <span class="col-6 ">{{object.request_no}}</span>
-                    </div>
-                    <div class="row">
-                      <span class="col-5"><strong>Vehicle Name:</strong></span>
-                      <span class="col-6">{{object.vehicle}}</span>
-                  </div>           
-                  <div class="row">
-                      <span class="col-5"><strong>Vehicle Type:</strong></span>
-                      <span class="col-6">{{object.vehicle.vehicle_type}}</span>
-                  </div>               
+        <div class="row mx-4 mt-2 pt-3 bg-white">
+        <div class="col-md-6 mt-0">
+        <div class="col-md-12">
+        <div class="row">
+        <br>
+        <p class="col-12 text-success lead">Allocation Details</p>
+        </div>
+
+        <div class="row">
+        <span class="col-5"><strong>Request No:</strong></span>
+        <span class="col-6 ">{{object.request_no}}</span>
+        </div>
+        
+        <div class="row">
+        <span class="col-5"><strong>Vehicle Name:</strong></span>
+        <span class="col-6">{{object.vehicle}}</span>
+        </div>           
                   
-                    <div class="row">
-                      <span class="col-5"><strong>Purpose:</strong></span>
-                      <span class="col-6">{{object.request_reason}}</span>
-                    </div>
+        <div class="row">
+        <span class="col-5"><strong>Vehicle Type:</strong></span>
+        <span class="col-6">{{object.vehicle.vehicle_type}}</span>
+        </div>               
+                  
+        <div class="row">
+        <span class="col-5"><strong>Purpose:</strong></span>
+        <span class="col-6">{{object.request_reason}}</span>
+        </div>
 
-                    <div class="row">
-                      <span class="col-5"><strong>Destination:</strong></span>
-                      <span class="col-6">{{object.destination}}</span>
-                    </div>
-                  <div class="row">
-                      <span class="col-5"><strong>Request Date:</strong></span>
-                      <span class="col-6">{{object.request_date}}</span>
-                  </div>  
+        <div class="row">
+        <span class="col-5"><strong>Destination:</strong></span>
+        <span class="col-6">{{object.destination}}</span>
+        </div>
+                  
+        <div class="row">
+        <span class="col-5"><strong>Request Date:</strong></span>
+        <span class="col-6">{{object.request_date_pretty}}</span>
+        </div>  
 
-                  <div class="row">
-                      <span class="col-5"><strong>Assigned Driver:</strong></span>
-                      <span class="col-6">  {{ object.driver }}</span>
-                  </div>
-                   <div class="row">
-                      <span class="col-5"><strong>Vehicle Current Milleage:</strong></span>
-                      <span class="col-6">  {{ object.current_mileage }}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-5"><strong>Trip Start Date:</strong></span>
-                      <span class="col-6">  {{ object.start_date }}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-5"><strong>Trip End Date:</strong></span>
-                      <span class="col-6">  {{ object.end_date }}</span>
-                  </div>
+        <div class="row">
+        <span class="col-5"><strong>Assigned Driver:</strong></span>
+        <span class="col-6">  {{ object.driver }}</span>
+        </div>
+                   
+        <div class="row">
+        <span class="col-5"><strong>Vehicle Current Milleage:</strong></span>
+        <span class="col-6">  {{ object.current_mileage }}</span>
+        </div>
+                  
+        <div class="row">
+        <span class="col-5"><strong>Trip Start Date:</strong></span>
+        <span class="col-6">  {{ object.start_date_pretty }}</span>
+        </div>
+                  
+        <div class="row">
+        <span class="col-5"><strong>Trip End Date:</strong></span>
+        <span class="col-6">  {{ object.end_date_pretty }}</span>
+        </div>
                   
 
-                </div>
-                <br>
-              </div>   
+        </div>
+        <br>
+        </div>   
 
-            <div class="col-md-5 mt-4">
-            <p class="text-success lead">Control Details</p>
-            <div class="row">
-                      <span class="col-5"><strong>Vehicle Assigned By:</strong></span>
-                      <span class="col-6">{{object.assigned_by.first_name}} {{object.assigned_by.last_name}}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-5"><strong>Approval Date:</strong></span>
-                      <span class="col-6">{{object.approved_date}}</span>
-                  </div>
+        <div class="col-md-5 mt-4">
+        <p class="text-success lead">Control Details</p>
+        <div class="row">
+        <span class="col-5"><strong>Vehicle Assigned By:</strong></span>
+        <span class="col-6">{{object.assigned_by.first_name}} {{object.assigned_by.last_name}}</span>
+        </div>
+                  
+        <div class="row">
+        <span class="col-5"><strong>Approval Date:</strong></span>
+        <span class="col-6">{{object.approved_date_pretty}}</span>
+        </div>
              
-              <hr> 
-              <div class="d-flex justify-content-end">  
-              <a href="{% url 'rrbnstaff:my_vehicles_allocations_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Vehicle Allocation List</a>  
-            </div>  
-            </div>
+        <hr> 
+        <div class="d-flex justify-content-end">  
+        <a href="{% url 'rrbnstaff:my_vehicles_allocations_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Vehicle Allocation List</a>  
+        </div>  
+        </div>
 
-
-      </div>
+        </div>
         <!-- /.container-fluid -->
-      </div>
-      </div>
-      <!-- End of Main Content -->
+        </div>
+        </div>
+        <!-- End of Main Content -->
+        </div>
+        <!-- End of Content Wrapper -->
 
-      
-
-    </div>
-    <!-- End of Content Wrapper -->
-
-  </div>
-  <!-- End of Page Wrapper -->
-
+        </div>
+        <!-- End of Page Wrapper -->
 
 <script src="{% static 'js/jquery.js' %}"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
@@ -134,15 +140,9 @@
 </script>
 
 
-
-
 <script>
   $('#mydata').dataTable();
 </script>
-
-
-
-
 
 
 

@@ -4,7 +4,7 @@
 <form method="post" action="" >
   {% csrf_token %}
 
-  <input type="hidden" name="user_id" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} >
+<input type="hidden" name="requesting_staff" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_requesting_staff">
 
 
  <div class="modal-header">
@@ -27,13 +27,11 @@
     <div class="form-group col-md-4 mt-2 pt-2">
     <label for="id_department" class=" requiredField">Department<span class="asteriskField">*</span></label>
     <input type="text" name="department" class="form-control"  value="{{ user.department }}"  required id="id_department"  id="div_id_department" readonly>
-
-    <input type="hidden" name="requesting_staff" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_requesting_staff">
     </div>
     </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-    <button type="button" class="submit-btn btn btn-success ml-4 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i>Create Requisition</button>
+    <button type="button" class="submit-btn btn btn-success ml-4 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i>&nbsp;Create Requisition</button>
 
   </div>
 

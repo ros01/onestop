@@ -9,6 +9,17 @@ from rrbnstaff.models import Requisition
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
+
+
+def increment_restock_no():
+    last_restock_no = Restock.objects.all().order_by('restock_no').last()
+    if not last_restock_no:
+        return '1000'
+    restock_no = last_restock_no.restock_no
+    new_restock_no = str(int(restock_no) + 1)
+    new_restock_no = restock_no[0:-(len(new_restock_no))] + new_restock_no
+    return new_restock_no
+
 class Vendor(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     vendor_name = models.CharField(max_length=200)
@@ -90,7 +101,8 @@ class Issue(models.Model):
         return str(self.quantity_issued)
 
     class Meta:
-        ordering = ["-issue_date"]
+       unique_together = (('requisition_no', 'item',), ('requisition_no', 'requesting_staff',))
+       ordering = ["-issue_date"]
 
 
     def requisition_date_pretty(self):
@@ -124,7 +136,45 @@ class Issue(models.Model):
         p.save()
   
 
+class Restock(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    restock_no = models.CharField(max_length=500, null=True, blank=True, unique=True, default=increment_restock_no)
+    item_name =models.CharField(max_length=200)
+    item_description = models.TextField(blank=True, null=True)
+    category = models.ForeignKey('Category', related_name='item_category', null=True, blank=True, on_delete=models.DO_NOTHING)
+    stock_code = models.CharField(max_length=200)
+    vendor = models.ForeignKey('Vendor', null=True, blank=True, on_delete=models.DO_NOTHING)
+    unit = models.CharField(max_length=100, choices = UNIT_OF_MEASUREMENT)
+    quantity_ordered = models.IntegerField()
+    unit_price = models.DecimalField(decimal_places=2, max_digits=20)
+    quantity_received = models.IntegerField()
+    received_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='received_by',  on_delete=models.DO_NOTHING)
+    received_on = models.DateTimeField(default=datetime.now, blank=True)
 
+
+    
+    def __str__(self):
+        return str(self.item_name)
+
+    class Meta:
+        ordering = ["-received_on"]
+
+
+    def received_on_pretty(self):
+        return self.received_on.strftime('%b %e %Y')
+
+
+    def save(self, *args, **kwargs):
+        super(Restock, self).save(*args, **kwargs)
+        
+
+        p = Item.objects.get(item_name=self.item_name)
+        p.quantity += self.quantity_received
+        p.save()
+
+
+        
+  
         
            
 

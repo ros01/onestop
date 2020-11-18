@@ -17,6 +17,8 @@ class RequisitionModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelFo
 
         widgets = {
         'requisition_no': forms.HiddenInput(),
+        'requesting_staff': forms.HiddenInput(),
+        'department': forms.TextInput(attrs={'readonly': True}),
         
         }
 
@@ -54,6 +56,7 @@ class RequestModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
         'request_no': forms.HiddenInput(),
         'requesting_staff': forms.HiddenInput(),
         'request_reason': forms.Textarea(attrs={'rows':2, 'cols':3}),
+        'department': forms.HiddenInput(),
         
         }
 

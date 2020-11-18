@@ -38,7 +38,9 @@ class Requisition(models.Model):
 	requisition_status = models.IntegerField(default=1)
 
 	def __str__(self):
-		return self.requisition_no
+		return str(self.item)
+
+		
 
 	def requisition_date_pretty(self):
 		return self.requisition_date.strftime('%b %e %Y')

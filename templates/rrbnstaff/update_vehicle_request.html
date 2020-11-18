@@ -3,6 +3,7 @@
 
 <form method="post" action="" >
   {% csrf_token %}
+  {{ form.requesting_staff|as_crispy_field }}
 
  
 
@@ -23,26 +24,18 @@
     {{ form.request_reason|as_crispy_field }}
     </div>
 
-    <div class="form-group col-md-4 mt-2 pt-2">
-    <label for="id_department" class=" requiredField">Department<span class="asteriskField">*</span></label>
-    <input type="text" name="department" class="form-control"  value="{{ user.department }}"  required id="id_department"  id="div_id_department" readonly>
-
+    <div class="form-group col-md-4">
+    {{ form.destination|as_crispy_field }}
     </div>
     </div>
 
     <div class="row">
     <div class="form-group col-md-4">
-    {{ form.destination|as_crispy_field }}
-    </div>
-
-    <div class="form-group col-md-4">
     {{ form.request_duration|as_crispy_field }}
     </div>
-
     <div class="form-group col-md-4">
-    {{ form.requesting_staff|as_crispy_field }}
+    {{ form.department|as_crispy_field }}
     </div>
-
     
     </div>
 

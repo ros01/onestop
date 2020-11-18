@@ -3,10 +3,12 @@
 {% block title%}| Vehicle Allocations {% endblock %}
 
 {% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.8.2-web/css/allt.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
 <!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
 <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
 <link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
+
 <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
 
 
@@ -26,63 +28,68 @@
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
-
-
-          <!-- Page Heading -->
+        <!-- Page Heading -->
          <br><br><br>
 
       
-          <button type="button" id="create-request" class="bs-modal btn btn-primary mt-1" data-form-url="{% url 'rrbnstaff:create_vehicle_request' %}"><i class="fa fa-list text-white"></i> Request for Vehicle</button><br>
+          <button type="button" id="create-request" class="bs-modal btn btn-success mt-1" data-form-url="{% url 'rrbnstaff:create_vehicle_request' %}"><i class="fa fa-list text-white"></i> Request for Vehicle</button><br>
 
            {% include 'partials/_alerts.html' %}
 
-          <!-- DataTales Example -->
-            <div class="card shadow mb-4">
-            <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-info">My Vehicle Allocations</h6>
-            </div>
-            <div class="card-body">
-             <div class="table">
-                <table class="table table-bordered" id="mydata" width="100" cellspacing="0">
-                  <thead class="text-info">
-                    <tr>
-                      <th width="02%">S/N</th>
-                      <th width="08%">Request No</th>
-                      <th width="10%">Vehicle Name</th>
-                      <th width="10%">Vehicle Type</th>
-                      <th width="10%">Destination</th>
-                      <th width="12%">Purpose</th>
-                      <th width="12%">Trip Start Date</th>
-                      <th width="12%">Trip End Date</th>
-                      <th width="14%">Approval Date</th>
-                      <th width="10%">Actions</th>
-                    </tr>
-                  </thead>
+         <!-- DataTales Example -->
+        <div class="card shadow mb-2">
+        <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-info">My Vehicle Allocations</h6>
+        </div>
 
-                <tbody>
-                {% if assign_qs %}
-                {% for object in assign_qs %}
-                <tr>
-                <td>{{forloop.counter}}</td>
-                <td width="08%">{{object.request_no}}</td>
-                <td width="10%">{{object.vehicle}}</td>
-                <td width="10%">{{object.vehicle.vehicle_type}}</td>
-                <td width="10%">{{object.destination}}</td>
-                <td width="2%">{{object.request_reason}}</td>
-                <td width="12%">{{object.start_date}}</td>
-                <td width="12%">{{object.end_date}}</td>
-                <td width="14%">{{object.approved_date}}</td>
-                <td width="10%">
-                  <a class="btn btn-primary py-1 mr-4 mt-1 mb-3" href="{% url 'rrbnstaff:allocated_vehicle_details' object.pk %}"><i class="fa fa-list text-white"></i> View</a>             
-                </td>
-                </tr>
-                {% endfor %}
-                {% endif %}
-                </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+        <div class="card-body">
+
+        <div class="table-responsive-lg">
+        <table class="table table-bordered table-hover" id="mydata">
+        <thead>
+        <tr style="background: #41963F;">
+        <td style="color: #fff;" class="small-text" width="05%">S/N</td>
+        <td style="color: #fff;" class="small-text" width="08%">Request No</td>
+        <td style="color: #fff;" class="small-text" width="15%">Vehicle Name</td>
+        <td style="color: #fff;" class="small-text" width="10%">Vehicle Type</td>
+        <td style="color: #fff;" class="small-text" width="14%">Destination</td>
+        <td style="color: #fff;" class="small-text" width="10%">Purpose</td>
+        <td style="color: #fff;" class="small-text" width="10%">Trip Start Date</td>
+        <td style="color: #fff;" class="small-text" width="10%">Trip End Date</td>
+        <td style="color: #fff;" class="small-text" width="10%">Approval Date</td>
+        <td style="color: #fff;" class="small-text" width="08%">Actions</td>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% if assign_qs %}
+        {% for object in assign_qs %}
+        <tr>
+        <td width="05%">{{forloop.counter}}</td>
+        <td width="08%">{{object.request_no}}</td>
+        <td width="15%">{{object.vehicle}}</td>
+        <td width="10%">{{object.vehicle.vehicle_type}}</td>
+        <td width="14%">{{object.destination}}</td>
+        <td width="10%">{{object.request_reason}}</td>
+        <td width="10%">{{object.start_date_pretty}}</td>
+        <td width="10%">{{object.end_date_pretty}}</td>
+        <td width="10%">{{object.approved_date_pretty}}</td>
+        <td width="08%">
+
+        <a class="btn btn-primary p-1" href="{% url 'rrbnstaff:allocated_vehicle_details' object.pk %}"><i class="fa fa-folder-open text-white"></i></a>           
+        </td>
+
+                         
+
+        </tr>
+
+        {% endfor %}
+        {% endif %}              
+        </tbody>
+        </table>
+        </div>
+        </div>
+        </div>
 
         </div>
         <!-- /.container-fluid -->
@@ -94,18 +101,14 @@
     <!-- End of Content Wrapper -->
 
   </div>
-   <!-- End of Page Wrapper -->
+  <!-- End of Page Wrapper -->
 
 
-
-<script src="{% static 'js/jquery.js' %}"></script>
+<!--Jquery plugin-->
+<script src="{% static 'js/jquery.js' %}"></script>    
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
-
-
-
-
-
+<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
 
 
 <script type="text/javascript">
@@ -122,10 +125,9 @@
 </script>
 
 
-
-
-
-
+<script>
+$('#mydata').dataTable();
+</script>
 
 
 {% endblock %}

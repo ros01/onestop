@@ -3,17 +3,19 @@
 {% block title%}| Requisitions {% endblock %}
 
 {% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.8.2-web/css/allt.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
 <!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
 <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
 <link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
-<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
-<link href="{% static 'assets/css/material-dashboard.css' %}" rel="stylesheet" /> 
+
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet"> 
 
 {% endblock %}
 
 {% block content %}
 
+{% include "_modal.html" %}
 <!-- Page Wrapper -->
   <div id="wrapper">
 
@@ -22,59 +24,62 @@
 
       <!-- Main Content -->
       <div id="content">
-      <!-- Begin Page Content -->
+
+        <!-- Begin Page Content -->
         <div class="container-fluid">
 
           <!-- Page Heading -->
          <br><br><br>
-
          
 
-           <!-- DataTales Example -->
+        {% include 'partials/_alerts.html' %}
+
+          <!-- DataTales Example -->
           <div class="card shadow mb-2">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-info">Requisitions Management</h6>
+              <h6 class="m-0 font-weight-bold text-success">Requisitions Management</h6>
             </div>
             <div class="card-body">
 
-              <div class="table">
-                <table class="table table-bordered" id="mydata" width="100" cellspacing="0">
-                  <thead class="text-info">
-                    <tr>
-                      <th>S/N</th>
-                      <th width="15%">Requisition No</th>
-                      <th width="13%">Item Name</th>
-                      <th width="13%">Quantity Requested</th>
-                      <th width="15%">Requested by</th>
-                      <th width="15%">Department</th>
-                      <th width="10%">Date</th>
-                      <th width="18%">Actions</th>
-                    </tr>
-                  </thead>
 
-                <tbody>
-                {% if requisition_qs %}
-                {% for object in requisition_qs %}
-                <tr>
-                <td>{{forloop.counter}}</td>
-                <td width="15%">{{object.requisition_no}}</td>
-                <td width="13%">{{object.item}}</td>
-                <td width="13%">{{object.quantity_requested}}</td>
-                <td width="15%">{{object.requesting_staff.first_name}} {{object.requesting_staff.last_name}}</td>
-                <td width="15%">{{object.department}}</td>
-                <td width="10%">{{object.requisition_date_pretty}}</td>
-                <td width="18%">
+      <div class="table-responsive-lg">
+      <table class="table table-bordered table-hover" id="mydata">
+      <thead>
+      <tr style="background: #41963F;">
+      <td style="color: #fff;" class="small-text" width="05%">S/N</td>
+      <td style="color: #fff;" class="small-text" width="10%">Requisition No</td>
+      <td style="color: #fff;" class="small-text" width="23%">Item Name</td>
+      <td style="color: #fff;" class="small-text" width="13%">Quantity Requested</td>
+      <td style="color: #fff;" class="small-text" width="13%">Requested by</td>
+      <td style="color: #fff;" class="small-text" width="13%">Department</td>
+      <td style="color: #fff;" class="small-text" width="13%">Date</td>
+      <td style="color: #fff;" class="small-text" width="10%">Actions</td>
+      </tr>
+      </thead>
+      
+      <tbody>
+      {% if requisition_qs %}
+      {% for object in requisition_qs %}
+      <tr>
+      <td width="05%">{{forloop.counter}}</td>
+      <td width="10%">{{object.requisition_no}}</td>
+      <td width="23%">{{object.item}}</td>
+      <td width="13%">{{object.quantity_requested}}</td>
+      <td width="13%">{{object.requesting_staff.first_name}} {{object.requesting_staff.last_name}}</td>
+      <td width="13%">{{object.department}}</td>
+      <td width="13%">{{object.requisition_date_pretty}}</td>
+      <td width="10%">
 
-                <a href="{% url 'store:requisition_details' object.id %}" class="btn btn-outline-warning btn-sm">View Requisition</a></td>
+      <a href="{% url 'store:requisition_details' object.id %}" class="btn btn-outline-warning btn-sm">View Requisition</a></td>
 
-                </td>
-                </tr>
-                {% endfor %}
-                {% endif %}
-                </tbody>
-                </table>
+      </td>
+      </tr>
+      {% endfor %}
+      {% endif %}
+      </tbody>
+      </table>
               </div>
-            </div>
+             </div>
           </div>
 
         </div>
@@ -82,18 +87,21 @@
 
       </div>
       <!-- End of Main Content -->
+
     </div>
     <!-- End of Content Wrapper -->
 
   </div>
   <!-- End of Page Wrapper -->
 
-<script src="{% static 'js/jquery.js' %}"></script>
-<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<!--Jquery plugin-->
+     <script src="{% static 'js/jquery.js' %}"></script>
+     
+     <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
 
+     <script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
 
-<!-- <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script> -->
 
 
 

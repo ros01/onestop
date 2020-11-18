@@ -1,0 +1,85 @@
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+<form method="post" action="">
+  {% csrf_token %}
+
+  {{ form.restock_no|as_crispy_field }}
+
+  <input type="hidden" name="received_by" class="form-control" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_received_by"  id="div_id_received_by">
+  
+
+
+ <div class="modal-header">
+    <h5 class="modal-title text-success">Restock</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row">
+    <div class="form-group col-md-4">
+    {{ form.stock_code|as_crispy_field }}
+    </div>
+
+    
+
+    <div class="form-group col-md-4">
+    {{ form.item_name|as_crispy_field }}
+    </div>
+
+    
+    <div class="form-group col-md-4">
+    {{ form.item_description|as_crispy_field }}
+    </div>
+
+    </div>
+
+    <div class="row">
+    <div class="form-group col-md-4">
+    {{ form.category|as_crispy_field }}
+    </div>
+
+    <div class="form-group col-md-4">
+      {{ form.vendor|as_crispy_field }}
+    </div> 
+
+    <div class="form-group col-md-4">
+      {{ form.unit|as_crispy_field }}
+    </div> 
+
+    </div>
+
+    <div class="row">
+    <div class="form-group col-md-4">
+    {{ form.quantity_ordered|as_crispy_field }}
+    </div>
+
+    <div class="form-group col-md-4">
+      {{ form.unit_price|as_crispy_field }}
+    </div> 
+
+    <div class="form-group col-md-4">
+      {{ form.quantity_received|as_crispy_field }}
+    </div> 
+
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times text-white"></i>  Close</button>
+    <button type="button" class="submit-btn btn btn-success ml-2 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i>  Restock Item</button>
+
+  </div>
+
+</form>
+
+
+
+
+
+
+
+

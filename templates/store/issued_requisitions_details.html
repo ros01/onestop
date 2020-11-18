@@ -21,97 +21,93 @@
       <!-- Main Content -->
       <div id="content">
 
+
       <!-- Begin Page Content -->
         <div class="container-fluid">
-           <br>
+        <br>
 
-        <div class="row mr-4 mt-4">
-            <div class="col-md-6 mt-0">
-                <div class="col-md-12">
-                    <div class="row">
-                      <h3 class="col-12 text-info">Issued Requisition Details</h3>
-                      <br>
-                        <p class="col-12 text-success lead">Issue Details</p>
-                    </div>
+        <div class="row ml-4 mt-4 pt-4">
+        <h3 class="col-12 text-info">Issued Requisition Details</h3>
+        </div>
 
-                    <div class="row">
-                        <span class="col-5"><strong>Requisition No:</strong></span>
-                        <span class="col-6 ">{{object.requisition_no}}</span>
-                    </div>
+        <div class="row mx-4 mt-2 pt-3 bg-white">
+        <div class="col-md-6 mt-0">
+        <div class="col-md-12">
+        <div class="row">
+        <br>
+        <p class="col-12 text-success lead">Issue Details</p>
+        </div>
 
-                     <div class="row">
-                        <span class="col-5"><strong>Item Name:</strong></span>
-                        <span class="col-6 ">{{object.item}}</span>
-                    </div> 
-                    <div class="row">
-                      <span class="col-5"><strong>Staff Department:</strong></span>
-                      <span class="col-6">{{object.department }}</span>
-                  </div>
+        <div class="row">
+        <span class="col-5"><strong>Requisition No:</strong></span>
+        <span class="col-6 ">{{object.requisition_no}}</span>
+        </div>
+
+        <div class="row">
+        <span class="col-5"><strong>Item Name:</strong></span>
+        <span class="col-6 ">{{object.item}}</span>
+        </div> 
+                    
+        <div class="row">
+        <span class="col-5"><strong>Staff Department:</strong></span>
+        <span class="col-6">{{object.department }}</span>
+        </div>
                  
-                  <div class="row">
-                      <span class="col-5"><strong>Requisition Date:</strong></span>
-                      <span class="col-6">{{object.requisition_date}}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-5"><strong>Requested Quantity:</strong></span>
-                      <span class="col-6">{{object.quantity_requested}}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-5"><strong>Staff Name:</strong></span>
-                      <span class="col-6">{{object.requesting_staff.first_name}} {{object.requesting_staff.last_name}}</span>
-                    </div>  
-                  <div class="row">
-                      <span class="col-5"><strong>Quantity Issued:</strong></span>
-                      <span class="col-6">{{object.quantity_issued}}</span>
-                  </div>
+        <div class="row">
+        <span class="col-5"><strong>Requisition Date:</strong></span>
+        <span class="col-6">{{object.requisition_date}}</span>
+        </div>
+                  
+        <div class="row">
+        <span class="col-5"><strong>Requested Quantity:</strong></span>
+        <span class="col-6">{{object.quantity_requested}}</span>
+        </div>
+                  
+        <div class="row">
+        <span class="col-5"><strong>Staff Name:</strong></span>
+        <span class="col-6">{{object.requesting_staff.first_name}} {{object.requesting_staff.last_name}}</span>
+        </div>  
+                  
+        <div class="row">
+        <span class="col-5"><strong>Quantity Issued:</strong></span>
+        <span class="col-6">{{object.quantity_issued}}</span>
+        </div>
                   
 
-                </div>
-                <br>
-              </div>   
+        </div>
+        <br>
+        </div>   
 
-            <div class="col-md-5 mt-4">
-            <p class="text-success lead">Control Details</p>
+        <div class="col-md-5 mt-0">
+        <p class="text-success lead">Control Details</p>
             
 
-            <div class="row">
-                      <span class="col-5"><strong>Issued By:</strong></span>
-                      <span class="col-6">{{object.issued_by.first_name}} {{object.issued_by.last_name}}</span>
-                  </div>
-                  <div class="row">
-                      <span class="col-5"><strong>Issue Date:</strong></span>
-                      <span class="col-6">{{object.issue_date}}</span>
-                  </div>
+        <div class="row">
+        <span class="col-5"><strong>Issued By:</strong></span>
+        <span class="col-6">{{object.issued_by.first_name}} {{object.issued_by.last_name}}</span>
+        </div>
+                  
+        <div class="row">
+        <span class="col-5"><strong>Issue Date:</strong></span>
+        <span class="col-6">{{object.issue_date}}</span>
+        </div>
              
-              <hr> 
-              <div class="d-flex justify-content-end">  
-              <a href="{% url 'store:issued_requisitions_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Issued Requisitions List</a>  
-            </div>  
-            </div>
+        <hr> 
+        <div class="d-flex justify-content-end">  
+        <a href="{% url 'store:issue_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Issued Requisitions List</a>  
+        </div>  
+        </div>
 
-
-      </div>
+        </div>
         <!-- /.container-fluid -->
-      </div>
+        </div>
+        </div>
+        <!-- End of Main Content -->
+        </div>
+        <!-- End of Content Wrapper -->
 
-
-
-
-
-
-
-
-      </div>
-      <!-- End of Main Content -->
-
-      
-
-    </div>
-    <!-- End of Content Wrapper -->
-
-  </div>
-  <!-- End of Page Wrapper -->
-
+        </div>
+        <!-- End of Page Wrapper -->
 
 <script src="{% static 'js/jquery.js' %}"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>

@@ -1,6 +1,6 @@
 from django import forms
 from django.http import HttpResponse, Http404, HttpResponseRedirect
-from .models import Item, Category, Vendor, Issue
+from .models import Item, Category, Vendor, Issue, Restock
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field
 from django.utils import timezone
@@ -154,9 +154,10 @@ class IssueRequisitionModelForm(forms.ModelForm):
         'department': forms.HiddenInput(),
         'requisition_date': forms.HiddenInput(),   
         'requesting_staff': forms.HiddenInput(),
-        'item': forms.TextInput(attrs={'readonly': True}),
+        
         'requisition_no': forms.TextInput(attrs={'readonly': True}), 
         'quantity_requested': forms.TextInput(attrs={'readonly': True}),
+
 
         }
 
@@ -171,8 +172,9 @@ class IssueRequisitionModelForm(forms.ModelForm):
       
       
        self.fields['requisition_no'].label = "Requisition No"
+       self.fields['item'].widget.attrs['value'] = self.instance.item
+       self.fields['item'].widget.attrs['readonly'] = 'readonly'
        self.fields['item'].label = "Item Name"
-       self.fields['item'].widget.attrs['placeholder'] = "Item Name"
        self.fields['department'].label = "Department"
        self.fields['requisition_date'].label = "Requisition Date"
        self.fields['quantity_requested'].label = "Requested Quantity"
@@ -184,6 +186,45 @@ class IssueRequisitionModelForm(forms.ModelForm):
        self.fields['issued_by'].widget.attrs['placeholder'] = "Issuing Officer"
 
 
+
+
+class RestockModelForm(forms.ModelForm):
+
+
+    class Meta:
+        model = Restock
+
+        fields = ('restock_no', 'item_name', 'item_description', 'category', 'stock_code', 'vendor', 'unit', 'quantity_ordered', 'unit_price', 'quantity_received', 'received_by', 'received_on')
+
+        widgets = {
+       'item_description': forms.Textarea(attrs={'rows':2, 'cols':12}),
+       'restock_no': forms.HiddenInput(),
+
+        }
+
+        
+
+    def __init__(self, *args, **kwargs):
+       super(RestockModelForm, self).__init__(*args, **kwargs)
+       for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'form-control',
+            })
+      
+       
+       self.fields['item_name'].label = "Item Name"
+       self.fields['item_description'].label = "Item Description"
+       self.fields['item_description'].widget.attrs['placeholder'] = "Enter Item Description"
+       self.fields['category'].label = "Category"
+       self.fields['stock_code'].label = "Stock Code"
+       self.fields['vendor'].label = "Vendor"
+       self.fields['unit'].label = "Unit of Measurement"
+       self.fields['quantity_ordered'].label = "Quantity Ordered"
+       self.fields['quantity_ordered'].widget.attrs['placeholder'] = "Enter Quantity Ordered"
+       self.fields['unit_price'].label = "Unit Price"
+       self.fields['unit_price'].widget.attrs['placeholder'] = "Enter Unit Price"
+       self.fields['quantity_received'].label = "Quantity Received"
+       self.fields['quantity_received'].widget.attrs['placeholder'] = "Enter Quantity Received"
 
     
 
