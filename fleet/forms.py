@@ -1,6 +1,6 @@
 from django import forms
 from django.http import HttpResponse, Http404, HttpResponseRedirect
-from .models import Workshop, Station, Category, Vehicle, Assign, Release, Fueling, Repair, Schedule, Maintenance
+from .models import Workshop, Station, Category, Vehicle, Assign, Release, Fueling, Repair, Schedule, Maintenance, Refill
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field
 from django.utils import timezone
@@ -51,7 +51,7 @@ class StationModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
 
     class Meta:
         model = Station
-        fields = ('station_name', 'contact_name', 'address', 'phone', 'email', 'station_credit', 'entered_by',)
+        fields = ('station_name', 'contact_name', 'address', 'phone', 'email', 'station_credit', 're_order_credit', 'entered_by',)
 
                 
 
@@ -74,6 +74,8 @@ class StationModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
        self.fields['email'].widget.attrs['placeholder'] = "Email"
        self.fields['station_credit'].label = "Station Credit"
        self.fields['station_credit'].widget.attrs['placeholder'] = "Enter Station Credit"
+       self.fields['re_order_credit'].label = "Station Re-Order Credit"
+       self.fields['re_order_credit'].widget.attrs['placeholder'] = "Enter Station Re-Order Credit"
        
 
     def save(self):
@@ -230,7 +232,7 @@ class FinalizeTripModelForm(forms.ModelForm):
         'department': forms.HiddenInput(),
         'request_date': forms.HiddenInput(),   
         'requesting_staff': forms.TextInput(attrs={'readonly': True}),
-        'vehicle': forms.TextInput(attrs={'readonly': True}),
+        #'vehicle': forms.TextInput(attrs={'readonly': True}),
         'request_no': forms.TextInput(attrs={'readonly': True}), 
         'driver': forms.TextInput(attrs={'readonly': True}),
         'start_date': DatePickerInput(format='%Y-%m-%d'),
@@ -247,7 +249,10 @@ class FinalizeTripModelForm(forms.ModelForm):
       
       
        self.fields['request_no'].label = "Request No"
-       self.fields['vehicle'].label = "Vehicle ID"
+       #self.fields['vehicle'].label = "Vehicle ID"
+       self.fields['vehicle'].widget.attrs['value'] = self.instance.vehicle
+       self.fields['vehicle'].widget.attrs['readonly'] = 'readonly'
+       self.fields['vehicle'].label = "Vehicle Name"
        self.fields['driver'].label = "Driver"
        self.fields['start_date'].label = "Trip Start Date"
        self.fields['end_date'].label = "Trip End Date"
@@ -266,7 +271,7 @@ class FuelingModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
 
     class Meta:
         model = Fueling
-        fields = ('vehicle', 'driver', 'current_mileage', 'fuel_input', 'fuel_cost', 'station', 'authorised_by')
+        fields = ('vehicle', 'driver', 'voucher_no', 'current_mileage', 'fuel_input', 'fuel_cost', 'station', 'authorised_by')
 
                 
 
@@ -281,6 +286,8 @@ class FuelingModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
        self.fields['station'].label = "Station Name"
        self.fields['driver'].label = "Driver Name"
        self.fields['driver'].widget.attrs['placeholder'] = "Enter Driver Name"
+       self.fields['voucher_no'].label = "Voucher Number"
+       self.fields['voucher_no'].widget.attrs['placeholder'] = "Enter Voucher Number"
        self.fields['current_mileage'].label = "Current Mileage"
        self.fields['current_mileage'].widget.attrs['placeholder'] = "Enter Current Mileage"
        self.fields['fuel_input'].label = "Fuel Quantity"
@@ -449,7 +456,41 @@ class RecordMaintenanceModelForm(forms.ModelForm):
 
         
 
+class RefillModelForm(forms.ModelForm):
 
+    class Meta:
+        model = Refill
+
+        fields = ('refill_no', 'station_name', 'address', 'phone', 'email', 'station_credit', 'refill_credit_value', 'refill_by')
+
+        widgets = {
+       'station_name': forms.TextInput(attrs={'readonly': True}),
+       'phone': forms.TextInput(attrs={'readonly': True}),
+       'address': forms.Textarea(attrs={'readonly': True,'rows':2, 'cols':12}),
+       'refill_no': forms.HiddenInput(),
+       'email': forms.HiddenInput(),
+       'station_credit': forms.TextInput(attrs={'readonly': True}),
+
+        }
+
+        
+
+    def __init__(self, *args, **kwargs):
+       super(RefillModelForm, self).__init__(*args, **kwargs)
+       for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'form-control',
+            })
+      
+       
+       self.fields['station_name'].label = "Station Name"
+       self.fields['address'].label = "Station Address"
+       self.fields['address'].widget.attrs['placeholder'] = "Enter Station Address"
+       self.fields['phone'].label = "Phone"
+       self.fields['email'].label = "Email"
+       self.fields['refill_credit_value'].label = "Restock Credit Value"
+       self.fields['refill_credit_value'].widget.attrs['placeholder'] = "Enter Restock Credit Value"
+       
 
 
 

@@ -1,5 +1,6 @@
 {% extends 'base0.html'%}
 {% load static %}
+{% load humanize %}
 {% block title%}| Maintenance Details {% endblock %}
 
 {% block styles %}
@@ -80,12 +81,12 @@
 
         <div class="row">
         <span class="col-5"><strong>Current Mileage:</strong></span>
-        <span class="col-6">{{ object.current_maintenance_mileage}}</span>
+        <span class="col-6">{{ object.current_maintenance_mileage| intcomma}}</span>
         </div>  
         
         <div class="row">
         <span class="col-5"><strong>Maintenance Cost:</strong></span>
-        <span class="col-6">{{ object.actual_maintenance_cost}}</span>
+        <span class="col-6">{{ object.actual_maintenance_cost| intcomma}}</span>
         </div>  
         
         <div class="row">

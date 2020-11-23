@@ -45,12 +45,12 @@
                   <div class="card-icon">
                     <i class="material-icons">update</i>
                   </div>
-                  <p class="card-category">Total Assigned Vehicles</p>
+                  <p class="card-category">Total Approved Requests</p>
                   <h3 class="card-title">125</h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons text-info">date_range</i> 50 (Assigned this Month)
+                    <i class="material-icons text-info">date_range</i> 50 (Approved this Month)
                   </div>
                 </div>
               </div>
@@ -61,12 +61,12 @@
                   <div class="card-icon">
                     <i class="material-icons">info_outline</i>
                   </div>
-                  <p class="card-category">Vehicles Due Maintenance</p>
+                  <p class="card-category">Pending Maintenance</p>
                   <h3 class="card-title">75</h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons text-info">date_range</i> 10 (Pending Maintenance this Month)
+                    <i class="material-icons text-info">date_range</i> 10 (Pending this Month)
                   </div>
                 </div>
               </div>
@@ -77,12 +77,12 @@
                   <div class="card-icon">
                     <i class="material-icons">info_outline</i>
                   </div>
-                  <p class="card-category">Vehicle Repair Requests</p>
+                  <p class="card-category">Total Vehicle Repairs</p>
                   <h3 class="card-title">50</h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons text-info">date_range</i> 5 (Vehicles repaired this Month)
+                    <i class="material-icons text-info">date_range</i> 5 (Repaired this Month)
                   </div>
                 </div>
               </div>
@@ -96,38 +96,47 @@
   </div>
 </div>
 
-
           <div class="row">
-      
-              <div class="col-md-4" onclick="window.location='{% url 'fleet:vehicle_list' %}';" style="cursor: pointer;">
+
+
+          <div class="col-md-4" onclick="window.location='{% url 'fleet:vehicle_request_list' %}';" style="cursor: pointer;">
               <div class="card remove-borer">
                 <div class="card-body">
-                <button type="button" class="btn info text-info pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/barcode.png' %}" alt="shop"> View Fleet List</button>
+                <button type="button" class="btn info text-info pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/car.png' %}" alt="shop"> View Vehicle Requests</button>
+                </div>
+                </div>
+              </div> 
+      
+              <div class="col-md-4" onclick="window.location='{% url 'fleet:retrieve_station' %}';" style="cursor: pointer;">
+              <div class="card remove-borer">
+                <div class="card-body">
+                <button type="button" class="btn warning text-warning pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/reports.png' %}" alt="shop"> Restock Station Credit</button>
                 </div>
                 </div>
               </div> 
 
           
 
-            <div class="col-md-4" onclick="window.location='{% url 'fleet:vehicle_request_list' %}';" style="cursor: pointer;">
+            <div class="col-md-4" onclick="window.location='{% url 'fleet:station_list' %}';" style="cursor: pointer;">
               <div class="card remove-borer">
                 <div class="card-body">
-                <button type="button" class="btn warning text-warning pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/car.png' %}" alt="shop"> View Vehicle Requests</button>
+                <button type="button" class="btn danger text-danger pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/view-requisition.png' %}" alt="shop"> Reports</button>
                 </div>
                 </div>
               </div> 
 
-
-              <div class="col-md-4" onclick="window.location='{% url 'fleet:vehicles_allocations_list' %}';" style="cursor: pointer;">
-              <div class="card remove-borer">
-                <div class="card-body">
-                <button type="button" class="btn danger text-danger pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/view-requisition.png' %}" alt="shop"> View Vehicle Assignment</button>
-                </div>
-                </div>
-              </div> 
+              </div>
 
 
-          </div>
+
+
+
+
+
+
+
+
+
         </div>
       </div>
 

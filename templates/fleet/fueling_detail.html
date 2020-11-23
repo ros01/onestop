@@ -29,7 +29,7 @@
 
         <div class="row ml-4 mt-4 pt-4">
             
-        <h3 class="col-12 text-info">Fueling Records</h3>
+        <h4 class="col-12 text-success">Fueling Records</h4>
         </div>
 
         <div class="row mx-4 mt-2 pt-3 bg-white">
@@ -49,6 +49,16 @@
         <span class="col-5"><strong>Driver Name:</strong></span>
         <span class="col-5">{{object.driver}}</span>
         </div>
+
+        <div class="row">
+        <span class="col-5"><strong>Station Name:</strong></span>
+        <span class="col-5">{{object.station}}</span>
+        </div> 
+
+        <div class="row">
+        <span class="col-5"><strong>Voucher Number:</strong></span>
+        <span class="col-5">{{object.voucher_no}}</span>
+        </div> 
                  
         <div class="row">
         <span class="col-5"><strong>Current Mileage:</strong></span>
@@ -66,10 +76,7 @@
         <span class="col-5">N{{object.fuel_cost| intcomma}}</span>
         </div>  
         
-        <div class="row">
-        <span class="col-5"><strong>Station Name:</strong></span>
-        <span class="col-5">{{object.station}}</span>
-        </div> 
+       
         </div>
         <br>
         </div>   

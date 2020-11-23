@@ -35,16 +35,21 @@
 </div>
 <div class="form-row">
 <div class="form-group col-md-6">
-{{ form.current_mileage|as_crispy_field }}
+{{ form.station|as_crispy_field }}
 </div>
 <div class="form-group col-md-6">
-{{ form.station|as_crispy_field }}
+{{ form.voucher_no|as_crispy_field }}
 </div>
 </div>
 <div class="form-row">
 <div class="form-group col-md-6">
+{{ form.current_mileage|as_crispy_field }}
+</div>
+<div class="form-group col-md-6">
 {{ form.fuel_input|as_crispy_field }}
 </div>
+</div>
+<div class="form-row">
 <div class="form-group col-md-6">
 {{ form.fuel_cost|as_crispy_field }}
 </div>

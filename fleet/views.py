@@ -11,10 +11,10 @@ from django.views.generic import (
      DeleteView,
      TemplateView
 )
-from .models import Station, Workshop, Category, Vehicle, Assign, Release, Fueling, Repair, Maintenance, Schedule
+from .models import Station, Workshop, Category, Vehicle, Assign, Release, Fueling, Repair, Maintenance, Schedule, Refill
 from rrbnstaff.models import Request
 
-from .forms import WorkshopModelForm, StationModelForm, CategoryModelForm, VehicleModelForm, IssueVehicleRequestModelForm, FinalizeTripModelForm, FuelingModelForm, RepairsModelForm, ScheduleModelForm, RecordMaintenanceModelForm
+from .forms import WorkshopModelForm, StationModelForm, CategoryModelForm, VehicleModelForm, IssueVehicleRequestModelForm, FinalizeTripModelForm, FuelingModelForm, RepairsModelForm, ScheduleModelForm, RecordMaintenanceModelForm, RefillModelForm
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from bootstrap_modal_forms.generic import BSModalCreateView
@@ -22,6 +22,9 @@ from bootstrap_modal_forms.mixins import PassRequestMixin, CreateUpdateAjaxMixin
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
+from decimal import Decimal
 
 # Create your views here.
 
@@ -32,6 +35,103 @@ class DashboardTemplateView(TemplateView):
         context = super(DashboardTemplateView, self).get_context_data(*args, **kwargs)
         #context["inspection"] = Schedule.objects.all()
         return context
+
+
+
+def retrieve_station(request):
+    return render(request, 'fleet/retrieve_station.html')
+
+
+def restock(request):
+    try:
+        query = request.GET.get('q')
+        object = 0
+
+    except ValueError:
+        query = None
+        object = None
+    try:
+        object = Station.objects.get(
+            Q(station_name=query) | Q(station_name__icontains=query)
+        )
+
+    except ObjectDoesNotExist:
+        messages.error(request, ('Station Name is Invalid.  Enter a Valid Station'))
+        pass
+
+    return render(request, 'fleet/results.html', {"object": object})
+
+
+class StationObjectMixin(object):
+    model = Station
+    def get_object(self):
+        id = self.kwargs.get('id')
+        obj = None
+        if id is not None:
+            obj = get_object_or_404(self.model, id=id)
+        return obj  
+
+
+class RestockStationCredit(StationObjectMixin, View):
+    template_name = "fleet/refill_station_credit.html"
+    template_name1 = "fleet/refill_station_credit_details.html"
+    
+    def get(self, request,  *args, **kwargs):
+        context = {}
+        obj = self.get_object()
+        if obj is not None:
+            form = RefillModelForm(instance=obj)
+            context['object'] = obj
+            context['form'] = form
+
+        return render(request, self.template_name, context)
+
+
+
+    def post(self, request,  *args, **kwargs):
+        form = RefillModelForm(request.POST)
+        if form.is_valid():
+            if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
+                form.save(commit=False)
+            else:
+                restock = form.save(commit=False)
+                restock.station_credit += Decimal(request.POST['refill_credit_value'])
+                restock.save()
+
+
+
+        context = {}
+
+        obj = self.get_object()
+        if obj is not None:
+            form = RefillModelForm(instance=obj)
+            context['object'] = obj
+            context['form'] = form
+            context['refill'] = Refill.objects.filter (station_name=obj.station_name, refill_no= request.POST['refill_no'])
+
+        return render(request, self.template_name1, context)
+
+
+class StationCreditRestockList(ListView):
+    template_name = "fleet/restock_list.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return Refill.objects.all()
+        
+
+    def get_context_data(self, **kwargs):
+        obj = super(StationCreditRestockList, self).get_context_data(**kwargs)
+        obj['restock_qs'] = Refill.objects.order_by('-refill_on')
+        return obj
+
+
+class StationCreditRestockDetails(DetailView):
+    template_name = "fleet/restock_station_credit_details.html"
+    model = Refill
+
+
+
 
 class WorkshopCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'fleet/create_workshop.html'
@@ -216,14 +316,7 @@ class WorkshopObjectMixin(object):
             obj = get_object_or_404(self.model, id=id)
         return obj 
 
-class StationObjectMixin(object):
-    model = Station
-    def get_object(self):
-        id = self.kwargs.get('id')
-        obj = None
-        if id is not None:
-            obj = get_object_or_404(self.model, id=id)
-        return obj 
+
 
 class CategoryObjectMixin(object):
     model = Category
@@ -409,9 +502,6 @@ class VehicleAssignmentList(ListView):
         obj = super(VehicleAssignmentList, self).get_context_data(**kwargs)
         obj['vehicle_assignment_qs'] = Assign.objects.filter(trip_status="created")
         return obj
-
-
-
 
 
 class VehicleAllocationsDetail(AssignObjectMixin, View):

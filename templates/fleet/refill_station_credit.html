@@ -1,0 +1,64 @@
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+
+<form method="post" action="">
+  {% csrf_token %}
+
+  {{ form.refill_no|as_crispy_field }}
+  {{ form.email|as_crispy_field }}
+ 
+  <input type="hidden" name="refill_by" class="form-control" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_refill_by"  id="div_id_refill_by">
+  
+
+
+ <div class="modal-header">
+    <h5 class="modal-title text-success">Refill Station Credit</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row">
+    <div class="form-group col-md-4">
+    {{ form.station_name|as_crispy_field }}
+    </div>
+
+    
+
+    <div class="form-group col-md-4">
+    {{ form.address|as_crispy_field }}
+    </div>
+
+    <div class="form-group col-md-4">
+    {{ form.phone|as_crispy_field }}
+    </div>
+
+    </div>
+    <div class="row">
+      <div class="form-group col-md-4">
+    {{ form.station_credit|as_crispy_field }}
+    </div>
+    <div class="form-group col-md-4">
+    {{ form.refill_credit_value|as_crispy_field }}
+    </div>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times text-white"></i>  Close</button>
+    <button type="button" class="submit-btn btn btn-success ml-2 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i>  Restock Station Credit</button>
+
+  </div>
+
+</form>
+
+
+
+
+
+
+
+

@@ -42,31 +42,35 @@
         </div>
 
                      <div class="row">
-                        <span class="col-4"><strong>Station Name:</strong></span>
+                        <span class="col-5"><strong>Station Name:</strong></span>
                         <span class="col-6 ">{{object.station_name}}</span>
                     </div>
                 
 
                     <div class="row">
-                      <span class="col-4"><strong>Contact Name:</strong></span>
+                      <span class="col-5"><strong>Contact Name:</strong></span>
                       <span class="col-6">{{object.contact_name}}</span>
                   </div>
                  
                   <div class="row">
-                      <span class="col-4"><strong>Address:</strong></span>
+                      <span class="col-5"><strong>Address:</strong></span>
                       <span class="col-6">{{object.address}}</span>
                   </div>
                   <div class="row">
-                      <span class="col-4"><strong>Phone:</strong></span>
+                      <span class="col-5"><strong>Phone:</strong></span>
                       <span class="col-6">{{object.phone}}</span>
                   </div>
                   <div class="row">
-                      <span class="col-4"><strong>Email:</strong></span>
+                      <span class="col-5"><strong>Email:</strong></span>
                       <span class="col-6">{{object.email}}</span>
                   </div> 
                   <div class="row">
-                      <span class="col-4"><strong>Station Credit:</strong></span>
+                      <span class="col-5"><strong>Station Credit:</strong></span>
                       <span class="col-6">N {{object.station_credit | intcomma}}</span>
+                  </div> 
+                  <div class="row">
+                      <span class="col-5"><strong>Station Re-Order Credit:</strong></span>
+                      <span class="col-6">N {{object.re_order_credit | intcomma}}</span>
                   </div>   
                 </div>
                 <br>
@@ -89,7 +93,7 @@
               <div class="d-flex justify-content-end">  
               
               <button type="button" id="update_station" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'fleet:station_update' object.pk %}"><i class="fa fa-list text-white"></i> Update Station</button>
-              <a href="{% url 'fleet:station_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Stations List</a>  
+              <a href="{% url 'fleet:station_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Stations List</a>  
             </div>  
             </div>
 

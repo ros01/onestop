@@ -1,6 +1,7 @@
 {% extends 'base0.html'%}
 {% load static %}
-{% block title%}| Repair Details {% endblock %}
+{% load humanize %}
+{% block title%}| Station Credit Restock Details {% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
@@ -28,7 +29,7 @@
 
         <div class="row ml-4 mt-4 pt-4">
             
-        <h4 class="col-12 text-success">Repair Records</h4>
+        <h4 class="col-12 text-success ml-3">Station Credit Restock Details</h4>
         </div>
 
         <div class="row mx-4 mt-2 pt-3 bg-white">
@@ -37,76 +38,61 @@
         <div class="row">
                       
         <br>
-        <p class="col-12 text-success lead">Repair Details</p>
-        </div>
-        
+        <p class="col-12 text-success lead">Station Credit Restock Details</p>
+        </div>    
         <div class="row">
-        <span class="col-4"><strong>Vehicle Name:</strong></span>
-        <span class="col-5 ">{{object.vehicle}}</span>
+        <span class="col-4"><strong>Restock Number:</strong></span>
+        <span class="col-5 ">{{object.refill_no}}</span>
         </div>
         <div class="row">
-        <span class="col-4"><strong>Driver Name:</strong></span>
-        <span class="col-5">{{object.driver}}</span>
+        <span class="col-4"><strong>Station Name:</strong></span>
+        <span class="col-5">{{object.station_name}}</span>
         </div>
                  
         <div class="row">
-        <span class="col-4"><strong>Current Mileage:</strong></span>
-        <span class="col-5">{{object.current_mileage}}</span>
+        <span class="col-4"><strong>Station Address:</strong></span>
+        <span class="col-5">{{object.address}}</span>
         </div>
                   
         <div class="row">
-        <span class="col-4"><strong>Fault Details:</strong></span>
-        <span class="col-5">{{object.fault}}</span>
-        </div>
-        
+        <span class="col-4"><strong>Station Phone No:</strong></span>
+        <span class="col-5">{{object.phone}}</span>
+        </div>    
 
         <div class="row">
-        <span class="col-4"><strong>Repair Details:</strong></span>
-        <span class="col-5">{{object.repair_details}}</span>
-        </div>  
-        
+        <span class="col-4"><strong>Station Email:</strong></span>
+        <span class="col-5">{{object.email}}</span>
+        </div>       
         <div class="row">
-        <span class="col-4"><strong>Repair Cost:</strong></span>
-        <span class="col-5">{{object.repair_cost}}</span>
+        <span class="col-4"><strong>Restock Credit Value:</strong></span>
+        <span class="col-5">N {{object.refill_credit_value| intcomma}}</span>
         </div> 
         
         <div class="row">
-        <span class="col-4"><strong>Repair Workshop:</strong></span>
-        <span class="col-5">{{object.workshop}}</span>
-        </div> 
-        
-        <div class="row">
-        <span class="col-4"><strong>Mechanic Name:</strong></span>
-        <span class="col-5">{{object.workshop.mechanic_name}}</span>
+        <span class="col-4"><strong>Current Station Credit:</strong></span>
+        <span class="col-5">N {{object.station_credit| intcomma}}</span>
         </div> 
         </div>
         <br>
         </div>   
-               
-             
+                
         <div class="col-md-5 mt-0">
         <p class="text-success lead">Control Details</p>
         <div class="row">
-        <span class="col-4"><strong>Fault Reported By:</strong></span>
-        <span class="col-5">{{object.reported_by}} 
+        <span class="col-5"><strong>Credit Restocked By:</strong></span>
+        <span class="col-6">{{object.refill_by.first_name}} {{object.refill_by.last_name}} 
         </span>
         </div>
         <div class="row">
-        <span class="col-4"><strong>Authorised By:</strong></span>
-        <span class="col-5">{{object.authorised_by.first_name}} {{object.authorised_by.last_name}}
-        </span>
-        </div>
-
-        <div class="row">
-        <span class="col-4"><strong>Repair Date:</strong></span>
-        <span class="col-5">{{object.repair_date_pretty}}</span>
+        <span class="col-5"><strong>Restock Date:</strong></span>
+        <span class="col-6">{{object.refill_on_pretty}}</span>
                    
         </div> 
         <hr> 
         <div class="d-flex justify-content-end">  
               
-        <button type="button" id="update_repairs" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'fleet:repairs_update' object.pk %}"><i class="fa fa-list text-white"></i> Update Repair Details</button>
-        <a href="{% url 'fleet:repairs_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Repairs List</a>  
+        <!--<button type="button" id="update_repairs" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'fleet:repairs_update' object.pk %}"><i class="fa fa-list text-white"></i> Update Repair Details</button>-->
+        <a href="{% url 'fleet:restock_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Repairs List</a>  
         </div>  
         </div>
 

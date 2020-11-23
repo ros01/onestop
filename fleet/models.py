@@ -18,6 +18,16 @@ def increment_schedule_no():
 	return new_schedule_no
 
 
+def increment_refill_no():
+	last_refill_no = Refill.objects.all().order_by('refill_no').last()
+	if not last_refill_no:
+		return '0000'
+	refill_no = last_refill_no.refill_no
+	new_refill_no = str(int(refill_no) + 1)
+	new_refill_no = refill_no[0:-(len(new_refill_no))] + new_refill_no
+	return new_refill_no
+
+
 class Station(models.Model):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	station_name = models.CharField(max_length=200)
@@ -26,14 +36,54 @@ class Station(models.Model):
 	phone = models.CharField(max_length=100, null=True, blank=True)
 	email = models.EmailField(max_length=100, null=True, blank=True)
 	station_credit = models.DecimalField(decimal_places=2, max_digits=20)
+	re_order_credit = models.DecimalField(decimal_places=2, max_digits=20)
 	entered_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
 	date_created = models.DateTimeField(auto_now_add=True, auto_now=False)
+	last_updated = models.DateTimeField(auto_now_add=False, auto_now=True)
 	
 	def __str__(self):
 		return self.station_name
 
 	def date_created_pretty(self):
 		return self.date_created.strftime('%b %e %Y')
+
+	def last_updated_pretty(self):
+		return self.last_updated.strftime('%b %e %Y')
+
+class Refill(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    refill_no = models.CharField(max_length=500, null=True, blank=True, unique=True, default=increment_refill_no)
+    station_name =models.CharField(max_length=200)
+    address = models.CharField(max_length=200)
+    phone = models.CharField(max_length=100, null=True, blank=True)
+    email = models.EmailField(max_length=100, null=True, blank=True)
+    station_credit = models.DecimalField(decimal_places=2, max_digits=20)
+    refill_credit_value = models.DecimalField(decimal_places=2, max_digits=20)
+    refill_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='refill_by',  on_delete=models.DO_NOTHING)
+    refill_on = models.DateTimeField(default=datetime.now, blank=True)
+
+
+    
+    def __str__(self):
+        return str(self.station_name)
+
+    class Meta:
+        ordering = ["-refill_on"]
+
+
+    def refill_on_pretty(self):
+        return self.refill_on.strftime('%b %e %Y')
+
+
+    def save(self, *args, **kwargs):
+        super(Refill, self).save(*args, **kwargs)
+        
+
+        p = Station.objects.get(station_name=self.station_name)
+        p.station_credit += self.refill_credit_value
+        p.save()
+
+
 
 
 class Workshop(models.Model):
@@ -131,6 +181,7 @@ class Vehicle(models.Model):
 	model = models.CharField(max_length=200)
 	purchase_year = models.CharField(max_length=200)
 	location = models.CharField(max_length=120, choices=LOCATION,  null=True, blank=True)
+	availability_status = models.IntegerField(default=1)
 	category = models.CharField(max_length=120, choices=CATEGORY,  null=True, blank=True)
 	engine_number = models.CharField(max_length=200)
 	chasis_number = models.CharField(max_length=200)
@@ -263,9 +314,10 @@ class Fueling(models.Model):
 	vehicle = models.ForeignKey('Vehicle', null=True, blank=True, on_delete=models.DO_NOTHING)
 	#driver = models.ForeignKey("hr.Driver", null=True, blank=True, on_delete=models.DO_NOTHING)
 	driver = models.CharField(max_length=200)
-	current_mileage = models.DecimalField(max_digits=50, decimal_places=2,)
+	voucher_no = models.CharField(max_length=500, null=True, blank=True)
+	current_mileage = models.DecimalField(max_digits=50, decimal_places=2)
 	fuel_input = models.IntegerField()
-	fuel_cost = models.DecimalField(max_digits=50, decimal_places=2,)
+	fuel_cost = models.DecimalField(max_digits=50, decimal_places=2)
 	station = models.ForeignKey('Station', null=True, blank=True, on_delete=models.DO_NOTHING)
 	authorised_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='protocol_hod', on_delete=models.DO_NOTHING)
 	fueling_date = models.DateTimeField(default=datetime.now, blank=True)
@@ -378,6 +430,18 @@ class Maintenance(models.Model):
 	class Meta:
 	   unique_together = ('schedule_no', 'vehicle')
 	   ordering = ["-actual_maintenance_date"]
+
+	def scheduled_on_pretty(self):
+		return self.scheduled_on.strftime('%b %e %Y')
+
+	def maintenance_due_date_pretty(self):
+		return self.maintenance_due_date.strftime('%b %e %Y')
+
+	def next_maintenance_date_pretty(self):
+		return self.next_maintenance_date.strftime('%b %e %Y')
+
+	def actual_maintenance_date_pretty(self):
+		return self.actual_maintenance_date.strftime('%b %e %Y')
 
 	def __str__(self):
 		return self.driver

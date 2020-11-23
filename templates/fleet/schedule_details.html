@@ -1,5 +1,6 @@
 {% extends 'base0.html'%}
 {% load static %}
+{% load humanize %}
 {% block title%}| Schedule Details {% endblock %}
 
 {% block styles %}
@@ -55,13 +56,13 @@
         
         <div class="row">
         <span class="col-6"><strong>Current Mileage:</strong></span>
-        <span class="col-6">{{object.current_mileage}}</span>
+        <span class="col-6">{{object.current_mileage| intcomma}}</span>
         </div>
                   
                     
         <div class="row">
         <span class="col-6"><strong>Maintenance Due Date:</strong></span>
-        <span class="col-6">{{object.maintenance_due_date}}</span>
+        <span class="col-6">{{object.maintenance_due_date_pretty}}</span>
         </div> 
                     
         <div class="row">
@@ -88,7 +89,7 @@
         </div>
         <div class="row">
         <span class="col-6"><strong>Schedule Created On:</strong></span>
-        <span class="col-6">{{object.scheduled_on}} 
+        <span class="col-6">{{object.scheduled_on_pretty}} 
         </span>
         </div>
 

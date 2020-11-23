@@ -45,12 +45,6 @@ class ItemCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
 def retrieve_item(request):
     return render(request, 'store/retrieve_item.html')
 
-def get_queryset(self): 
-        query = self.request.GET.get('q')
-        object_list = License.objects.filter(
-            Q(license_no__iexact=query) | Q(hospital_name__iexact=query)
-        )
-        return object_list
 
 def restock(request):
     try:
@@ -66,7 +60,7 @@ def restock(request):
         )
 
     except ObjectDoesNotExist:
-        messages.error(request, ('Stock Code is Invalid.  Enter a Valid Stock Code'))
+        messages.error(request, ('Stock Code or Item Name is Invalid.  Enter a Valid Stock Code or Item Name'))
         pass
 
     return render(request, 'store/results.html', {"object": object})
