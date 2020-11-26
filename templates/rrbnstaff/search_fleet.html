@@ -1,0 +1,80 @@
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+
+
+
+<form method="GET" action="{% url 'rrbnstaff:retrieve_vehicles' %}" >
+  {% csrf_token %}
+
+  
+
+  
+
+
+ <div class="modal-header">
+    <h5 class="modal-title text-success">Search for Available Vehicles</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+
+    
+    <table class='table'>
+    {% for object in vehicle %}
+
+    <tr>
+
+    <td>
+    {{ object.vehicle_name }}
+
+    </td>
+    <td>
+    Vehicle Count: {{ vehicle_count }}
+    </td>
+
+
+    </tr>
+
+    {% endfor %}
+
+    </table>
+
+    
+
+    <div class="mb-4" style="background-color: #bfe3f8; padding:5px; border-right:4px solid #ecd863; border-left:4px solid #ecd863"> <b>PLEASE NOTE:</b> Vehicle assignment is stictly on availability. Please specify your location and your trip type to retrieve available vehicles most suited to your request. 
+    </div> 
+
+    <div class="row">
+    
+    <input type='hidden' name='q' value='{{ request.GET.q }}' />
+
+    <div class="form-group col-md-6 mb-0">
+        {{ filter_form.location|as_crispy_field }}
+    </div>
+
+    <div class="form-group col-md-6 mb-0">
+        {{ filter_form.trip_type|as_crispy_field }}
+    </div>
+
+    </div>
+
+    
+
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <button type="button" class="submit-btn btn btn-success ml-4 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i>&nbsp;Retrieve Vehicles</button>
+
+  </div>
+
+</form>
+
+
+
+
+
+
+

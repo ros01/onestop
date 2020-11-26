@@ -1,5 +1,6 @@
 {% extends 'base0.html'%}
 {% load static %}
+{% load humanize %}
 {% block title%}| Repair Details {% endblock %}
 
 {% block styles %}
@@ -51,7 +52,7 @@
                  
         <div class="row">
         <span class="col-4"><strong>Current Mileage:</strong></span>
-        <span class="col-5">{{object.current_mileage}}</span>
+        <span class="col-5">{{object.current_mileage| intcomma}}</span>
         </div>
                   
         <div class="row">
@@ -67,7 +68,7 @@
         
         <div class="row">
         <span class="col-4"><strong>Repair Cost:</strong></span>
-        <span class="col-5">{{object.repair_cost}}</span>
+        <span class="col-5">N {{object.repair_cost| intcomma}}</span>
         </div> 
         
         <div class="row">

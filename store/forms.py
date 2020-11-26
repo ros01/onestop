@@ -197,8 +197,12 @@ class RestockModelForm(forms.ModelForm):
         fields = ('restock_no', 'item_name', 'item_description', 'category', 'stock_code', 'vendor', 'unit', 'quantity_ordered', 'unit_price', 'quantity_received', 'received_by', 'received_on')
 
         widgets = {
-       'item_description': forms.Textarea(attrs={'rows':2, 'cols':12}),
+       'item_description': forms.Textarea(attrs={'readonly': True,'rows':2, 'cols':12}),
        'restock_no': forms.HiddenInput(),
+       'stock_code': forms.TextInput(attrs={'readonly': True}), 
+       'item_name': forms.TextInput(attrs={'readonly': True}), 
+       
+       'unit': forms.TextInput(attrs={'readonly': True}), 
 
         }
 

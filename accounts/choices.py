@@ -7,7 +7,7 @@ DEPARTMENT = (
         ('Audit', 'Audit'),
         ('ICT', 'ICT'),
         ('Stores', 'Stores'),
-        ('Protocol', 'Protocol'),
+        ('Protocol', 'PR & Protocol'),
         )
 
 MODULE_NAME = (

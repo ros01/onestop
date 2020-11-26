@@ -1,0 +1,15 @@
+
+<div class='row'>
+{% for i in object_list.vehicle.all %}
+	<div class='col-xs-4 {{ col_class_set }}'>
+	<h4>{{ i.vehicle_name }}</h4>
+
+	</div>
+	{% if not col_class_set %}
+{% cycle '' '' '</div><div class="row">' %}
+{% endif %}
+{% endfor %}
+
+</div>
+
+

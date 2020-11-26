@@ -27,7 +27,7 @@
         <div class="container-fluid">
           <!-- Page Heading -->
          <br><br><br>
-          <button type="button" id="create-vehicle" class="bs-modal btn btn-success mt-1" data-form-url="{% url 'rrbnstaff:create_vehicle_request' %}"><i class="fa fa-list text-white"></i> Request for Vehicle</button><br>
+          
 
            {% include 'partials/_alerts.html' %}
 
@@ -60,7 +60,7 @@
           <tr>
           <td width="05%">{{forloop.counter}}</td>
           <td width="15%">{{object.request_no}}</td>
-          <td width="15%">{{object.vehicle}}</td>
+          <td width="15%">{{object.vehicle_name}}</td>
           <td width="10%">{{object.department}}</td>
           <td width="15%">{{object.destination}}</td>
           <td width="15%">{{object.request_duration}}</td>

@@ -164,7 +164,8 @@ class Vehicle(models.Model):
 
 	LOCATION = (
 		('HQ', 'HQ'),
-		('Lagos', 'Lagos'),
+		('Lagos Zonal Office ', 'Lagos Zonal Office'),
+		('Lagos CERT-RADMIRS', 'Lagos CERT-RADMIRS'),
 		('Asaba', 'Asaba'),
 		('Enugu', 'Enugu'),
 		('Port Harcourt', 'Port Harcourt'),
@@ -174,14 +175,22 @@ class Vehicle(models.Model):
 		('Calabar', 'Calabar'),
 		)
 
+	TRIP_CHOICES = (
+		('short', 'Short Trip'),
+		('long', 'Long Trip'),
+		)
+
+	
+	
+
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	vehicle_name = models.CharField(max_length=200)
 	description = models.TextField(blank=True, null=True)
 	vehicle_type = models.CharField(max_length=120, choices=TYPE,  null=True, blank=True)
 	model = models.CharField(max_length=200)
 	purchase_year = models.CharField(max_length=200)
-	location = models.CharField(max_length=120, choices=LOCATION,  null=True, blank=True)
-	availability_status = models.IntegerField(default=1)
+	location = models.CharField(max_length=120, choices=LOCATION, blank=False)
+	trip_type = models.CharField(max_length=120, choices=TRIP_CHOICES, blank=False, default='short') 
 	category = models.CharField(max_length=120, choices=CATEGORY,  null=True, blank=True)
 	engine_number = models.CharField(max_length=200)
 	chasis_number = models.CharField(max_length=200)
@@ -191,6 +200,7 @@ class Vehicle(models.Model):
 	insurance_details = models.CharField(max_length=200)
 	entered_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
 	date_created = models.DateTimeField(auto_now_add=True, auto_now=False)
+	trip_status = models.IntegerField(default=1)
 	
 
 	def __str__(self):
@@ -210,7 +220,7 @@ class Assign(models.Model):
 
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	request_no = models.CharField(max_length=200)
-	vehicle = models.ForeignKey('Vehicle', null=True, blank=True, on_delete=models.DO_NOTHING)
+	vehicle_name = models.CharField(max_length=200)
 	requesting_staff = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='applying_staff',  on_delete=models.DO_NOTHING)
 	department = models.CharField(max_length=200)
 	request_reason = models.TextField(blank=True, null=True)
@@ -228,7 +238,7 @@ class Assign(models.Model):
 
 
 	class Meta:
-	   unique_together = (('request_no', 'vehicle',), ('request_no', 'requesting_staff',))
+	   unique_together = (('request_no', 'vehicle_name',), ('request_no', 'requesting_staff',))
 	   ordering = ["-approved_date"]
 
 	def __str__(self):
@@ -264,12 +274,17 @@ class Assign(models.Model):
 			request.request_status = 2
 			request.save()
 
+		p = Vehicle.objects.get(vehicle_name=self.vehicle_name)
+		p.trip_status = 2
+		p.save()
+
 
 
 
 class Release(models.Model):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-	vehicle = models.ForeignKey('Vehicle', null=True, blank=True, on_delete=models.DO_NOTHING)
+	#vehicle = models.ForeignKey('Vehicle', null=True, blank=True, on_delete=models.DO_NOTHING)
+	vehicle_name = models.CharField(max_length=200)
 	request_no = models.CharField(max_length=200)
 	request_date = models.DateTimeField(default=datetime.now, blank=True)
 	requesting_staff = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='request_staff',  on_delete=models.DO_NOTHING)
@@ -283,12 +298,18 @@ class Release(models.Model):
 	release_date = models.DateTimeField(default=datetime.now, blank=True)
 
 	class Meta:
-	   unique_together = (('request_no', 'vehicle',), ('request_no', 'requesting_staff',))
+	   unique_together = (('request_no', 'vehicle_name',), ('request_no', 'requesting_staff',))
 	   ordering = ["-release_date"]
 
 
 	def __str__(self):
 		return self.request_no
+
+	def start_date_pretty(self):
+		return self.start_date.strftime('%b %e %Y')
+
+	def end_date_pretty(self):
+		return self.end_date.strftime('%b %e %Y')
 
 	def save(self, *args, **kwargs):
 		super(Release, self).save(*args, **kwargs)
@@ -306,6 +327,10 @@ class Release(models.Model):
 		if self.id is not None:
 			assign.trip_status = "completed"
 			assign.save()
+
+		p = Vehicle.objects.get(vehicle_name=self.vehicle_name)
+		p.trip_status = 1
+		p.save()
 
 
 
@@ -330,20 +355,6 @@ class Fueling(models.Model):
 
 	def save(self, *args, **kwargs):
 		super(Fueling, self).save(*args, **kwargs)
-        
-        #try:
-            #requisition = Requisition.objects.get(
-                #requisition_no=self.requisition_no,
-                #requesting_staff=self.requesting_staff,
-                
-                #)
-        #except Requisition.DoesNotExist:
-            #pass
-        
-       
-        #if self.id is not None:
-            #requisition.requisition_status = 2
-            #requisition.save()
 
 		p = Station.objects.get(station_name=self.station)
 		p.station_credit -= self.fuel_cost

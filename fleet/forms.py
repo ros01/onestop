@@ -184,7 +184,7 @@ class IssueVehicleRequestModelForm(forms.ModelForm):
     class Meta:
         model = Assign
 
-        fields = ('request_no', 'vehicle', 'department', 'request_date', 'request_reason','destination', 'requesting_staff', 'driver', 'current_mileage', 'start_date', 'end_date','assigned_by')
+        fields = ('request_no', 'vehicle_name', 'department', 'request_date', 'request_reason','destination', 'requesting_staff', 'driver', 'current_mileage', 'start_date', 'end_date','assigned_by')
 
         widgets = {
         'department': forms.HiddenInput(),
@@ -209,9 +209,9 @@ class IssueVehicleRequestModelForm(forms.ModelForm):
       
       
        self.fields['request_no'].label = "Request No"
-       self.fields['vehicle'].widget.attrs['value'] = self.instance.vehicle
-       self.fields['vehicle'].widget.attrs['readonly'] = 'readonly'
-       self.fields['vehicle'].label = "Vehicle Name"
+       self.fields['vehicle_name'].widget.attrs['value'] = self.instance.vehicle_name
+       self.fields['vehicle_name'].widget.attrs['readonly'] = 'readonly'
+       self.fields['vehicle_name'].label = "Vehicle Name"
        self.fields['department'].label = "Department"
        self.fields['driver'].label = "Driver"
        self.fields['start_date'].label = "Trip Start Date"
@@ -226,7 +226,7 @@ class FinalizeTripModelForm(forms.ModelForm):
     class Meta:
         model = Release
 
-        fields = ('request_no', 'vehicle', 'department', 'request_date', 'requesting_staff', 'driver', 'start_date', 'end_date', 'trip_start_mileage', 'trip_end_mileage', 'released_by')
+        fields = ('request_no', 'vehicle_name', 'department', 'request_date', 'requesting_staff', 'driver', 'start_date', 'end_date', 'trip_start_mileage', 'trip_end_mileage', 'released_by')
 
         widgets = {
         'department': forms.HiddenInput(),
@@ -250,9 +250,9 @@ class FinalizeTripModelForm(forms.ModelForm):
       
        self.fields['request_no'].label = "Request No"
        #self.fields['vehicle'].label = "Vehicle ID"
-       self.fields['vehicle'].widget.attrs['value'] = self.instance.vehicle
-       self.fields['vehicle'].widget.attrs['readonly'] = 'readonly'
-       self.fields['vehicle'].label = "Vehicle Name"
+       self.fields['vehicle_name'].widget.attrs['value'] = self.instance.vehicle_name
+       self.fields['vehicle_name'].widget.attrs['readonly'] = 'readonly'
+       self.fields['vehicle_name'].label = "Vehicle Name"
        self.fields['driver'].label = "Driver"
        self.fields['start_date'].label = "Trip Start Date"
        self.fields['end_date'].label = "Trip End Date"
@@ -302,11 +302,13 @@ class FuelingModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
 
       if not self.request.is_ajax():
           instance = super(CreateUpdateAjaxMixin, self).save(commit=True)
-          instance.save()
       else:
           instance = super(CreateUpdateAjaxMixin, self).save(commit=False)
 
       return instance
+
+
+
 
 
 

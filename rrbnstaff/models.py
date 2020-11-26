@@ -61,9 +61,9 @@ REQUEST_DURATION_CHOICES = (
 
 class Request(models.Model):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-	request_no = models.CharField(max_length=500, null=True, blank=True, 
+	request_no = models.CharField(max_length=500, null=True, blank=True, unique=True,
         default=increment_request_no)
-	vehicle = models.ForeignKey("fleet.Vehicle", null=True, blank=True, on_delete=models.DO_NOTHING)
+	vehicle_name = models.CharField(max_length=200)
 	department = models.CharField(max_length=200)
 	request_reason = models.TextField(blank=True, null=True)
 	destination = models.CharField(max_length=200)

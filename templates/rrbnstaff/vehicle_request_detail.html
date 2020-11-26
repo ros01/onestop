@@ -1,7 +1,6 @@
 {% extends 'base1.html'%}
 {% load static %}
-{% load humanize %}
-{% block title%}| Assigned Vehicle Details {% endblock %}
+{% block title%}| Vehicle Request Details {% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
@@ -28,7 +27,7 @@
         <br>
 
         <div class="row ml-4 mt-4 pt-4">
-        <h3 class="col-12 text-info">My Vehicle Allocation Details</h3>
+        <h3 class="col-12 text-info">Vehicle Request Details</h3>
         </div>
 
         <div class="row mx-4 mt-2 pt-3 bg-white">
@@ -36,76 +35,70 @@
         <div class="col-md-12">
         <div class="row">
         <br>
-        <p class="col-12 text-success lead">Allocation Details</p>
+        <p class="col-12 text-success lead">Vehicle Request Details</p>
         </div>
+        {% for object in request %}
 
         <div class="row">
         <span class="col-5"><strong>Request No:</strong></span>
         <span class="col-6 ">{{object.request_no}}</span>
         </div>
-        
+        {% endfor %}
+
+    
         <div class="row">
         <span class="col-5"><strong>Vehicle Name:</strong></span>
         <span class="col-6">{{object.vehicle_name}}</span>
         </div>           
-                  
-                    
-                  
+        
+                                
+        
+        {% for object in request %}
+
         <div class="row">
-        <span class="col-5"><strong>Purpose:</strong></span>
+        <span class="col-5"><strong>Requesting Staff Department:</strong></span>
+        <span class="col-6">{{object.department}}</span>
+        </div>  
+         
+        <div class="row">
+        <span class="col-5"><strong>Request Reason:</strong></span>
         <span class="col-6">{{object.request_reason}}</span>
         </div>
-
+                  
         <div class="row">
         <span class="col-5"><strong>Destination:</strong></span>
         <span class="col-6">{{object.destination}}</span>
-        </div>
-                  
-        <div class="row">
-        <span class="col-5"><strong>Request Date:</strong></span>
-        <span class="col-6">{{object.request_date_pretty}}</span>
         </div>  
 
         <div class="row">
-        <span class="col-5"><strong>Assigned Driver:</strong></span>
-        <span class="col-6">  {{ object.driver }}</span>
-        </div>
-                   
-        <div class="row">
-        <span class="col-5"><strong>Vehicle Current Milleage:</strong></span>
-        <span class="col-6">  {{ object.current_mileage| intcomma}}</span>
-        </div>
-                  
-        <div class="row">
-        <span class="col-5"><strong>Trip Start Date:</strong></span>
-        <span class="col-6">  {{ object.start_date_pretty }}</span>
-        </div>
-                  
-        <div class="row">
-        <span class="col-5"><strong>Trip End Date:</strong></span>
-        <span class="col-6">  {{ object.end_date_pretty }}</span>
-        </div>
-                  
+        <span class="col-5"><strong>Trip Duration:</strong></span>
+        <span class="col-6">{{ object.request_duration}}</span>
+        </div>  
 
+        <div class="row">
+        <span class="col-5"><strong>Trip Date:</strong></span>
+        <span class="col-6">{{ object.trip_date}}</span>
+        </div> 
+
+        <div class="row">
+        <span class="col-5"><strong>Requesting Staff:</strong></span>
+        <span class="col-6">{{object.requesting_staff.first_name}} {{object.requesting_staff.last_name}}</span>
+        </div> 
+
+        {% endfor %}         
+
+                 
         </div>
         <br>
         </div>   
 
-        <div class="col-md-5 mt-4">
-        <p class="text-success lead">Control Details</p>
-        <div class="row">
-        <span class="col-5"><strong>Vehicle Assigned By:</strong></span>
-        <span class="col-6">{{object.assigned_by.first_name}} {{object.assigned_by.last_name}}</span>
-        </div>
-                  
-        <div class="row">
-        <span class="col-5"><strong>Approval Date:</strong></span>
-        <span class="col-6">{{object.approved_date_pretty}}</span>
-        </div>
-             
+        <div class="col-md-5 mt-5">
+        <p class="text-success lead">Actions</p>
         <hr> 
-        <div class="d-flex justify-content-end">  
-        <a href="{% url 'rrbnstaff:my_vehicles_allocations_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Vehicle Allocation List</a>  
+        <div class="d-flex justify-content-end">   
+        
+        
+        <a href="{% url 'rrbnstaff:request_list' %}" class="btn btn-warning text-white py-1 mr-4 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Requisition List</a>
         </div>  
         </div>
 
@@ -128,8 +121,10 @@
     $(function() {
     
         $(".bs-modal").each(function () {
+
           $(this).modalForm({
               formURL: $(this).data('form-url')
+               
           });
         });
     
@@ -138,9 +133,16 @@
 </script>
 
 
+
+
+
 <script>
   $('#mydata').dataTable();
 </script>
+
+
+
+
 
 
 

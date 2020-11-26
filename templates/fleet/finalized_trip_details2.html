@@ -1,5 +1,6 @@
 {% extends 'base0.html'%}
 {% load static %}
+{% load humanize %}
 {% block title%}| Trip Finalization Details {% endblock %}
 
 {% block styles %}
@@ -39,12 +40,9 @@
                     </div>
                     <div class="row">
                       <span class="col-5"><strong>Vehicle Name:</strong></span>
-                      <span class="col-6">{{object.vehicle}}</span>
+                      <span class="col-6">{{object.vehicle_name}}</span>
                   </div>           
-                  <div class="row">
-                      <span class="col-5"><strong>Vehicle Type:</strong></span>
-                      <span class="col-6">{{object.vehicle.vehicle_type}}</span>
-                  </div>               
+                              
                   <div class="row">
                       <span class="col-5"><strong>Requesting Staff:</strong></span>
                       <span class="col-6">{{object.requesting_staff.first_name}} {{object.requesting_staff.last_name}}</span>
@@ -57,33 +55,28 @@
                       <span class="col-5"><strong>Assigned Driver:</strong></span>
                       <span class="col-6">{{object.driver}}</span>
                     </div>
-                    <div class="row">
-                      <span class="col-5"><strong>Request Date:</strong></span>
-                      <span class="col-6">{{object.request_date}}</span>
-                  </div>  
-
               
                     <div class="row">
                       <span class="col-5"><strong>Trip Start Date:</strong></span>
-                      <span class="col-6">{{object.start_date}}</span>
+                      <span class="col-6">{{object.start_date_pretty}}</span>
                     </div>
                      <div class="row">
                       <span class="col-5"><strong>Trip End Date:</strong></span>
-                      <span class="col-6">{{object.end_date}}</span>
+                      <span class="col-6">{{object.end_date_pretty}}</span>
                     </div>
                     <div class="row">
                       <span class="col-5"><strong>Trip Start Mileage:</strong></span>
-                      <span class="col-6">{{object.trip_start_mileage}}</span>
+                      <span class="col-6">{{object.trip_start_mileage| intcomma}}</span>
                     </div>
                      <div class="row">
                       <span class="col-5"><strong>Trip End Mileage:</strong></span>
-                      <span class="col-6">{{object.trip_end_mileage}}</span>
+                      <span class="col-6">{{object.trip_end_mileage| intcomma}}</span>
                     </div>
                   
 
                   <div class="row">
                       <span class="col-5"><strong>Finalized By:</strong></span>
-                      <span class="col-6">{{ object.released_by}}</span>
+                      <span class="col-6">{{ object.released_by.first_name }} {{ object.released_by.last_name }}</span>
                   </div>  
 
      

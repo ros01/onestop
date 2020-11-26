@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from .filters import VehicleFilter
+from django_filters.views import FilterView
 from .views import (
     DashboardTemplateView,
     RequisitionCreateView,
@@ -18,6 +20,10 @@ from .views import (
     MyIssuedRequisitionsDetails,
     MyVehicleAllocations,
     AssignedVehicleDetails,
+    #FilterView,
+    #VehicleListView,
+    #FleetListView,
+    #AvailableVehiclesView,
 )
 
 
@@ -27,6 +33,12 @@ urlpatterns = [
 	path('dashboard/', DashboardTemplateView.as_view(), name='staff_dashboard'),
 	path('profile/', ProfileTemplateView.as_view(), name='edit_profile'),
 	path('tables/', TableTemplateView.as_view(), name='table_list'),
+	path('list_vehicles', views.list_vehicles, name='list_vehicles'),
+	path('search_vehicles', FilterView.as_view(filterset_class=VehicleFilter,
+        template_name='rrbnstaff/search_vehicles.html'), name='search_vehicles'),
+
+
+	#path('retrieve_vehicles', AvailableVehiclesView.as_view(), name='retrieve_vehicles'),
 	path('requisition_list/', RequisitionsListView.as_view(), name='requisition_list'),
 	path('request_list/', RequestListView.as_view(), name='request_list'),
 	path('my_issued_requisitions/', MyIssuedRequisitions.as_view(), name='my_issued_requisitions'),
@@ -36,9 +48,10 @@ urlpatterns = [
 	path('<uuid:id>/requisition_detail/', RequisitionDetailView.as_view(), name='requisition_detail'),
 	path('<uuid:pk>/requisition_update/', RequisitionUpdateView.as_view(), name='requisition_update'),
 	path('<uuid:id>/requisition_delete/', RequisitionDeleteView.as_view(), name='requisition_delete'),
-	path('create_vehicle_request/', CreateVehicleRequest.as_view(), name='create_vehicle_request'),
+    path('<uuid:id>/create_vehicle_request', CreateVehicleRequest.as_view(), name='create_vehicle_request'),
+	#path('create_vehicle_request/', CreateVehicleRequest.as_view(), name='create_vehicle_request'),
 	path('<uuid:pk>/vehicle_request_detail/', VehicleRequestDetailView.as_view(), name='vehicle_request_detail'),
-	path('<uuid:pk>/vehicle_request_update/', VehicleRequestUpdateView.as_view(), name='vehicle_request_update'),
+	path('<uuid:id>/vehicle_request_update/', VehicleRequestUpdateView.as_view(), name='vehicle_request_update'),
 	path('<uuid:id>/vehicle_request_delete/', VehicleRequestDeleteView.as_view(), name='vehicle_request_delete'),
 	path('<uuid:pk>/allocated_vehicle_details/', AssignedVehicleDetails.as_view(), name='allocated_vehicle_details'),
 	

@@ -100,15 +100,17 @@
                 </div>
               </div>
 
-            <div class="col-md-4">
+              <div class="col-md-4" onclick="window.location='{% url 'rrbnstaff:search_vehicles' %}';" style="cursor: pointer;">
               <div class="card remove-borer">
                 <div class="card-body">
-                <button type="button" id="request-vehicle" class="bs-modal btn warning text-warning pt-5  pb-5 mt-2 mb-2 w-100" data-form-url="{% url 'rrbnstaff:create_vehicle_request' %}"><img class="icons-set" src="{% static 'img/car.png' %}" alt="shop"> Request Vehicle</button>
+                <button type="button" class="btn warning text-warning pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/car.png' %}" alt="shop"> Request Vehicle</button>
                 </div>
                 </div>
-            </div>
+              </div>
 
-              <div class="col-md-4" onclick="window.location='{% url 'rrbnstaff:requisition_list' %}';" style="cursor: pointer;">
+             
+
+           <div class="col-md-4" onclick="window.location='{% url 'rrbnstaff:requisition_list' %}';" style="cursor: pointer;">
               <div class="card remove-borer">
                 <div class="card-body">
                 <button type="button" class="btn danger text-danger pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/view-requisition.png' %}" alt="shop"> View Requisitions</button>

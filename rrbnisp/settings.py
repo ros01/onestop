@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'bootstrap_modal_forms',
     'rrbnstaff',
     'crispy_forms',
+    'django_filters',
     'widget_tweaks',
     'multiselectfield',
     'tempus_dominus',

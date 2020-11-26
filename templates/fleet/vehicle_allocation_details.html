@@ -1,5 +1,7 @@
 {% extends 'base0.html'%}
 {% load static %}
+{% load humanize %}
+
 {% block title%}| Vehicle Allocation Details {% endblock %}
 
 {% block styles %}
@@ -44,13 +46,9 @@
 
         <div class="row">
         <span class="col-5"><strong>Vehicle Name:</strong></span>
-        <span class="col-6 ">{{object.vehicle}}</span>
+        <span class="col-6 ">{{object.vehicle_name}}</span>
         </div> 
                    
-        <div class="row">
-        <span class="col-5"><strong>Vehicle Type:</strong></span>
-        <span class="col-6">{{object.vehicle.vehicle_type}}</span>
-        </div>
 
         <div class="row">
         <span class="col-5"><strong>Staff Name:</strong></span>
@@ -65,7 +63,7 @@
                  
         <div class="row">
         <span class="col-5"><strong>Request Date:</strong></span>
-        <span class="col-6">{{object.request_date}}</span>
+        <span class="col-6">{{object.request_date_pretty}}</span>
         </div>
                   
         <div class="row">
@@ -85,17 +83,17 @@
                    
         <div class="row">
         <span class="col-5"><strong>Vehicle Current Milleage:</strong></span>
-        <span class="col-6">  {{ object.current_mileage }}</span>
+        <span class="col-6">  {{ object.current_mileage| intcomma }}</span>
         </div>
                   
         <div class="row">
         <span class="col-5"><strong>Trip Start Date:</strong></span>
-        <span class="col-6">  {{ object.start_date }}</span>
+        <span class="col-6">  {{ object.start_date_pretty }}</span>
         </div>
                   
         <div class="row">
         <span class="col-5"><strong>Trip End Date:</strong></span>
-        <span class="col-6">  {{ object.end_date }}</span>
+        <span class="col-6">  {{ object.end_date_pretty }}</span>
         </div>
         </div>
         <br>
@@ -111,7 +109,7 @@
         </div>
         <div class="row">
         <span class="col-5"><strong>Approval Date:</strong></span>
-        <span class="col-6">{{object.approved_date}}</span>
+        <span class="col-6">{{object.approved_date_pretty}}</span>
         </div>
              
         <hr> 

@@ -3,6 +3,7 @@
 
 <form method="post" action="" >
   {% csrf_token %}
+  {{ form.request_no|as_crispy_field }}
 
   <input type="hidden" name="requesting_staff" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_requesting_staff">
 
@@ -19,7 +20,7 @@
   <div class="modal-body">
     <div class="row">
     <div class="form-group col-md-4">
-    {{ form.vehicle|as_crispy_field }}
+    {{ form.vehicle_name|as_crispy_field }}
     </div>
 
     <div class="form-group col-md-4">

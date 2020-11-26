@@ -32,7 +32,7 @@
          <br><br><br>
 
       
-          <button type="button" id="create-request" class="bs-modal btn btn-success mt-1" data-form-url="{% url 'rrbnstaff:create_vehicle_request' %}"><i class="fa fa-list text-white"></i> Request for Vehicle</button><br>
+          
 
            {% include 'partials/_alerts.html' %}
 
@@ -51,7 +51,7 @@
         <td style="color: #fff;" class="small-text" width="05%">S/N</td>
         <td style="color: #fff;" class="small-text" width="08%">Request No</td>
         <td style="color: #fff;" class="small-text" width="15%">Vehicle Name</td>
-        <td style="color: #fff;" class="small-text" width="10%">Vehicle Type</td>
+        
         <td style="color: #fff;" class="small-text" width="14%">Destination</td>
         <td style="color: #fff;" class="small-text" width="10%">Purpose</td>
         <td style="color: #fff;" class="small-text" width="10%">Trip Start Date</td>
@@ -67,8 +67,8 @@
         <tr>
         <td width="05%">{{forloop.counter}}</td>
         <td width="08%">{{object.request_no}}</td>
-        <td width="15%">{{object.vehicle}}</td>
-        <td width="10%">{{object.vehicle.vehicle_type}}</td>
+        <td width="15%">{{object.vehicle_name}}</td>
+        
         <td width="14%">{{object.destination}}</td>
         <td width="10%">{{object.request_reason}}</td>
         <td width="10%">{{object.start_date_pretty}}</td>
