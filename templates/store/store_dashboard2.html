@@ -28,7 +28,13 @@
                     <i class="material-icons">content_copy</i>
                   </div>
                   <p class="card-category">Total Requisitions</p>
-                  <h3 class="card-title">150
+                  {% if requ %}<h3 class="card-title">{{ requ.count }}
+                  </h3>
+                  {% else %}  
+                  <h3 class="card-title">0
+                  </h3>
+                  {% endif %}
+
                   </h3>
                 </div>
                 <div class="card-footer">
@@ -46,7 +52,13 @@
                     <i class="material-icons">update</i>
                   </div>
                   <p class="card-category">Total Issued Items</p>
-                  <h3 class="card-title">125</h3>
+                  {% if iss %}<h3 class="card-title">{{ iss.count }}
+                  </h3>
+                  {% else %}  
+                  <h3 class="card-title">0
+                  </h3>
+                  {% endif %}
+
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -62,7 +74,13 @@
                     <i class="material-icons">error_outline</i>
                   </div>
                   <p class="card-category">Items Below Reorder</p>
-                  <h3 class="card-title">75</h3>
+                  {% if ite %}<h3 class="card-title">{{ ite.count }}
+                  </h3>
+                  {% else %}  
+                  <h3 class="card-title">0
+                  </h3>
+                  {% endif %}
+
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -78,7 +96,13 @@
                     <i class="material-icons">report</i>
                   </div>
                   <p class="card-category">Currently Unavailable</p>
-                  <h3 class="card-title">50</h3>
+                  {% if res %}<h3 class="card-title">{{ res.count }}
+                  </h3>
+                  {% else %}  
+                  <h3 class="card-title">0
+                  </h3>
+                  {% endif %}
+
                 </div>
                 <div class="card-footer">
                   <div class="stats">

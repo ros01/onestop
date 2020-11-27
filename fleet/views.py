@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 # Create your views here.
 from django.shortcuts import get_object_or_404, render, redirect
@@ -28,13 +30,29 @@ from decimal import Decimal
 
 # Create your views here.
 
-class DashboardTemplateView(TemplateView):
+class LoginRequiredMixin(object):
+    @classmethod
+    def as_view(cls, **kwargs):
+        view = super(LoginRequiredMixin, cls).as_view(**kwargs)
+        return login_required(view)
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
+
+
+class DashboardTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "fleet/fleet_dashboard.html"
     
     def get_context_data(self, *args, **kwargs):
         context = super(DashboardTemplateView, self).get_context_data(*args, **kwargs)
-        #context["inspection"] = Schedule.objects.all()
+        context['req'] = Request.objects.all()
+        context['main'] = Maintenance.objects.all()
+        context['rep'] = Repair.objects.all()
+        context['pen'] = Request.objects.filter(request_status=1)
         return context
+
+        
 
 
 
@@ -72,7 +90,7 @@ class StationObjectMixin(object):
         return obj  
 
 
-class RestockStationCredit(StationObjectMixin, View):
+class RestockStationCredit(LoginRequiredMixin, StationObjectMixin, View):
     template_name = "fleet/refill_station_credit.html"
     template_name1 = "fleet/refill_station_credit_details.html"
     
@@ -112,7 +130,7 @@ class RestockStationCredit(StationObjectMixin, View):
         return render(request, self.template_name1, context)
 
 
-class StationCreditRestockList(ListView):
+class StationCreditRestockList(LoginRequiredMixin, ListView):
     template_name = "fleet/restock_list.html"
     context_object_name = 'object'
 
@@ -126,14 +144,14 @@ class StationCreditRestockList(ListView):
         return obj
 
 
-class StationCreditRestockDetails(DetailView):
+class StationCreditRestockDetails(LoginRequiredMixin, DetailView):
     template_name = "fleet/restock_station_credit_details.html"
     model = Refill
 
 
 
 
-class WorkshopCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
+class WorkshopCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'fleet/create_workshop.html'
     form_class = WorkshopModelForm
     success_message = 'Workshop created Successfully.'
@@ -141,7 +159,7 @@ class WorkshopCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('fleet:workshop_list')
 
 
-class StationCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
+class StationCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'fleet/create_station.html'
     form_class = StationModelForm
     success_message = 'Station created Successfully.'
@@ -149,14 +167,14 @@ class StationCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('fleet:station_list')
 
 
-class CategoryCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
+class CategoryCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'fleet/create_category.html'
     form_class = CategoryModelForm
     success_message = 'category created Successfully.'
 
     success_url = reverse_lazy('fleet:category_list')
 
-class VehicleCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
+class VehicleCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'fleet/create_vehicle.html'
     form_class = VehicleModelForm
     success_message = 'Vehicle created Successfully.'
@@ -164,7 +182,7 @@ class VehicleCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('fleet:vehicle_list')
 
 
-class WorkshopListView(ListView):
+class WorkshopListView(LoginRequiredMixin, ListView):
     template_name = "fleet/workshop_list.html"
     context_object_name = 'object'
 
@@ -178,7 +196,7 @@ class WorkshopListView(ListView):
         return obj
 
 
-class StationListView(ListView):
+class StationListView(LoginRequiredMixin, ListView):
     template_name = "fleet/station_list.html"
     context_object_name = 'object'
 
@@ -191,7 +209,7 @@ class StationListView(ListView):
         obj['station_qs'] = Station.objects.order_by('-date_created')
         return obj
 
-class CategoryListView(ListView):
+class CategoryListView(LoginRequiredMixin, ListView):
     template_name = "fleet/category_list.html"
     context_object_name = 'object'
 
@@ -204,7 +222,7 @@ class CategoryListView(ListView):
         obj['category_qs'] = Category.objects.order_by('-date_created')
         return obj
 
-class VehicleListView(ListView):
+class VehicleListView(LoginRequiredMixin, ListView):
     template_name = "fleet/vehicle_list.html"
     context_object_name = 'object'
 
@@ -218,7 +236,7 @@ class VehicleListView(ListView):
         return obj
 
 
-class VehicleRequestList(ListView):
+class VehicleRequestList(LoginRequiredMixin, ListView):
     template_name = "fleet/vehicle_request_list.html"
     context_object_name = 'object'
 
@@ -233,21 +251,21 @@ class VehicleRequestList(ListView):
 
 
 
-class WorkshopDetailView(DetailView):
+class WorkshopDetailView(LoginRequiredMixin, DetailView):
     template_name = "fleet/workshop_detail.html"
     model = Workshop
 
 
-class StationDetailView(DetailView):
+class StationDetailView(LoginRequiredMixin, DetailView):
     template_name = "fleet/station_detail.html"
     model = Station
 
 
-class CategoryDetailView(DetailView):
+class CategoryDetailView(LoginRequiredMixin, DetailView):
     template_name = "fleet/category_detail.html"
     model = Category
 
-class VehicleDetailView(DetailView):
+class VehicleDetailView(LoginRequiredMixin,DetailView):
     template_name = "fleet/vehicle_detail.html"
     model = Vehicle
 
@@ -269,21 +287,21 @@ class RequestObjectMixin(object):
         return obj 
 
 
-class VehicleRequestDetail(RequestObjectMixin, View):
+class VehicleRequestDetail(LoginRequiredMixin, RequestObjectMixin, View):
     template_name = "fleet/vehicle_request_detail.html" 
     def get(self, request, id=None, *args, **kwargs):
         context = {'object': self.get_object()}
         return render(request, self.template_name, context)
 
 
-class WorkshopUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
+class WorkshopUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
     model = Workshop
     template_name = 'fleet/update_workshop.html'
     form_class = WorkshopModelForm
     success_message = 'Success: Workshop Details were updated.'
     success_url = reverse_lazy('fleet:workshop_list')
 
-class StationUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
+class StationUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
     model = Station
     template_name = 'fleet/update_station.html'
     form_class = StationModelForm
@@ -291,14 +309,14 @@ class StationUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy('fleet:station_list')
 
 
-class CategoryUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
+class CategoryUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
     model = Category
     template_name = 'fleet/update_category.html'
     form_class = CategoryModelForm
     success_message = 'Success: Category Details were updated.'
     success_url = reverse_lazy('fleet:category_list')
 
-class VehicleUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
+class VehicleUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
     model = Vehicle
     template_name = 'fleet/update_vehicle.html'
     form_class = VehicleModelForm
@@ -338,7 +356,7 @@ class VehicleObjectMixin(object):
         return obj 
 
 
-class WorkshopDeleteView(WorkshopObjectMixin, View):
+class WorkshopDeleteView(LoginRequiredMixin, WorkshopObjectMixin, View):
     template_name = "fleet/workshop_delete.html" # DetailView
     def get(self, request, id=None, *args, **kwargs):
         # GET method
@@ -359,7 +377,7 @@ class WorkshopDeleteView(WorkshopObjectMixin, View):
         return render(request, self.template_name, context)
 
 
-class VehicleDeleteView(VehicleObjectMixin, View):
+class VehicleDeleteView(LoginRequiredMixin, VehicleObjectMixin, View):
     template_name = "fleet/vehicle_delete.html" # DetailView
     def get(self, request, id=None, *args, **kwargs):
         # GET method
@@ -379,7 +397,7 @@ class VehicleDeleteView(VehicleObjectMixin, View):
             return redirect('fleet:vehicle_list')
         return render(request, self.template_name, context)
 
-class StationDeleteView(StationObjectMixin, View):
+class StationDeleteView(LoginRequiredMixin, StationObjectMixin, View):
     template_name = "fleet/station_delete.html" # DetailView
     def get(self, request, id=None, *args, **kwargs):
         # GET method
@@ -400,7 +418,7 @@ class StationDeleteView(StationObjectMixin, View):
         return render(request, self.template_name, context)
 
 
-class CategoryDeleteView(CategoryObjectMixin, View):
+class CategoryDeleteView(LoginRequiredMixin, CategoryObjectMixin, View):
     template_name = "fleet/category_delete.html" # DetailView
     def get(self, request, id=None, *args, **kwargs):
         # GET method
@@ -421,7 +439,7 @@ class CategoryDeleteView(CategoryObjectMixin, View):
         return render(request, self.template_name, context)
 
 
-class IssueVehicleRequest(RequestObjectMixin, SuccessMessageMixin, CreateView):
+class IssueVehicleRequest(LoginRequiredMixin, RequestObjectMixin, SuccessMessageMixin, CreateView):
     template_name = 'fleet/assign_vehicle.html'
     template_name1 = 'fleet/assigned_vehicle_details.html'
     def get(self, request,  *args, **kwargs):
@@ -461,7 +479,7 @@ class AssignObjectMixin(object):
             obj = get_object_or_404(self.model, id=id)
         return obj 
 
-class UpdateVehicleAssignemt(AssignObjectMixin, View):
+class UpdateVehicleAssignemt(LoginRequiredMixin, AssignObjectMixin, View):
     template_name = "fleet/update_assign_vehicle.html" 
     template_name1 = "fleet/assigned_vehicle_details2.html" 
     
@@ -490,7 +508,7 @@ class UpdateVehicleAssignemt(AssignObjectMixin, View):
         return render(request, self.template_name1, context)
 
 
-class VehicleAssignmentList(ListView):
+class VehicleAssignmentList(LoginRequiredMixin, ListView):
     template_name = "fleet/assigned_vehicles_list.html"
     context_object_name = 'object'
 
@@ -504,14 +522,14 @@ class VehicleAssignmentList(ListView):
         return obj
 
 
-class VehicleAllocationsDetail(AssignObjectMixin, View):
+class VehicleAllocationsDetail(LoginRequiredMixin, AssignObjectMixin, View):
     template_name = "fleet/vehicle_allocation_details.html" 
     def get(self, request, id=None, *args, **kwargs):
         context = {'object': self.get_object()}
         return render(request, self.template_name, context)
 
 
-class FinalizeTrip(AssignObjectMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
+class FinalizeTrip(LoginRequiredMixin, AssignObjectMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'fleet/finalize_trip.html'
     template_name1 = 'fleet/finalized_trip_details.html'
     def get(self, request,  *args, **kwargs):
@@ -556,7 +574,7 @@ class ReleaseObjectMixin(object):
 
 
 
-class UpdateTripFinalization(ReleaseObjectMixin, View):
+class UpdateTripFinalization(LoginRequiredMixin, ReleaseObjectMixin, View):
     template_name = "fleet/update_finalize_trip.html" 
     template_name1 = "fleet/finalized_trip_details2.html" 
     
@@ -585,7 +603,7 @@ class UpdateTripFinalization(ReleaseObjectMixin, View):
         return render(request, self.template_name1, context)
 
 
-class TripHistoryList(ListView):
+class TripHistoryList(LoginRequiredMixin, ListView):
     template_name = "fleet/trip_history.html"
     context_object_name = 'object'
 
@@ -599,7 +617,7 @@ class TripHistoryList(ListView):
         return obj
 
 
-class TripHistory(AssignObjectMixin, View):
+class TripHistory(LoginRequiredMixin, AssignObjectMixin, View):
     template_name = "fleet/trip_history_details.html" 
 
     def get(self, request, id=None,  *args, **kwargs):
@@ -613,7 +631,7 @@ class TripHistory(AssignObjectMixin, View):
 
 
 
-class FuelingRecordView(PassRequestMixin, SuccessMessageMixin, CreateView):
+class FuelingRecordView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'fleet/record_fueling.html'
     form_class = FuelingModelForm
     success_message = 'Fueling Records Entered Successfully.'
@@ -621,7 +639,7 @@ class FuelingRecordView(PassRequestMixin, SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('fleet:fueling_list')
 
 
-class FuelingListView(ListView):
+class FuelingListView(LoginRequiredMixin, ListView):
     template_name = "fleet/fueling_list.html"
     context_object_name = 'object'
 
@@ -635,12 +653,12 @@ class FuelingListView(ListView):
         return obj
 
 
-class FuelingDetailView(DetailView):
+class FuelingDetailView(LoginRequiredMixin, DetailView):
     template_name = "fleet/fueling_detail.html"
     model = Fueling
 
 
-class FuelingUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
+class FuelingUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
     model = Fueling
     template_name = 'fleet/update_fueling_record.html'
     form_class = FuelingModelForm
@@ -648,14 +666,14 @@ class FuelingUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy('fleet:fueling_list')
 
 
-class RepairsRecordView(PassRequestMixin, SuccessMessageMixin, CreateView):
+class RepairsRecordView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'fleet/record_repairs.html'
     form_class = RepairsModelForm
     success_message = 'Repairs Records Entered Successfully.'
 
     success_url = reverse_lazy('fleet:repairs_list')
 
-class RepairsListView(ListView):
+class RepairsListView(LoginRequiredMixin, ListView):
     template_name = "fleet/repairs_list.html"
     context_object_name = 'object'
 
@@ -668,12 +686,12 @@ class RepairsListView(ListView):
         obj['repairs_qs'] = Repair.objects.all()
         return obj
 
-class RepairsDetailView(DetailView):
+class RepairsDetailView(LoginRequiredMixin, DetailView):
     template_name = "fleet/repairs_detail.html"
     model = Repair
 
 
-class RepairsUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
+class RepairsUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
     model = Repair
     template_name = 'fleet/update_repair_records.html'
     form_class = RepairsModelForm
@@ -683,14 +701,14 @@ class RepairsUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
 
     
     
-class ScheduleMaintenance(SuccessMessageMixin, CreateView):
+class ScheduleMaintenance(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     template_name = 'fleet/schedule_maintenance2.html'
     form_class = ScheduleModelForm
     success_message = 'Vehicle Maintenance Scheduled Successfully.'
 
     success_url = reverse_lazy('fleet:schedule_list')
 
-class ScheduleListView(ListView):
+class ScheduleListView(LoginRequiredMixin, ListView):
     template_name = "fleet/schedule_list.html"
     context_object_name = 'object'
 
@@ -703,12 +721,12 @@ class ScheduleListView(ListView):
         obj['schedule_qs'] = Schedule.objects.filter(schedule_status=1)
         return obj
         
-class ScheduleDetailView(DetailView):
+class ScheduleDetailView(LoginRequiredMixin, DetailView):
     template_name = "fleet/schedule_details.html"
     model = Schedule
 
 
-class ScheduleUpdateView(SuccessMessageMixin, UpdateView):
+class ScheduleUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Schedule
     template_name = 'fleet/update_maintenance_schedule2.html'
     form_class = ScheduleModelForm
@@ -729,7 +747,7 @@ class ScheduleObjectMixin(object):
 
 
 
-class RecordMaintenance(ScheduleObjectMixin, View):
+class RecordMaintenance(LoginRequiredMixin, ScheduleObjectMixin, View):
     template_name = 'fleet/record_maintenance.html'
     template_name1 = 'fleet/maintenance_details.html'
     def get(self, request,  *args, **kwargs):
@@ -770,7 +788,7 @@ class MaintenanceObjectMixin(object):
             obj = get_object_or_404(self.model, id=id)
         return obj 
 
-class UpdateMaintenance(MaintenanceObjectMixin, SuccessMessageMixin, View):
+class UpdateMaintenance(LoginRequiredMixin, MaintenanceObjectMixin, SuccessMessageMixin, View):
     template_name = "fleet/update_maintenance.html" 
     template_name1 = "fleet/maintenance_detail.html" 
     
@@ -799,7 +817,7 @@ class UpdateMaintenance(MaintenanceObjectMixin, SuccessMessageMixin, View):
         return render(request, self.template_name1, context)
 
 
-class MaintenanceList(SuccessMessageMixin, ListView):
+class MaintenanceList(LoginRequiredMixin, SuccessMessageMixin, ListView):
     template_name = "fleet/maintenance_list.html"
     context_object_name = 'object'
 
@@ -813,6 +831,6 @@ class MaintenanceList(SuccessMessageMixin, ListView):
         return obj
 
 
-class MaintenanceDetailView(DetailView):
+class MaintenanceDetailView(LoginRequiredMixin, DetailView):
     template_name = "fleet/maintenance_detail.html"
     model = Maintenance

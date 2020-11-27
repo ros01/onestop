@@ -1,4 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import (
      CreateView,
@@ -24,17 +26,31 @@ from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 
+class LoginRequiredMixin(object):
+    @classmethod
+    def as_view(cls, **kwargs):
+        view = super(LoginRequiredMixin, cls).as_view(**kwargs)
+        return login_required(view)
 
-class DashboardTemplateView(TemplateView):
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
+
+
+class DashboardTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "store/store_dashboard2.html"
     
     def get_context_data(self, *args, **kwargs):
         context = super(DashboardTemplateView, self).get_context_data(*args, **kwargs)
         #context["inspection"] = Schedule.objects.all()
+        context['requ'] = Requisition.objects.all()
+        context['iss'] = Issue.objects.all()
+        context['ite'] = Item.objects.all()
+        context['res'] = Restock.objects.all()
         return context
 
 
-class ItemCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
+class ItemCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'store/create_item2.html'
     form_class = ItemModelForm
     success_message = 'Item created Successfully.'
@@ -76,7 +92,7 @@ class ItemObjectMixin(object):
         return obj 
 
 
-class RestockItem(ItemObjectMixin, View):
+class RestockItem(LoginRequiredMixin, ItemObjectMixin, View):
     template_name = "store/restock_item.html"
     template_name1 = "store/restock_item_details.html"
     
@@ -113,7 +129,7 @@ class RestockItem(ItemObjectMixin, View):
         return render(request, self.template_name1, context)
 
 
-class ReceivedItemsList(ListView):
+class ReceivedItemsList(LoginRequiredMixin, ListView):
     template_name = "store/restock_list.html"
     context_object_name = 'object'
 
@@ -127,12 +143,12 @@ class ReceivedItemsList(ListView):
         return obj
 
 
-class ItemRestockDetails(DetailView):
+class ItemRestockDetails(LoginRequiredMixin, DetailView):
     template_name = "store/restock_details.html"
     model = Restock
 
 
-class VendorListView(ListView):
+class VendorListView(LoginRequiredMixin, ListView):
     template_name = "store/vendors_list2.html"
     context_object_name = 'object'
 
@@ -145,7 +161,7 @@ class VendorListView(ListView):
         obj['vendor_qs'] = Vendor.objects.order_by('-date_created')
         return obj
 
-class ItemCategoyListView(ListView):
+class ItemCategoyListView(LoginRequiredMixin, ListView):
     template_name = "store/items_category_list.html"
     context_object_name = 'object'
 
@@ -158,7 +174,7 @@ class ItemCategoyListView(ListView):
         obj['category_qs'] = Category.objects.order_by('-entry_date')
         return obj
 
-class ItemsListView(ListView):
+class ItemsListView(LoginRequiredMixin, ListView):
     template_name = "store/items_list2.html"
     context_object_name = 'object'
 
@@ -171,7 +187,7 @@ class ItemsListView(ListView):
         obj['items_qs'] = Item.objects.order_by('-entry_date')
         return obj
 
-class RequisitionListView(ListView):
+class RequisitionListView(LoginRequiredMixin, ListView):
     template_name = "store/requisitions_list2.html"
     context_object_name = 'object'
 
@@ -185,7 +201,7 @@ class RequisitionListView(ListView):
         return obj
 
 
-class RequisitionListView(ListView):
+class RequisitionListView(LoginRequiredMixin, ListView):
     template_name = "store/requisitions_list2.html"
     context_object_name = 'object'
 
@@ -199,7 +215,7 @@ class RequisitionListView(ListView):
         return obj
 
 
-class IssuedRequisitions(ListView):
+class IssuedRequisitions(LoginRequiredMixin, ListView):
     template_name = "store/issued_requisitions.html"
     context_object_name = 'object'
 
@@ -213,14 +229,14 @@ class IssuedRequisitions(ListView):
         return obj
 
 
-class VendorCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
+class VendorCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'store/create_vendor2.html'
     form_class = VendorModelForm
     success_message = 'Vendor created Successfully.'
 
     success_url = reverse_lazy('store:vendor_list')
 
-class CategoryCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
+class CategoryCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'store/create_category2.html'
     form_class = CategoryModelForm
     success_message = 'Category created Successfully.'
@@ -268,7 +284,7 @@ class IssueObjectMixin(object):
             obj = get_object_or_404(self.model, id=id)
         return obj 
 
-class IssueRequisition(RequisitionObjectMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
+class IssueRequisition(LoginRequiredMixin, RequisitionObjectMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'store/issue_requisition.html'
     template_name1 = 'store/issue_requisition_details2.html'
     def get(self, request,  *args, **kwargs):
@@ -303,19 +319,19 @@ class IssueRequisition(RequisitionObjectMixin, PassRequestMixin, SuccessMessageM
         return render(request, self.template_name1, context)
 
 
-class ItemDetailView(DetailView):
+class ItemDetailView(LoginRequiredMixin, DetailView):
     template_name = "store/item_detail2.html"
     model = Item
 
 
 
-class IssuedRequisitionsDetailView(DetailView):
+class IssuedRequisitionsDetailView(LoginRequiredMixin, DetailView):
     template_name = "store/issued_requisitions_details.html"
     model = Issue
 
 
 
-class VendorDetailView(VendorObjectMixin, View):
+class VendorDetailView(LoginRequiredMixin, VendorObjectMixin, View):
     template_name = "store/vendor_detail2.html"
 
     def get(self, request, id=None, *args, **kwargs):
@@ -323,7 +339,7 @@ class VendorDetailView(VendorObjectMixin, View):
         return render(request, self.template_name, context)
 
 
-class VendorUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
+class VendorUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
     model = Vendor
     template_name = 'store/vendor_update2.html'
     form_class = VendorModelForm
@@ -332,7 +348,7 @@ class VendorUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
 
 
 
-class VendorDeleteView(VendorObjectMixin, View):
+class VendorDeleteView(LoginRequiredMixin, VendorObjectMixin, View):
     template_name = "store/vendor_delete2.html" # DetailView
     def get(self, request, id=None, *args, **kwargs):
         # GET method
@@ -353,7 +369,7 @@ class VendorDeleteView(VendorObjectMixin, View):
         return render(request, self.template_name, context)
 
 
-class ItemUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
+class ItemUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
     model = Item
     template_name = 'store/item_update2.html'
     form_class = ItemModelForm
@@ -362,7 +378,7 @@ class ItemUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
 
 
 
-class ItemDeleteView(ItemObjectMixin, View):
+class ItemDeleteView(LoginRequiredMixin, ItemObjectMixin, View):
     template_name = "store/item_delete2.html" # DetailView
     def get(self, request, id=None, *args, **kwargs):
         # GET method
@@ -383,7 +399,7 @@ class ItemDeleteView(ItemObjectMixin, View):
         return render(request, self.template_name, context)
 
 
-class CategoryDetailView(CategoryObjectMixin, View):
+class CategoryDetailView(LoginRequiredMixin, CategoryObjectMixin, View):
     template_name = "store/category_detail2.html"
 
     def get(self, request, id=None, *args, **kwargs):
@@ -391,7 +407,7 @@ class CategoryDetailView(CategoryObjectMixin, View):
         return render(request, self.template_name, context)
 
 
-class CategoryUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
+class CategoryUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
     model = Category
     template_name = 'store/category_update2.html'
     form_class = CategoryModelForm
@@ -399,7 +415,7 @@ class CategoryUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy('store:category_list')
 
 
-class CategoryDeleteView(CategoryObjectMixin, View):
+class CategoryDeleteView(LoginRequiredMixin, CategoryObjectMixin, View):
     template_name = "store/category_delete2.html" # DetailView
     def get(self, request, id=None, *args, **kwargs):
         # GET method
@@ -419,7 +435,7 @@ class CategoryDeleteView(CategoryObjectMixin, View):
             return redirect('store:category_list')
         return render(request, self.template_name, context)
 
-class RequisitionDetailsView(RequisitionObjectMixin, View):
+class RequisitionDetailsView(LoginRequiredMixin, RequisitionObjectMixin, View):
     template_name = "store/requisition_detail2.html" 
     def get(self, request, id=None, *args, **kwargs):
         context = {'object': self.get_object()}
@@ -427,7 +443,7 @@ class RequisitionDetailsView(RequisitionObjectMixin, View):
 
 
 
-class IssueRequisitionDetail(IssueObjectMixin, View):
+class IssueRequisitionDetail(LoginRequiredMixin, IssueObjectMixin, View):
     template_name = "store/issue_requisition_details2.html"
 
     def get(self, request, id=None, *args, **kwargs):
@@ -435,7 +451,7 @@ class IssueRequisitionDetail(IssueObjectMixin, View):
         return render(request, self.template_name, context)
 
  
-class IssueRequisitionUpdate(IssueObjectMixin, View):
+class IssueRequisitionUpdate(LoginRequiredMixin, IssueObjectMixin, View):
     template_name = "store/issue_requisition_update.html" 
     template_name1 = "store/issue_requisition_details2.html" 
     

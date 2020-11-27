@@ -93,6 +93,30 @@ def list_vehicles(request):
     vehicle_filter = VehicleFilter(request.GET, queryset=vehicle_list)
     return render(request, 'rrbnstaff/list_vehicles.html', {'filter': vehicle_filter})
 
+
+class ListVehicles(TemplateView):
+    template_name = "rrbnstaff/search_vehicles.html"
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super(ListVehicles, self).get_context_data(*args, **kwargs)
+        context['vehicle_list'] = Vehicle.objects.filter(trip_status=1)
+        context['vehicle_filter'] = VehicleFilter(request.GET, queryset=vehicle_list)
+        #obj['inspection'] = self.queryset.filter(application_status=7).count()
+        context['pending'] = Request.objects.filter(request_status=1)
+        return context
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ListVehicles, self).get_context_data(*args, **kwargs)
+        qs = self.get_queryset()
+        short_trip = self.request.GET.get(trip_status="short")
+        if short_trip:
+            qs = Vehicle.objects.filter(trip_status=1)
+        #filter_class = self.filter_class
+        #if filter_class:
+            #f = filter_class(self.request.GET, queryset=qs)
+            #context["object_list"] = f
+        #return context
+
 #class VehicleFilter(FilterSet):
 
     #location = CharFilter(name='location', lookup_type='icontains',)

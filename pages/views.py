@@ -13,3 +13,6 @@ class HomepageTemplateView(TemplateView):
         #context = super(HomepageTemplateView, self).get_context_data(*args, **kwargs)
         #context["inspection"] = Schedule.objects.all()
         #return context
+
+def get_object_or_404(request):
+    return render(request, 'pages/404.html')
