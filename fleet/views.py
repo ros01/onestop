@@ -24,9 +24,12 @@ from bootstrap_modal_forms.mixins import PassRequestMixin, CreateUpdateAjaxMixin
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.db.models import Q
-from django.core.exceptions import ObjectDoesNotExist
 from decimal import Decimal
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+from django.db.models import Q, Count, F, Value
+from django.core.exceptions import ObjectDoesNotExist
+import datetime
 
 # Create your views here.
 
@@ -38,28 +41,35 @@ class LoginRequiredMixin(object):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
+        
         return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
 
 
 class DashboardTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "fleet/fleet_dashboard.html"
+
     
     def get_context_data(self, *args, **kwargs):
         context = super(DashboardTemplateView, self).get_context_data(*args, **kwargs)
-        context['req'] = Request.objects.all()
-        context['main'] = Maintenance.objects.all()
+        this_month = (datetime.datetime.now() + datetime.timedelta(days=30))
+        context['vreq'] = Request.objects.all()
+        context['vreqmnth'] = Request.objects.filter(request_date__lt=this_month)
+        context['vreq_pend'] = Request.objects.filter(request_status=1)
+        context['vreq_pend_mnth'] = Request.objects.filter(request_date__lt=this_month, request_status=1)
+        context['sch_pend'] = Schedule.objects.filter(schedule_status=1)
+        context['sch_pend_mnth'] = Schedule.objects.filter(scheduled_on__lt=this_month, schedule_status=1)
         context['rep'] = Repair.objects.all()
-        context['pen'] = Request.objects.filter(request_status=1)
+        context['rep_mnth'] = Repair.objects.filter(repair_date__lt=this_month)
         return context
 
         
 
 
-
+@login_required
 def retrieve_station(request):
     return render(request, 'fleet/retrieve_station.html')
 
-
+@login_required
 def restock(request):
     try:
         query = request.GET.get('q')
@@ -79,6 +89,49 @@ def restock(request):
 
     return render(request, 'fleet/results.html', {"object": object})
 
+class VehicleListView(LoginRequiredMixin, ListView):
+    template_name = "fleet/vehicle_list2.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return Vehicle.objects.all()
+        
+
+    def get_context_data(self, **kwargs):
+        obj = super(VehicleListView, self).get_context_data(**kwargs)
+        obj['vehicle_qs'] = Vehicle.objects.order_by('-date_created')
+        return obj
+
+@login_required
+def view_vehicle (request, id):
+  vehicle = get_object_or_404(Vehicle, pk=id)
+  context={'vehicle': vehicle,       
+           }
+  return render(request, 'fleet/view_vehicle_details.html', context)
+
+@login_required
+def lock_vehicle (request, id):
+  if request.method == 'POST':
+     vehicle = get_object_or_404(Vehicle, pk=id)
+     vehicle.interstate_trip = 'local'
+     vehicle.save()
+
+     context = {}
+     context['object'] = vehicle
+     messages.success(request, ('Vehicle Locked Successfully. Please Remember to unlock vehicle after road worthiness confirmation'))
+     return render(request, 'fleet/lock_vehicle_details.html', context)
+
+@login_required
+def unlock_vehicle (request, id):
+  if request.method == 'POST':
+     vehicle = get_object_or_404(Vehicle, pk=id)
+     vehicle.interstate_trip = 'interstate'
+     vehicle.save()
+
+     context = {}
+     context['object'] = vehicle
+     messages.success(request, ('Vehicle Unlocked Successfully. Vehicle is now available for Interstate Trips'))
+     return render(request, 'fleet/lock_vehicle_details.html', context)
 
 class StationObjectMixin(object):
     model = Station
@@ -222,18 +275,7 @@ class CategoryListView(LoginRequiredMixin, ListView):
         obj['category_qs'] = Category.objects.order_by('-date_created')
         return obj
 
-class VehicleListView(LoginRequiredMixin, ListView):
-    template_name = "fleet/vehicle_list.html"
-    context_object_name = 'object'
 
-    def get_queryset(self):
-        return Vehicle.objects.all()
-        
-
-    def get_context_data(self, **kwargs):
-        obj = super(VehicleListView, self).get_context_data(**kwargs)
-        obj['vehicle_qs'] = Vehicle.objects.order_by('-date_created')
-        return obj
 
 
 class VehicleRequestList(LoginRequiredMixin, ListView):
@@ -439,8 +481,9 @@ class CategoryDeleteView(LoginRequiredMixin, CategoryObjectMixin, View):
         return render(request, self.template_name, context)
 
 
-class IssueVehicleRequest(LoginRequiredMixin, RequestObjectMixin, SuccessMessageMixin, CreateView):
-    template_name = 'fleet/assign_vehicle.html'
+
+class IssueVehicleRequest(LoginRequiredMixin, RequestObjectMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
+    template_name = 'fleet/assign_vehicle2.html'
     template_name1 = 'fleet/assigned_vehicle_details.html'
     def get(self, request,  *args, **kwargs):
         context = {}
@@ -457,7 +500,10 @@ class IssueVehicleRequest(LoginRequiredMixin, RequestObjectMixin, SuccessMessage
         
         form = IssueVehicleRequestModelForm(request.POST)
         if form.is_valid():
-            form.save()
+            if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
+                form.save(commit=False)
+            else:
+                form.save(commit=True)
             
         context = {}
 
@@ -695,18 +741,21 @@ class RepairsUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixi
     model = Repair
     template_name = 'fleet/update_repair_records.html'
     form_class = RepairsModelForm
-    success_message = 'Success: Repairs Details Successfully Updated.'
+    success_message = 'Repairs Details Successfully Updated.'
     success_url = reverse_lazy('fleet:repairs_list')
 
 
     
     
-class ScheduleMaintenance(LoginRequiredMixin, SuccessMessageMixin, CreateView):
-    template_name = 'fleet/schedule_maintenance2.html'
+class ScheduleMaintenance(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
+    template_name = 'fleet/schedule_maintenance.html'
     form_class = ScheduleModelForm
     success_message = 'Vehicle Maintenance Scheduled Successfully.'
 
     success_url = reverse_lazy('fleet:schedule_list')
+
+
+
 
 class ScheduleListView(LoginRequiredMixin, ListView):
     template_name = "fleet/schedule_list.html"
@@ -726,12 +775,13 @@ class ScheduleDetailView(LoginRequiredMixin, DetailView):
     model = Schedule
 
 
-class ScheduleUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class ScheduleUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
     model = Schedule
-    template_name = 'fleet/update_maintenance_schedule2.html'
+    template_name = 'fleet/update_maintenance_schedule.html'
     form_class = ScheduleModelForm
-    success_message = 'Success: Schedule Details Successfully Updated.'
+    success_message = 'Schedule Details Successfully Updated.'
     success_url = reverse_lazy('fleet:schedule_list')
+
 
 
 
@@ -747,8 +797,8 @@ class ScheduleObjectMixin(object):
 
 
 
-class RecordMaintenance(LoginRequiredMixin, ScheduleObjectMixin, View):
-    template_name = 'fleet/record_maintenance.html'
+class RecordMaintenance(LoginRequiredMixin, ScheduleObjectMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
+    template_name = 'fleet/record_maintenance2.html'
     template_name1 = 'fleet/maintenance_details.html'
     def get(self, request,  *args, **kwargs):
         context = {}
@@ -763,7 +813,10 @@ class RecordMaintenance(LoginRequiredMixin, ScheduleObjectMixin, View):
     def post(self, request,  *args, **kwargs):
         form = RecordMaintenanceModelForm(request.POST)
         if form.is_valid():
-            form.save()
+            if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
+                form.save(commit=False)
+            else:
+                form.save(commit=True)
 
         context = {}
         obj = self.get_object()
@@ -789,7 +842,7 @@ class MaintenanceObjectMixin(object):
         return obj 
 
 class UpdateMaintenance(LoginRequiredMixin, MaintenanceObjectMixin, SuccessMessageMixin, View):
-    template_name = "fleet/update_maintenance.html" 
+    template_name = "fleet/update_maintenance2.html" 
     template_name1 = "fleet/maintenance_detail.html" 
     
     def get(self, request, id=None, *args, **kwargs):

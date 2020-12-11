@@ -145,6 +145,7 @@ class Vehicle(models.Model):
 		('Truck', 'Truck'),
 		('Van', 'Van'),
 		('Wagon', 'Wagon'),
+		('SUV', 'SUV'),
 		)
 
 	COLOUR = (
@@ -175,9 +176,14 @@ class Vehicle(models.Model):
 		('Calabar', 'Calabar'),
 		)
 
-	TRIP_CHOICES = (
-		('short', 'Short Trip'),
-		('long', 'Long Trip'),
+	LOCAL_CHOICES = (
+		('local', 'Local Trip'),
+		('interstate', 'Interstate Trip'),
+		)
+
+	INTERSTATE_CHOICES = (
+		('local', 'Local Trip'),
+		('interstate', 'Interstate Trip'),
 		)
 
 	
@@ -190,7 +196,7 @@ class Vehicle(models.Model):
 	model = models.CharField(max_length=200)
 	purchase_year = models.CharField(max_length=200)
 	location = models.CharField(max_length=120, choices=LOCATION, blank=False)
-	trip_type = models.CharField(max_length=120, choices=TRIP_CHOICES, blank=False, default='short') 
+	interstate_trip = models.CharField(max_length=120, choices=INTERSTATE_CHOICES, default='interstate')  
 	category = models.CharField(max_length=120, choices=CATEGORY,  null=True, blank=True)
 	engine_number = models.CharField(max_length=200)
 	chasis_number = models.CharField(max_length=200)
@@ -205,6 +211,9 @@ class Vehicle(models.Model):
 
 	def __str__(self):
 		return self.vehicle_name
+
+	class Meta:
+		ordering = ["vehicle_name"]
 
 	def date_created_pretty(self):
 		return self.date_created.strftime('%b %e %Y')
@@ -389,13 +398,10 @@ class Schedule(models.Model):
 	schedule_no = models.CharField(max_length=500, null=True, blank=True, 
         default=increment_schedule_no)
 	vehicle = models.ForeignKey('Vehicle', null=True, blank=True, on_delete=models.DO_NOTHING)
-	current_mileage = models.DecimalField(max_digits=50, decimal_places=2,)
-	#last_maintenance_date = models.DateTimeField(default=datetime.now, blank=True)
-	maintenance_due_date = models.DateTimeField(default=datetime.now, blank=True)
+	target_maintenance_mileage = models.DecimalField(max_digits=50, decimal_places=2,)
+	target_maintenance_date = models.DateTimeField(default=datetime.now, blank=True)
 	workshop = models.ForeignKey('Workshop', null=True, blank=True, on_delete=models.DO_NOTHING)
 	mechanic_name = models.ForeignKey('Workshop', null=True, blank=True, related_name='workshop_mechanic', on_delete=models.DO_NOTHING)
-	#maintenance_cost_estimate = models.DecimalField(max_digits=50, decimal_places=2,)
-	#projected_maintenance = models.TextField(null=True, blank=True)
 	schedule_status = models.IntegerField(default=1)
 	maintenance_scheduled_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='maintenance_scheduler', on_delete=models.DO_NOTHING)
 	scheduled_on = models.DateTimeField(default=datetime.now, blank=True)
@@ -413,8 +419,8 @@ class Schedule(models.Model):
 	def scheduled_on_pretty(self):
 		return self.scheduled_on.strftime('%b %e %Y')
 
-	def maintenance_due_date_pretty(self):
-		return self.maintenance_due_date.strftime('%b %e %Y')
+	def target_maintenance_date_pretty(self):
+		return self.target_maintenance_date.strftime('%b %e %Y')
 	
 
 class Maintenance(models.Model):
@@ -422,13 +428,9 @@ class Maintenance(models.Model):
 	schedule_no = models.CharField(max_length=500, null=True, blank=True, default=increment_schedule_no)
 	vehicle = models.ForeignKey('Vehicle', null=True, blank=True, on_delete=models.DO_NOTHING)
 	driver = models.CharField(max_length=200)
-	#last_maintenance_mileage = models.DecimalField(max_digits=50, decimal_places=2,)
-	#last_maintenance_date = models.DateTimeField(default=datetime.now, blank=True)
-	maintenance_due_date = models.DateTimeField(default=datetime.now, blank=True)
+	target_maintenance_date = models.DateTimeField(default=datetime.now, blank=True)
 	workshop = models.ForeignKey('Workshop', null=True, blank=True, on_delete=models.DO_NOTHING)
 	mechanic_name = models.ForeignKey('Workshop', null=True, blank=True, related_name='maintenance_mechanic', on_delete=models.DO_NOTHING)
-	#maintenance_cost_estimate = models.DecimalField(max_digits=50, decimal_places=2,)
-	#projected_maintenance = models.TextField(null=True, blank=True)
 	maintenance_scheduled_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
 	scheduled_on = models.DateTimeField(default=datetime.now, blank=True)
 	current_maintenance_mileage = models.DecimalField(max_digits=50, decimal_places=2,)
@@ -445,8 +447,8 @@ class Maintenance(models.Model):
 	def scheduled_on_pretty(self):
 		return self.scheduled_on.strftime('%b %e %Y')
 
-	def maintenance_due_date_pretty(self):
-		return self.maintenance_due_date.strftime('%b %e %Y')
+	def target_maintenance_date_pretty(self):
+		return self.target_maintenance_date.strftime('%b %e %Y')
 
 	def next_maintenance_date_pretty(self):
 		return self.next_maintenance_date.strftime('%b %e %Y')

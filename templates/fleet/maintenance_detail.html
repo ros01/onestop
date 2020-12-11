@@ -53,8 +53,8 @@
                   
                     
         <div class="row">
-        <span class="col-5"><strong>Maintenance Due Date:</strong></span>
-        <span class="col-6">{{object.maintenance_due_date_pretty}}</span>
+        <span class="col-5"><strong>Target Maintenance Date:</strong></span>
+        <span class="col-6">{{object.target_maintenance_date_pretty}}</span>
         </div>
 
         <div class="row">
@@ -130,7 +130,9 @@
     <hr> 
     <div class="d-flex justify-content-end"> 
 
-    <a href="{% url 'fleet:update_maintenance' object.id %}" class="btn btn-primary text-white py-1 mr-3 mt-1 mb-3"><i class="fa fa-list text-white"></i> Update Maintenance</a>  
+      
+
+    <button type="button" id="update-maintenance" class="bs-modal btn btn-primary text-white py-1 mr-3 mt-1 mb-3" data-form-url="{% url 'fleet:update_maintenance' object.id %}"><i class="fa fa-list text-white"></i> Update Maintenance</button>
         
         
        

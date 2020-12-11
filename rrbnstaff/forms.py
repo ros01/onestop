@@ -116,40 +116,42 @@ LOCATION_CHOICES = (
 
 
 TRIP_CHOICES = (
-  ('short', 'Short Trip'),
-  ('long', 'Long Trip'),
+  ('local', 'Local Trip'),
+  ('interstate', 'Interstate Trip'),
 )
 
 
+#class VehicleFilterForm(forms.Form):
+  #location = forms.ChoiceField(
+    #label='Location',
+    #choices=LOCATION_CHOICES, 
+    #widget=forms.CheckboxSelectMultiple, 
+    #required=False)
+  
+  #trip_type = forms.ChoiceField(
+    #label='Trip Type',
+    #choices=TRIP_CHOICES, 
+    #widget=forms.CheckboxSelectMultiple, 
+    #required=False)   
+
+
+
 class VehicleFilterForm(forms.ModelForm):
-    #q = forms.CharField(label='Search', required=False)
-    #vehicle_name = forms.ModelMultipleChoiceField(
-      #label='Vehicle',
-      #queryset=Vehicle.objects.all(), 
-      #widget=forms.CheckboxSelectMultiple, 
+    location = forms.ChoiceField(choices = LOCATION_CHOICES, widget=forms.Select(), required=True)
+    trip_type = forms.ChoiceField(choices = TRIP_CHOICES, widget=forms.Select(), required=True)
+
 
     class Meta:
-        fields = ('location', 'trip_type',)
+        model = Vehicle
+        fields = ('location', 'trip_type')
 
-    location = forms.ChoiceField(choices=LOCATION_CHOICES)
 
-    trip_type = forms.ChoiceField(choices=TRIP_CHOICES)
 
     def __init__(self, *args, **kwargs):
        super(VehicleFilterForm, self).__init__(*args, **kwargs)
-       for name in self.fields.keys():
-            self.fields[name].widget.attrs.update({
-                'class': 'form-control',
-            })
-            self.fields[name].empty_label = None
-       
        self.fields['location'].label = "Location"
        self.fields['trip_type'].label = "Trip Type"
        
-       
-       
-
-
 
 
 

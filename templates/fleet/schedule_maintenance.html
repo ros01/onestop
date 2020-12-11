@@ -1,7 +1,5 @@
 {% load widget_tweaks %}
 {% load crispy_forms_tags %}
-{# Django Tempus Dominus assets are included in `{{ form.media }}` #}
-{{ form.media }}
 
 
 
@@ -36,40 +34,33 @@
 {{ form.vehicle|as_crispy_field }}
 </div>
 <div class="form-group col-md-6">
-{{ form.driver|as_crispy_field }}
+{{ form.target_maintenance_mileage|as_crispy_field }}
 </div>
 </div>
 <div class="form-row">
-<div class="form-group col-md-6">
-{{ form.last_maintenance_mileage|as_crispy_field }}
-</div>
-<div class="form-group col-md-6">
-{{ form.last_maintenance_date|as_crispy_field }}
-</div>
-</div>
-<div class="form-row">
-<div class="form-group col-md-6">
-{{ form.maintenance_due_date|as_crispy_field }}
-</div>
+
+
+<div class="form-group col-md-6 mt-2 pt-2">
+ <label for="id_target_maintenance_date" class=" requiredField">Target Maintenance Date<span class="asteriskField">*</span></label>
+ <input type="date" name="target_maintenance_date" class="form-control" required id="id_target_maintenance_date"  id="div_id_target_maintenance_date">
+ </div>
+
+
+
+
 <div class="form-group col-md-6">
 {{ form.workshop|as_crispy_field }}
+</div>
+</div>
+<div class="form-row">
+<div class="form-group col-md-6">
+{{ form.mechanic_name|as_crispy_field }}
 </div>
 </div>
  
 
 <div class="form-row">
-<div class="form-group col-md-6">
-{{ form.mechanic_name|as_crispy_field }}
-</div>
-<div class="form-group col-md-6">
-{{ form.maintenance_cost_estimate|as_crispy_field }}
-</div>
-</div>
 
-<div class="form-row">
-<div class="form-group col-md-6">
-{{ form.projected_maintenance|as_crispy_field }}
-</div>
 
 </div>
     

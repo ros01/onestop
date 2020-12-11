@@ -25,6 +25,10 @@ from django_filters import FilterSet, CharFilter, NumberFilter
 from django.core.exceptions import ImproperlyConfigured
 from .filters import VehicleFilter
 from django.contrib import messages
+from .choices import location_choices, trip_choices
+from django.db.models import Q, Count, F, Value
+from django.core.exceptions import ObjectDoesNotExist
+import datetime
 
 
 
@@ -32,27 +36,37 @@ from django.contrib import messages
 
 
 class LoginRequiredMixin(object):
-    #@classmethod
-    #def as_view(cls, **kwargs):
-        #view = super(LoginRequiredMixin, cls).as_view(**kwargs)
-        #return login_required(view)
+    @classmethod
+    def as_view(cls, **kwargs):
+        view = super(LoginRequiredMixin, cls).as_view(**kwargs)
+        return login_required(view)
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
+        
         return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
 
 
 
-class DashboardTemplateView(TemplateView):
+class DashboardTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "rrbnstaff/staff_dashboard2.html"
     
     def get_context_data(self, *args, **kwargs):
         context = super(DashboardTemplateView, self).get_context_data(*args, **kwargs)
-        #context["inspection"] = Schedule.objects.all()
+        this_month = (datetime.datetime.now() + datetime.timedelta(days=30))
+        context['res'] = Requisition.objects.all()
+        context['resmnth'] = Requisition.objects.filter(requisition_date__lt=this_month)
+        context['res_pend'] = Requisition.objects.filter(requisition_status=1)
+        context['res_pend_mnth'] = Requisition.objects.filter(requisition_date__lt=this_month, requisition_status=1)
+        context['req'] = Request.objects.all()
+        context['reqmnth'] = Request.objects.filter(request_date__lt=this_month)
+        context['req_pend'] = Request.objects.filter(request_status=1)
+        context['req_pend_mnth'] = Request.objects.filter(request_date__lt=this_month, request_status=1)
+        
         return context
 
 
-class ProfileTemplateView(TemplateView):
+class ProfileTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "rrbnstaff/edit_profile.html"
     
     def get_context_data(self, *args, **kwargs):
@@ -81,145 +95,79 @@ class DashboardListView(ListView):
         obj['request_qs'] = Requisition.objects.order_by('-requisition_date')
         return obj
 
-
-def search_vehicles(request):
-    vehicle_list = Vehicle.objects.all()
-    vehicle_filter = VehicleFilter(request.GET, queryset=vehicle_list)
-    return render(request, 'rrbnstaff/search_vehicles.html', {'filter': vehicle_filter})
-
-
+@login_required
 def list_vehicles(request):
     vehicle_list = Vehicle.objects.filter(trip_status=1)
     vehicle_filter = VehicleFilter(request.GET, queryset=vehicle_list)
     return render(request, 'rrbnstaff/list_vehicles.html', {'filter': vehicle_filter})
 
+def is_valid_queryparam(param):
+    return param != '' and param is not None
 
-class ListVehicles(TemplateView):
-    template_name = "rrbnstaff/search_vehicles.html"
-    
-    def get_context_data(self, *args, **kwargs):
-        context = super(ListVehicles, self).get_context_data(*args, **kwargs)
-        context['vehicle_list'] = Vehicle.objects.filter(trip_status=1)
-        context['vehicle_filter'] = VehicleFilter(request.GET, queryset=vehicle_list)
-        #obj['inspection'] = self.queryset.filter(application_status=7).count()
-        context['pending'] = Request.objects.filter(request_status=1)
-        return context
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(ListVehicles, self).get_context_data(*args, **kwargs)
-        qs = self.get_queryset()
-        short_trip = self.request.GET.get(trip_status="short")
-        if short_trip:
-            qs = Vehicle.objects.filter(trip_status=1)
-        #filter_class = self.filter_class
-        #if filter_class:
-            #f = filter_class(self.request.GET, queryset=qs)
-            #context["object_list"] = f
-        #return context
-
-#class VehicleFilter(FilterSet):
-
-    #location = CharFilter(name='location', lookup_type='icontains',)
-    #trip_status = CharFilter(name='trip_status', lookup_type='icontains',) 
+@login_required
+def search_vehicles(request):
+    qs = Vehicle.objects.filter(trip_status=1)
+    location = request.GET.get('location')
+    interstate_trip = request.GET.get('interstate_trip')
    
-    #class Meta:
-        #model = Vehicle
-        #fields = [
-            #'location',
-            #'trip_status',
-        #]
+    if is_valid_queryparam(location):
+        qs = qs.filter(location__iexact=location)
 
 
+    if is_valid_queryparam(location):
+        qs = qs.filter(location__iexact=location)
 
 
-#class FilterMixin(object):
-    #filter_class = None
-    #search_ordering_param = "ordering"
+    if is_valid_queryparam(interstate_trip):
+        qs = qs.filter(interstate_trip__iexact=interstate_trip)
 
-    #def get_queryset(self, *args, **kwargs):
-        #try:
-            #qs = super(FilterMixin, self).get_queryset(*args, **kwargs)
-            #return qs
-        #except:
-            #raise ImproperlyConfigured("You must have a queryset in order to use the FilterMixin")
+    context = {
+        'queryset': qs,
+        'location_choices': location_choices,
+        'trip_choices': trip_choices,
+        'values': request.GET,
+        
+    }
+    return render(request, 'rrbnstaff/search_vehicles2.html', context)
 
-    #def get_context_data(self, *args, **kwargs):
-        #context = super(FilterMixin, self).get_context_data(*args, **kwargs)
-        #qs = self.get_queryset()
-        #ordering = self.request.GET.get(self.search_ordering_param)
-        #if ordering:
-            #qs = qs.order_by(ordering)
-        #filter_class = self.filter_class
-        #if filter_class:
-            #f = filter_class(self.request.GET, queryset=qs)
-            #context["object_list"] = f
-        #return context
+@login_required
+def FindVehicleView(request):
+    qs = Vehicle.objects.filter(trip_status=1)
+    location = request.GET.get('location')
+    interstate_trip = request.GET.get('interstate_trip')
+
+    if is_valid_queryparam(location):
+        qs = qs.filter(location__iexact=location)
 
 
+    if is_valid_queryparam(interstate_trip) and interstate_trip == 'interstate':
+        qs = qs.filter(interstate_trip__iexact=interstate_trip)
 
 
-#class FleetListView(FilterMixin, ListView):
-    #template_name = "rrbnstaff/display_fleet.html"
-    #model = Vehicle
-    #queryset = Vehicle.objects.all()
-    #filter_class = VehicleFilter
+    elif is_valid_queryparam(interstate_trip) and interstate_trip == 'local':
+        qs = Vehicle.objects.filter(trip_status=1)
 
+    context = {
+        'queryset': qs,
+        'location_choices': location_choices,
+        'trip_choices': trip_choices,
+        'values': request.GET,
+        
+    }
+    return render(request, "rrbnstaff/find_vehicle.html", context)
 
-    #def get_context_data(self, *args, **kwargs):
-        #context = super(FleetListView, self).get_context_data(*args, **kwargs)
-        #context["query"] = self.request.GET.get("q") #None
-        #context["filter_form"] = VehicleFilterForm(data=self.request.GET or None)
-        #context["vehicle"] = Vehicle.objects.all()
-        #context['vehicle_count'] = self.queryset.count()
-        #return context
-
-    #def get_queryset(self, *args, **kwargs):
-        #qs = super(FleetListView, self).get_queryset(*args, **kwargs)
-        #query = self.request.GET.get("q")
-        #if query:
-            #qs = self.model.objects.filter(
-                #Q(location__icontains=query) |
-                #Q(trip_status__icontains=query)
-                #)
-            #try:
-                #qs2 = self.model.objects.filter(
-                    #Q(vehicle_name=query)
-                #)
-                #qs = (qs | qs2).distinct()
-            #except:
-                #pass
-        #return qs
-
-
-#class AvailableVehiclesView(FilterMixin, ListView):
-    #template_name = "rrbnstaff/display_fleet.html"
-    #model = Vehicle
-    #queryset = Vehicle.objects.all()
-    #filter_class = VehicleFilter
-
-
-    #def get_context_data(self, *args, **kwargs):
-        #context = super(AvailableVehiclesView, self).get_context_data(*args, **kwargs)
-        #context["query"] = self.request.GET.get("q") #None
-        #context["filter_form"] = VehicleFilterForm(data=self.request.GET or None)
-        #return context
-
-    #def get_queryset(self, *args, **kwargs):
-        #qs = super(AvailableVehiclesView, self).get_queryset(*args, **kwargs)
-        #query = self.request.GET.get("q")
-        #if query:
-            #qs = self.model.objects.filter(
-                #Q(location__icontains=query) |
-                #Q(trip_status__iexact=query)
-                #)
-            #try:
-                #qs2 = self.model.objects.filter(
-                 #   Q(vehicle_name=query)
-                #)
-                #qs = (qs | qs2).distinct()
-            #except:
-                #pass
-        #return qs
+class VehiclesFilter(FilterSet):
+    location = CharFilter(name='location', lookup_type='icontains', distinct=True)
+    trip_type = CharFilter(name='trip_type', lookup_type='icontains', distinct=True)
+   
+    
+    class Meta:
+        model = Vehicle
+        fields = [
+            'location',
+            'trip_type',
+            
+        ]
 
 
 class VehicleObjectMixin(object):
@@ -232,7 +180,7 @@ class VehicleObjectMixin(object):
         return obj 
 
 
-class CreateVehicleRequest(VehicleObjectMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
+class CreateVehicleRequest(LoginRequiredMixin, VehicleObjectMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'rrbnstaff/create_vehicle_request.html'
     template_name1 = 'rrbnstaff/vehicle_request_detail.html'
     def get(self, request,  *args, **kwargs):
@@ -266,7 +214,7 @@ class CreateVehicleRequest(VehicleObjectMixin, PassRequestMixin, SuccessMessageM
 
         return render(request, self.template_name1, context)
 
-class RequisitionCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
+class RequisitionCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'rrbnstaff/create_requisition.html'
     form_class = RequisitionModelForm
     success_message = 'Requisition created successfully.'
@@ -279,7 +227,7 @@ class RequisitionCreateView(PassRequestMixin, SuccessMessageMixin, CreateView):
     #success_url = reverse_lazy('rrbnstaff:request_list') 
 
 
-class RequisitionsListView(ListView):
+class RequisitionsListView(LoginRequiredMixin, ListView):
     template_name = "rrbnstaff/requisition_list2.html"
     context_object_name = 'object'
 
@@ -293,7 +241,7 @@ class RequisitionsListView(ListView):
         return obj
 
 
-class RequestListView(ListView):
+class RequestListView(LoginRequiredMixin, ListView):
     template_name = "rrbnstaff/request_list.html"
     context_object_name = 'object'
 
@@ -326,7 +274,7 @@ class RequestObjectMixin(object):
 
 
 
-class RequisitionDetailView(RequisitionObjectMixin, View):
+class RequisitionDetailView(LoginRequiredMixin, RequisitionObjectMixin, View):
     template_name = "rrbnstaff/requisition_detail.html"
 
     def get(self, request, id=None, *args, **kwargs):
@@ -334,11 +282,11 @@ class RequisitionDetailView(RequisitionObjectMixin, View):
         return render(request, self.template_name, context)
 
 
-class VehicleRequestDetailView(DetailView):
+class VehicleRequestDetailView(LoginRequiredMixin, DetailView):
     template_name = "fleet/vehicle_detail.html"
     model = Request
 
-class RequisitionUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
+class RequisitionUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
     model = Requisition
     template_name = 'rrbnstaff/requisition_update.html'
     form_class = RequisitionModelForm
@@ -355,7 +303,7 @@ class RequisitionUpdateView(PassRequestMixin, SuccessMessageMixin, UpdateView):
     #success_url = reverse_lazy('rrbnstaff:request_list')
 
 
-class VehicleRequestUpdateView(RequestObjectMixin, View):
+class VehicleRequestUpdateView(LoginRequiredMixin, RequestObjectMixin, View):
     template_name = "rrbnstaff/update_vehicle_request.html" 
     template_name1 = "rrbnstaff/vehicle_request_detail.html" 
     
@@ -383,7 +331,7 @@ class VehicleRequestUpdateView(RequestObjectMixin, View):
         messages.success(request, ('Vehicle Request Updated Successfully'))
         return render(request, self.template_name1, context)
 
-class RequisitionDeleteView(RequisitionObjectMixin, View):
+class RequisitionDeleteView(LoginRequiredMixin, RequisitionObjectMixin, View):
     template_name = "rrbnstaff/requisition_delete.html" # DetailView
     def get(self, request, id=None, *args, **kwargs):
         # GET method
@@ -403,7 +351,7 @@ class RequisitionDeleteView(RequisitionObjectMixin, View):
             return redirect('rrbnstaff:requisition_list')
         return render(request, self.template_name, context)
 
-class VehicleRequestDeleteView(RequestObjectMixin, View):
+class VehicleRequestDeleteView(LoginRequiredMixin, RequestObjectMixin, View):
     template_name = "rrbnstaff/vehicle_request_delete.html" # DetailView
     def get(self, request, id=None, *args, **kwargs):
         # GET method
@@ -425,7 +373,7 @@ class VehicleRequestDeleteView(RequestObjectMixin, View):
 
 
 
-class MyIssuedRequisitions(ListView):
+class MyIssuedRequisitions(LoginRequiredMixin, ListView):
     template_name = "rrbnstaff/my_issued_requisitions.html"
     context_object_name = 'object'
 
@@ -439,7 +387,7 @@ class MyIssuedRequisitions(ListView):
         return obj 
 
 
-class MyVehicleAllocations(ListView):
+class MyVehicleAllocations(LoginRequiredMixin, ListView):
     template_name = "rrbnstaff/my_vehicle_allocations.html"
     context_object_name = 'object'
 
@@ -453,11 +401,11 @@ class MyVehicleAllocations(ListView):
         return obj 
 
 
-class MyIssuedRequisitionsDetails(DetailView):
+class MyIssuedRequisitionsDetails(LoginRequiredMixin, DetailView):
     template_name = "rrbnstaff/my_issued_requisitions_details.html"
     model = Issue 
 
-class AssignedVehicleDetails(DetailView):
+class AssignedVehicleDetails(LoginRequiredMixin, DetailView):
     template_name = "rrbnstaff/assigned_vehicle_details.html"
     model = Assign
 

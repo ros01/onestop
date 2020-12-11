@@ -128,6 +128,28 @@
             </a>
           </li>
 
+          
+
+          {% elif "search" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:request_list' %}">
+              <i class="material-icons">local_taxi</i>
+              <p>Vehicle Requests</p>
+            </a>
+          </li>
+
+         
+
+          {% elif "find" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:request_list' %}">
+              <i class="material-icons">local_taxi</i>
+              <p>Vehicle Requests</p>
+            </a>
+          </li>
+
           {% else %}
 
           <li class="nav-item ">

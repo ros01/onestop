@@ -31,7 +31,7 @@
                     <i class="material-icons">content_copy</i>
                   </div>
                   <p class="card-category">Total Vehicle Requests</p>
-                  {% if req %}<h3 class="card-title">{{ req.count }}
+                  {% if vreq %}<h3 class="card-title">{{ vreq.count }}
                   </h3>
                   {% else %}  
                   <h3 class="card-title">0
@@ -42,7 +42,10 @@
                 <div class="card-footer">
                   <div class="stats">
                     <i class="material-icons text-info">date_range</i>
+                    {% if vreqmnth %} {{ vreqmnth.count }} (Requested this Month)
+                    {% else %}  
                     0 (Requested this Month)
+                    {% endif %}
                   </div>
                 </div>
               </div>
@@ -54,7 +57,7 @@
                     <i class="material-icons">update</i>
                   </div>
                   <p class="card-category">Total Pending Requests</p>
-                   {% if pen %}<h3 class="card-title">{{ pen.count }}
+                   {% if vreq_pend %}<h3 class="card-title">{{ vreq_pend.count }}
                   </h3>
                   {% else %}  
                   <h3 class="card-title">0
@@ -63,7 +66,10 @@
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons text-info">date_range</i> 50 (Pending this Month)
+                    <i class="material-icons text-info">date_range</i> {% if vreq_pend_mnth %} {{ vreq_pend_mnth.count }} (Pending this Month)
+                    {% else %}  
+                    0 (Pending this Month)
+                    {% endif %}
                   </div>
                 </div>
               </div>
@@ -75,7 +81,7 @@
                     <i class="material-icons">info_outline</i>
                   </div>
                   <p class="card-category">Scheduled Maintenance</p>
-                  {% if main %}<h3 class="card-title">{{ main.count }}
+                  {% if sch_pend %}<h3 class="card-title">{{ sch_pend.count }}
                   </h3>
                   {% else %}  
                   <h3 class="card-title">0
@@ -84,7 +90,10 @@
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons text-info">date_range</i> 10 (Pending this Month)
+                    <i class="material-icons text-info">date_range</i>{% if sch_pend_mnth %} {{ sch_pend_mnth.count }} (Pending this Month)
+                    {% else %}  
+                    0 (Pending this Month)
+                    {% endif %}
                   </div>
                 </div>
               </div>
@@ -105,7 +114,10 @@
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons text-info">date_range</i> 5 (Repaired this Month)
+                    <i class="material-icons text-info">date_range</i> {% if rep_mnth %} {{ rep_mnth.count }} (Repaired this Month)
+                    {% else %}  
+                    0 (Repaired this Month)
+                    {% endif %}
                   </div>
                 </div>
               </div>

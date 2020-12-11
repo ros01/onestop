@@ -45,14 +45,14 @@
     <thead>
     <tr style="background: #41963F;">
     <td style="color: #fff;" class="small-text" width="05%">S/N</td>
-    <td style="color: #fff;" class="small-text" width="15%">Item Name</td>
+    <td style="color: #fff;" class="small-text" width="14%">Item Name</td>
     <td style="color: #fff;" class="small-text" width="10%">Stock Code</td>
-    <td style="color: #fff;" class="small-text" width="15%">Item Description</td>
+    <td style="color: #fff;" class="small-text" width="16%">Item Description</td>
     <td style="color: #fff;" class="small-text" width="10%">Category</td>
     <td style="color: #fff;" class="small-text" width="10%">Quantity</td>
-    <td style="color: #fff;" class="small-text" width="15%">Re-Order Quantity</td>
+    <td style="color: #fff;" class="small-text" width="13%">Re-Order Quantity</td>
     <td style="color: #fff;" class="small-text" width="10%">Last Updated</td>
-    <td style="color: #fff;" class="small-text" width="10%">Actions</td>
+    <td style="color: #fff;" class="small-text" width="12%">Actions</td>
     </tr>
     </thead>
     <tbody>
@@ -60,14 +60,14 @@
     {% for object in items_qs %}
     <tr>
     <td width="05%">{{forloop.counter}}</td>
-    <td width="15%">{{object.item_name}}</td>
+    <td width="14%">{{object.item_name}}</td>
     <td width="10%">{{object.stock_code}}</td>
-    <td width="15%">{{object.item_description}}</td>
+    <td width="16%">{{object.item_description}}</td>
     <td width="10%">{{object.category}}</td>
     <td width="10%">{{object.quantity}}</td>
-    <td width="15%">{{object.re_order_no}}</td>
+    <td width="13%">{{object.re_order_no}}</td>
     <td width="10%">{{object.updated_pretty}}</td>
-    <td width="10%">
+    <td width="12%">
     <a class="btn btn-primary p-1" href="{% url 'store:item_detail' object.id %}"><i class="fa fa-folder-open text-white"></i></a>
     <button type="button" id="update-item" class="bs-modal btn btn-small btn-warning mt-1 p-1" data-form-url="{% url 'store:item_update' object.pk %}"><i class="fas fa-redo"></i></button>
     <button type="button" id="delete-item" class="bs-modal btn btn-small btn-danger mt-1 p-1" data-form-url="{% url 'store:item_delete' object.id %}"><i class="fas fa-trash-alt"></i></button>

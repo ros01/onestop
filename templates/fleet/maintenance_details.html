@@ -53,8 +53,8 @@
                   
                     
         <div class="row">
-        <span class="col-5"><strong>Maintenance Due Date:</strong></span>
-        <span class="col-6">{{object.maintenance_due_date}}</span>
+        <span class="col-5"><strong>Target Maintenance Date:</strong></span>
+        <span class="col-6">{{object.target_maintenance_date_pretty}}</span>
         </div>
 
         <div class="row">
@@ -74,7 +74,7 @@
         
         <div class="row">
         <span class="col-5"><strong>Maintenance Scheduled On:</strong></span>
-        <span class="col-6">{{ object.scheduled_on}}</span>
+        <span class="col-6">{{ object.scheduled_on_pretty}}</span>
         </div> 
 
         {% for object in schedule %}
@@ -96,7 +96,7 @@
                   
         <div class="row">
         <span class="col-5"><strong>Next Maintenance Date:</strong></span>
-        <span class="col-6">{{ object.next_maintenance_date}}</span>
+        <span class="col-6">{{ object.next_maintenance_date_pretty}}</span>
         </div>  
                   
 
@@ -115,8 +115,8 @@
     <p class="text-success lead">Control Details</p>
 
     <div class="row">
-    <span class="col-5"><strong>Actual Maintenance Date:</strong></span>
-    <span class="col-6">{{ object.actual_maintenance_date}}</span>
+    <span class="col-5"><strong>Maintenance Date:</strong></span>
+    <span class="col-6">{{ object.actual_maintenance_date_pretty}}</span>
     </div> 
     
     <div class="row">
@@ -132,7 +132,9 @@
 
     {% for object in schedule %}
 
-    <a href="{% url 'fleet:update_maintenance' schedule.first.id %}" class="btn btn-primary text-white py-1 mr-3 mt-1 mb-3"><i class="fa fa-list text-white"></i> Update Maintenance Details</a>  
+   
+
+    <button type="button" id="update-maintenance" class="bs-modal btn btn-primary text-white py-1 mr-3 mt-1 mb-3" data-form-url="{% url 'fleet:update_maintenance' schedule.first.id %}"><i class="fa fa-list text-white"></i> Update Maintenance</button>
         
      {% endfor %}   
        

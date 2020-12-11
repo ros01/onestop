@@ -40,11 +40,15 @@
     <div class="form-group col-md-4">
     {{ form.destination|as_crispy_field }}
     </div>
-    <div class="form-group col-md-4">
-    {{ form.start_date|as_crispy_field }}
+    
+    <div class="form-group col-md-4 mt-2 pt-2">
+    <label for="id_start_date" class=" requiredField">Trip Start Date<span class="asteriskField">*</span></label>
+    <input type="date" name="start_date" class="form-control" required id="id_start_date"  id="div_id_start_date">
     </div>
-    <div class="form-group col-md-4">
-    {{ form.end_date|as_crispy_field }}
+
+    <div class="form-group col-md-4 mt-2 pt-2">
+    <label for="id_end_date" class=" requiredField">Trip End Date<span class="asteriskField">*</span></label>
+    <input type="date" name="end_date" class="form-control" required id="id_end_date"  id="div_id_end_date">
     </div>
 
     <div class="form-group col-md-4">

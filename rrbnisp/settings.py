@@ -88,7 +88,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'fleet.context_processors.finalize_form_processor',
+                
             ],
         },
     },
@@ -129,6 +129,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+#SESSION_COOKIE_AGE = 60 * 5  # Session will expiry after 30 minutes idle.
+#SESSION_SAVE_EVERY_REQUEST = True
+#SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 60 * 5 # Session will expiry after 30 minutes idle.
+SESSION_SAVE_EVERY_REQUEST = True
+LOGIN_URL = '/accounts/signin'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/

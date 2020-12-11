@@ -55,49 +55,53 @@
     
 
 
-    <form method="get">
-    <div class="well">
-    <h4 style="margin-top: 0">Filter</h4>
-    <div class="row">
-    <div class="form-group col-sm-4 col-md-3">
-  
-    
-    {{ filter_form.form.location.label_tag }}
-    {% render_field filter_form.form.location class="form-control" %}
-
-    </div>
-
-    <div class="form-group col-sm-4 col-md-3">
-    {{ filter_form.form.trip_type.label_tag }}
-    {% render_field filter_form.form.trip_type class="form-control" %}
-    </div>
-
-    </div>
-
-    <button type="submit" class="btn btn-primary">
-        <span class="glyphicon glyphicon-search"></span> Search
-      </button>
-
-
-    </div> 
-    </form>
-
-
-      <div class='col-sm-2'>
-      <form method="GET" action="{% url 'rrbnstaff:request_vehicle' %}">
-      {{ filter_form|crispy }}
       
-      <input type='submit' value='Apply Filter' class='btn btn-default'>
 
+      
+      <form method="GET" action="{% url 'rrbnstaff:find_vehicle' %}">
+        
+
+        <div class="form-row">
+          
+          <div class="form-group col-md-5">
+            <label for="location">Location</label>
+            <select id="location" class="form-control" name="location" value="{{ values.location }}">
+              <option selected>Choose...</option>
+             {% for key,value in location_choices %}
+                      <option value="{{ key }}" 
+                      {% if key == values.location %}
+                        selected
+                      {% endif %}
+                      >{{ value }}</option>
+                    {% endfor %}
+            </select>
+          </div>
+          <div class="form-group col-md-2">
+           
+          </div>
+
+          <div class="form-group col-md-5">
+            <label for="interstate_trip">Trip Type</label>
+            <select id="interstate_trip" class="form-control" name="interstate_trip" value="{{ values.interstate_trip }}">
+              <option selected>Choose...</option>
+             {% for key,value in trip_choices %}
+                      <option value="{{ key }}" 
+                      {% if key == values.interstate_trip %}
+                        selected
+                      {% endif %}
+                      >{{ value }}</option>
+                    {% endfor %}
+            </select>
+          </div>
+
+
+           
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Search</button>
       </form>
 
-      
-      </div>
-
-
-
-
-
+      <hr />
 
 
     <br>
@@ -116,15 +120,17 @@
       </tr>
     </thead>
     <tbody>
+
+     
       
-      {% for object in object_list %}
+      {% for object in queryset %}
         <tr>
           <td>{{ object.vehicle_name }}</td>
           <td>{{ object.location }}</td>
           <td>{{ object.model }}</td>
           <td>{{ object.colour }}</td> 
           <td>
-          <button type="button" id="request-vehicle" class="bs-modal btn btn-outline-warning btn-sm py-1 mr-4 mt-1 mb-3" data-form-url="#"> Request Vehicle</button>
+          <button type="button" id="request-vehicle" class="bs-modal btn btn-outline-warning btn-sm py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'rrbnstaff:create_vehicle_request' object.id %}"> Request Vehicle</button>
             
           </td>
         </tr>
@@ -133,6 +139,8 @@
           <td colspan="100%" text-align="center">No vehicles available for your query parameters</td>
         </tr>
       {% endfor %}
+
+     
      
     </tbody>
   </table>

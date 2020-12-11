@@ -37,10 +37,10 @@
 
 
 
-    <!-- <button type="button" id="create-schedule" class="bs-modal btn btn-small btn-success mt-2" data-form-url="{% url 'fleet:create_maintenance_schedule' %}"><i class="fa fa-list text-white"></i> Schedule Vehicle Maintenance</button> -->
+    <button type="button" id="create-schedule" class="bs-modal btn btn-small btn-success mt-2" data-form-url="{% url 'fleet:create_maintenance_schedule' %}"><i class="fa fa-list text-white"></i> Schedule Vehicle Maintenance</button>
 
 
-    <a class="btn btn-small btn-success mt-2" href="{% url 'fleet:create_maintenance_schedule' %}"><i class="fa fa-list text-white"></i> Schedule Vehicle Maintenance</a><br>
+    <!-- <a class="btn btn-small btn-success mt-2" href="{% url 'fleet:create_maintenance_schedule' %}"><i class="fa fa-list text-white"></i> Schedule Vehicle Maintenance</a><br> -->
     {% include 'partials/_alerts.html' %}
     <!-- <a href="{% url 'fleet:create_maintenance_schedule' %}" class="btn btn btn-warning pt-2 pb-1"><i class="fa fa-check"></i> Schedule Vehicle Maintenance</a> -->
 
@@ -62,9 +62,9 @@
     <td style="color: #fff;" class="small-text" width="05%">S/N</td>
     <td style="color: #fff;" class="small-text" width="10%">Schedule No</td>
     <td style="color: #fff;" class="small-text" width="12%">Vehicle Name</td>
-    <td style="color: #fff;" class="small-text" width="10%">Current Mileage</td>
+    <td style="color: #fff;" class="small-text" width="10%">Target Mileage</td>
     <td style="color: #fff;" class="small-text" width="14%">Repair Workshop</td>
-    <td style="color: #fff;" class="small-text" width="14%">Maintenance Due</td>
+    <td style="color: #fff;" class="small-text" width="14%">Target Maintenance Date</td>
     <td style="color: #fff;" class="small-text" width="12%">Scheduled By</td>
     <td style="color: #fff;" class="small-text" width="12%">Scheduled On</td>
     <td style="color: #fff;" class="small-text" width="11%">Actions</td>
@@ -78,14 +78,17 @@
     <td width="05%">{{forloop.counter}}</td>
     <td width="10%">{{object.schedule_no}}</td>
     <td width="12%">{{object.vehicle}}</td>
-    <td width="10%">{{object.current_mileage| intcomma}}</td>
+    <td width="10%">{{object.target_maintenance_mileage| intcomma}}</td>
     <td width="14%">{{object.workshop}}</td>
-    <td width="14%">{{object.maintenance_due_date_pretty}}</td>
+    <td width="14%">{{object.target_maintenance_date_pretty}}</td>
     <td width="12%">{{object.maintenance_scheduled_by.first_name}} {{object.maintenance_scheduled_by.last_name}}</td>
     <td width="12%">{{object.scheduled_on_pretty}}</td>
     <td width="11%">
     <a class="btn btn-success" href="{% url 'fleet:schedule_details' object.pk %}"><i class="fa fa-folder-open text-white"></i></a>
-    <a class="btn btn-warning" href="{% url 'fleet:create_maintenance_record' object.id %}"><i class="fa fa-cogs text-white"></i></a>
+
+    <button type="button" id="record-maintenance" class="bs-modal btn btn-warning" data-form-url="{% url 'fleet:create_maintenance_record' object.id %}"><i class="fa fa-cogs text-white"></i></button>
+
+    
     </td>
     </tr>
     {% endfor %}

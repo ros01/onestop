@@ -55,32 +55,61 @@
     
 
 
-    <form method="get" action="{% url 'rrbnstaff:request_vehicle' %}">
-    <div class="well">
-    <h4 style="margin-top: 0">Filter</h4>
-    <div class="row">
-    <div class="form-group col-sm-4 col-md-3">
-  
+      
+
+      
+      <form method="GET" action="{% url 'rrbnstaff:find_vehicle' %}">
+        
+
+        <div class="form-row">
+          
+          <div class="form-group col-md-5">
+            <label for="location">Location</label>
+            <select id="location" class="form-control" name="location" value="{{ values.location }}">
+              <option selected>Choose...</option>
+             {% for key,value in location_choices%}
+                      <option value="{{ key }}" 
+                      {% if key == values.location %}
+                        selected
+                      {% endif %}
+                      >{{ value }}</option>
+                    {% endfor %}
+            </select>
+          </div>
+          <div class="form-group col-md-2">
+           
+          </div>
+
+          <div class="form-group col-md-5">
+            <label for="interstate_trip">Trip Type</label>
+            <select id="interstate_trip" class="form-control" name="interstate_trip" value="{{ values.interstate_trip }}">
+              <option selected>Choose...</option>
+             {% for key,value in trip_choices %}
+                      <option value="{{ key }}" 
+                      {% if key == values.interstate_trip %}
+                        selected
+                      {% endif %}
+                      >{{ value }}</option>
+                    {% endfor %}
+            </select>
+          </div>
+
+
+           
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+
+      <hr />
+
+      
+
+   
     
-    {{ filter.form.location.label_tag }}
-    {% render_field filter.form.location class="form-control" %}
-
-    </div>
-
-    <div class="form-group col-sm-4 col-md-3">
-    {{ filter.form.trip_type.label_tag }}
-    {% render_field filter.form.trip_type class="form-control" %}
-    </div>
-
-    </div>
-
-    <button type="submit" class="btn btn-primary">
-        <span class="glyphicon glyphicon-search"></span> Search
-      </button>
 
 
-    </div> 
-    </form>
+
     <br>
 
     

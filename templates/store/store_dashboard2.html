@@ -40,7 +40,11 @@
                 <div class="card-footer">
                   <div class="stats">
                     <i class="material-icons text-info">date_range</i>
-                    75 (Requested this Month)
+
+                    {% if reqmnth %} {{ reqmnth.count }} (Requested this Month)
+                    {% else %}  
+                    0 (Requested this Month)
+                    {% endif %}
                   </div>
                 </div>
               </div>
@@ -62,7 +66,12 @@
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons text-info">date_range</i> 50 (Issued this Month)
+                    <i class="material-icons text-info">date_range</i>
+                    
+                    {% if issmnth %} {{ issmnth.count }} (Issued this Month)
+                    {% else %}  
+                    0 (Issued this Month)
+                    {% endif %}
                   </div>
                 </div>
               </div>
@@ -84,7 +93,12 @@
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons text-info">date_range</i> 10 (Pending this Month)
+                    <i class="material-icons text-info">date_range</i> 
+                    {% if itemnth %} {{ itemnth.count }} (Below Reorder this Month)
+                    {% else %}  
+                    0 (Below Reorder this Month)
+                    {% endif %}
+
                   </div>
                 </div>
               </div>
@@ -106,7 +120,11 @@
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons text-info">date_range</i> 5 (Unavailable this Month)
+                    <i class="material-icons text-info">date_range</i> 
+                    {% if resmnth %} {{ resmnth.count }} (Unavailable this Month)
+                    {% else %}  
+                    0 (Unavailable this Month)
+                    {% endif %}
                   </div>
                 </div>
               </div>

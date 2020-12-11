@@ -53,6 +53,8 @@ class Item(models.Model):
     entered_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     entry_date = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
+    below_re_order_date = models.DateTimeField(default=datetime.now, blank=True)
+    unavailable_date = models.DateTimeField(default=datetime.now, blank=True)
     
     def __str__(self):
         return self.item_name

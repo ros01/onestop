@@ -70,10 +70,10 @@ class ReleaseAdmin(admin.ModelAdmin):
 admin.site.register(Release, ReleaseAdmin)
 
 class ScheduleAdmin(admin.ModelAdmin):
-  list_display = ('schedule_no', 'vehicle', 'maintenance_due_date', 'current_mileage', 'maintenance_scheduled_by', 'scheduled_on')
-  list_display_links = ('schedule_no', 'vehicle', 'maintenance_due_date', 'current_mileage', 'maintenance_scheduled_by', 'scheduled_on')
-  list_filter = ('schedule_no', 'maintenance_due_date', 'current_mileage', 'maintenance_scheduled_by', 'scheduled_on')
-  search_fields = ('schedule_no', 'vehicle', 'maintenance_due_date', 'current_mileage', 'maintenance_scheduled_by', 'scheduled_on')
+  list_display = ('schedule_no', 'vehicle', 'target_maintenance_date', 'target_maintenance_mileage', 'maintenance_scheduled_by', 'scheduled_on')
+  list_display_links = ('schedule_no', 'vehicle', 'target_maintenance_date', 'target_maintenance_mileage', 'maintenance_scheduled_by', 'scheduled_on')
+  list_filter = ('schedule_no', 'target_maintenance_date', 'target_maintenance_mileage', 'maintenance_scheduled_by', 'scheduled_on')
+  search_fields = ('schedule_no', 'vehicle', 'target_maintenance_date', 'target_maintenance_mileage', 'maintenance_scheduled_by', 'scheduled_on')
   list_per_page = 25
 
 
@@ -81,10 +81,10 @@ admin.site.register(Schedule, ScheduleAdmin)
 
 
 class MaintenanceAdmin(admin.ModelAdmin):
-  list_display = ('schedule_no', 'vehicle', 'maintenance_due_date', 'current_maintenance_mileage', 'actual_maintenance_cost', 'next_maintenance_date', 'maintenance_recorded_by')
-  list_display_links = ('schedule_no', 'vehicle', 'maintenance_due_date', 'current_maintenance_mileage', 'actual_maintenance_cost', 'next_maintenance_date')
-  list_filter = ('schedule_no', 'maintenance_due_date', 'current_maintenance_mileage', 'actual_maintenance_cost', 'next_maintenance_date')
-  search_fields = ('schedule_no', 'vehicle', 'maintenance_due_date', 'current_maintenance_mileage', 'actual_maintenance_cost', 'next_maintenance_date')
+  list_display = ('schedule_no', 'vehicle', 'target_maintenance_date', 'current_maintenance_mileage', 'actual_maintenance_cost', 'next_maintenance_date', 'maintenance_recorded_by')
+  list_display_links = ('schedule_no', 'vehicle', 'target_maintenance_date', 'current_maintenance_mileage', 'actual_maintenance_cost', 'next_maintenance_date')
+  list_filter = ('schedule_no', 'target_maintenance_date', 'current_maintenance_mileage', 'actual_maintenance_cost', 'next_maintenance_date')
+  search_fields = ('schedule_no', 'vehicle', 'target_maintenance_date', 'current_maintenance_mileage', 'actual_maintenance_cost', 'next_maintenance_date')
   list_per_page = 25
 
 

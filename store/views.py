@@ -21,8 +21,9 @@ from bootstrap_modal_forms.mixins import PassRequestMixin, CreateUpdateAjaxMixin
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.db.models import Q
+from django.db.models import Q, Count, F, Value
 from django.core.exceptions import ObjectDoesNotExist
+import datetime
 
 # Create your views here.
 
@@ -39,14 +40,20 @@ class LoginRequiredMixin(object):
 
 class DashboardTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "store/store_dashboard2.html"
+
+
     
     def get_context_data(self, *args, **kwargs):
         context = super(DashboardTemplateView, self).get_context_data(*args, **kwargs)
-        #context["inspection"] = Schedule.objects.all()
+        this_month = (datetime.datetime.now() + datetime.timedelta(days=30))
         context['requ'] = Requisition.objects.all()
         context['iss'] = Issue.objects.all()
-        context['ite'] = Item.objects.all()
-        context['res'] = Restock.objects.all()
+        context['ite'] = Item.objects.filter(re_order_no__gt=F('quantity'))
+        context['res'] = Item.objects.filter(Q(quantity__lt=0))
+        context['reqmnth'] = Requisition.objects.filter(requisition_date__lt=this_month)
+        context['issmnth'] = Issue.objects.filter(issue_date__lt=this_month)
+        context['itemnth'] = Item.objects.filter(re_order_no__gt=F('quantity'), below_re_order_date__lt=this_month)
+        context['resmnth'] = Item.objects.filter(Q(quantity__lt=0), below_re_order_date__lt=this_month)
         return context
 
 
@@ -58,10 +65,12 @@ class ItemCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, 
     success_url = reverse_lazy('store:items_list')
 
 
+@login_required
 def retrieve_item(request):
     return render(request, 'store/retrieve_item.html')
 
 
+@login_required
 def restock(request):
     try:
         query = request.GET.get('q')

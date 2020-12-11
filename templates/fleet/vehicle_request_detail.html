@@ -89,7 +89,15 @@
             <div class="d-flex justify-content-end">   
            
 
-            <a class="btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" href="{% url 'fleet:issue_vehicle_request' object.id %}"><i class="fa fa-list text-white"></i> Assign Vehicle</a>
+            
+
+             
+
+              
+
+               <button type="button" id="js-vehicle-request" class="bs-modal btn btn-outline-warning js-vehicle-request btn-sm py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'fleet:issue_vehicle_request' object.id %}"> Allocate Vehicle</button>
+
+              
 
 
 
@@ -119,6 +127,9 @@
   </div>
   <!-- End of Page Wrapper -->
 
+  
+
+
 
 <script src="{% static 'js/jquery.js' %}"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
@@ -142,6 +153,10 @@
     });
 
 </script>
+
+
+
+
 
 
 

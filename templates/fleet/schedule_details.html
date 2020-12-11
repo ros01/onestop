@@ -55,14 +55,14 @@
                  
         
         <div class="row">
-        <span class="col-6"><strong>Current Mileage:</strong></span>
-        <span class="col-6">{{object.current_mileage| intcomma}}</span>
+        <span class="col-6"><strong>Target Maintenance Mileage:</strong></span>
+        <span class="col-6">{{object.target_maintenance_mileage| intcomma}}</span>
         </div>
                   
                     
         <div class="row">
-        <span class="col-6"><strong>Maintenance Due Date:</strong></span>
-        <span class="col-6">{{object.maintenance_due_date_pretty}}</span>
+        <span class="col-6"><strong>Target Maintenance Date:</strong></span>
+        <span class="col-6">{{object.target_maintenance_date_pretty}}</span>
         </div> 
                     
         <div class="row">
@@ -99,7 +99,10 @@
               
         
 
-        <a href="{% url 'fleet:schedule_update' object.pk %}" class="btn btn-primary text-white py-1 px-3 mt-1 mb-3 mr-3"><i class="fa fa-list text-white"></i> Update Details</a> 
+        
+
+
+        <button type="button" id="update_schedule" class="bs-modal btn btn-small btn-primary py-1 px-3 mt-1 mb-3 mr-3" data-form-url="{% url 'fleet:schedule_update' object.pk %}"><i class="fa fa-edit text-white"></i> Update Details</button>
 
 
         <a href="{% url 'fleet:schedule_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Schedules List</a>  
