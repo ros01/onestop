@@ -58,22 +58,40 @@
                     <div class="row">
                       <span class="col-5"><strong>Request Date:</strong></span>
                       <span class="col-6">{{object.request_date_pretty}}</span>
+                    </div>  
+                    {% for object in assign %}
+                    <div class="row">
+                      <span class="col-5"><strong>Destination:</strong></span>
+                      <span class="col-6">{{object.destination}}</span>
+                    </div> 
+                    <div class="row">
+                      <span class="col-5"><strong>Assigned By:</strong></span>
+                      <span class="col-6">{{object.assigned_by.first_name}} {{object.assigned_by.last_name}}</span>
+                    </div> 
+
+
+                    {% endfor %}
+                    <div class="row">
+                      <span class="col-5"><strong>Approved Start Date:</strong></span>
+                      <span class="col-6">{{object.approved_start_date}}</span>
+                    </div> 
+                    <div class="row">
+                      <span class="col-5"><strong>Approved End Date:</strong></span>
+                      <span class="col-6">{{object.approved_end_date}}</span>
                     </div> 
                     <div class="row">
                       <span class="col-5"><strong>Assigned Driver:</strong></span>
                       <span class="col-6">{{object.driver}}</span>
                     </div>
+                   
                     <div class="row">
                       <span class="col-5"><strong>Trip Start Date:</strong></span>
-                      <span class="col-6">{{object.start_date_pretty}}</span>
+                      <span class="col-6">{{object.actual_trip_start_date}}</span>
                     </div>
                      <div class="row">
                       <span class="col-5"><strong>Trip End Date:</strong></span>
-                      <span class="col-6">{{object.end_date_pretty}}</span>
+                      <span class="col-6">{{object.actual_trip_end_date}}</span>
                     </div>
-
-                     {% for object in release %}
-                   
                     <div class="row">
                       <span class="col-5"><strong>Trip Start Mileage:</strong></span>
                       <span class="col-6">{{object.trip_start_mileage| intcomma}}</span>
@@ -87,8 +105,12 @@
                       <span class="col-5"><strong>Finalized By:</strong></span>
                       <span class="col-6">{{ object.released_by.first_name}} {{ object.released_by.last_name}}</span>
                       </div>  
+                      <div class="row">
+                      <span class="col-5"><strong>Finalized On:</strong></span>
+                      <span class="col-6">{{ object.release_date}}</span>
+                      </div> 
 
-                   {% endfor %}
+                   
                  
                 </div>
                 <br>

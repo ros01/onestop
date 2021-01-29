@@ -21,11 +21,13 @@ from .views import (
     MyVehicleAllocations,
     AssignedVehicleDetails,
     FindVehicleView,
-    #RequestVehicle,
-    #FilterView,
-    #VehicleListView,
-    #FleetListView,
-    #AvailableVehiclesView,
+    StaffProfileCreateView,
+    MyProfileListView,
+    MyProfileDetailView,
+    MyProfileUpdateView,
+    MyProfileDeleteView,
+
+
 )
 
 
@@ -33,6 +35,8 @@ app_name = 'rrbnstaff'
 
 urlpatterns = [
 	path('dashboard/', DashboardTemplateView.as_view(), name='staff_dashboard'),
+    path('retrieve_item', views.retrieve_item, name='retrieve_item'),
+    path('find_item/', views.find_item, name='find_item'),
 	path('profile/', ProfileTemplateView.as_view(), name='edit_profile'),
 	path('tables/', TableTemplateView.as_view(), name='table_list'),
     path('find_vehicle', FindVehicleView, name='find_vehicle'),
@@ -44,16 +48,20 @@ urlpatterns = [
 	path('my_issued_requisitions/', MyIssuedRequisitions.as_view(), name='my_issued_requisitions'),
 	path('my_vehicles_allocations_list/', MyVehicleAllocations.as_view(), name='my_vehicles_allocations_list'),
 	path('<uuid:pk>/issued_requisitions_details/', MyIssuedRequisitionsDetails.as_view(), name='issued_requisitions_details'),
-	path('create_requisition/', RequisitionCreateView.as_view(), name='create_requisition'),
+	path('<uuid:id>/create_requisition/', RequisitionCreateView.as_view(), name='create_requisition'),
 	path('<uuid:id>/requisition_detail/', RequisitionDetailView.as_view(), name='requisition_detail'),
 	path('<uuid:pk>/requisition_update/', RequisitionUpdateView.as_view(), name='requisition_update'),
 	path('<uuid:id>/requisition_delete/', RequisitionDeleteView.as_view(), name='requisition_delete'),
     path('<uuid:id>/create_vehicle_request', CreateVehicleRequest.as_view(), name='create_vehicle_request'),
 	#path('create_vehicle_request/', CreateVehicleRequest.as_view(), name='create_vehicle_request'),
-	path('<uuid:pk>/vehicle_request_detail/', VehicleRequestDetailView.as_view(), name='vehicle_request_detail'),
-	path('<uuid:id>/vehicle_request_update/', VehicleRequestUpdateView.as_view(), name='vehicle_request_update'),
+	path('<uuid:pk>/request_list_details/', VehicleRequestDetailView.as_view(), name='request_list_details'),
+	path('<uuid:pk>/vehicle_request_update/', VehicleRequestUpdateView.as_view(), name='vehicle_request_update'),
 	path('<uuid:id>/vehicle_request_delete/', VehicleRequestDeleteView.as_view(), name='vehicle_request_delete'),
 	path('<uuid:pk>/allocated_vehicle_details/', AssignedVehicleDetails.as_view(), name='allocated_vehicle_details'),
-	
+	path('create_staff_profile/', StaffProfileCreateView.as_view(), name='create_staff_profile'),
+    path('my_profile_list/', MyProfileListView.as_view(), name='my_profile_list'),
+    path('<uuid:pk>/my_profile_detail/', MyProfileDetailView.as_view(), name='my_profile_detail'),
+    path('<uuid:pk>/my_profile_update/', MyProfileUpdateView.as_view(), name='my_profile_update'),
+    path('<uuid:id>/my_profile_delete/', MyProfileDeleteView.as_view(), name='my_profile_delete'),
     
     ]

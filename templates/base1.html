@@ -98,6 +98,25 @@
           </li>
 
           {% endif %} -->
+          {% if "my_profile" in request.path %}
+          <li class="nav-item active  ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_profile_list' %}">
+              <i class="material-icons">person_search</i>
+              <p>My Profile</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_profile_list' %}">
+              <i class="material-icons">person_search</i>
+              <p>My Profile</p>
+            </a>
+          </li>
+
+          {% endif %}
+          
 
           {% if "requisition_list" in request.path %}
 
@@ -144,6 +163,15 @@
           {% elif "find" in request.path %}
 
           <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:request_list' %}">
+              <i class="material-icons">local_taxi</i>
+              <p>Vehicle Requests</p>
+            </a>
+          </li>
+
+          {% elif "request_detail" in request.path %}
+
+          <li class="nav-item active">
             <a class="nav-link" href="{% url 'rrbnstaff:request_list' %}">
               <i class="material-icons">local_taxi</i>
               <p>Vehicle Requests</p>
@@ -250,8 +278,6 @@
                 </a>
                 
               </li>
-
-
              
               <li class="nav-item dropdown">
                 <a class="nav-link" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{request.user.first_name}} {{request.user.last_name}}
@@ -261,8 +287,10 @@
                   </p>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-                  <a class="dropdown-item" href="#">Profile</a>
-                  <a class="dropdown-item" href="#">Settings</a>
+                  
+                  
+                  <button type="button" class="bs-modal dropdown-item" id="create-profile"  data-form-url="{% url 'rrbnstaff:create_staff_profile' %}"> Profile</button>
+                  
                   <div class="dropdown-divider"></div>
                   
 

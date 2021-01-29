@@ -26,37 +26,11 @@
           <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
-                <div class="card-header card-header-success card-header-icon">
-                  <div class="card-icon">
-                    <i class="material-icons">content_copy</i>
-                  </div>
-                  <p class="card-category">Total Vehicle Requests</p>
-                  {% if vreq %}<h3 class="card-title">{{ vreq.count }}
-                  </h3>
-                  {% else %}  
-                  <h3 class="card-title">0
-                  </h3>
-                  {% endif %}
-
-                </div>
-                <div class="card-footer">
-                  <div class="stats">
-                    <i class="material-icons text-info">date_range</i>
-                    {% if vreqmnth %} {{ vreqmnth.count }} (Requested this Month)
-                    {% else %}  
-                    0 (Requested this Month)
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-              <div class="card card-stats">
                 <div class="card-header card-header-warning card-header-icon">
                   <div class="card-icon">
                     <i class="material-icons">update</i>
                   </div>
-                  <p class="card-category">Total Pending Requests</p>
+                  <p class="card-category">Pending Vehicle Requests</p>
                    {% if vreq_pend %}<h3 class="card-title">{{ vreq_pend.count }}
                   </h3>
                   {% else %}  
@@ -74,9 +48,37 @@
                 </div>
               </div>
             </div>
+
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
-                <div class="card-header card-header-danger card-header-icon">
+                <div class="card-header card-header-success card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">content_copy</i>
+                  </div>
+                  <p class="card-category">Total Vehicle Assignments</p>
+                  {% if vass %}<h3 class="card-title">{{ vass.count }}
+                  </h3>
+                  {% else %}  
+                  <h3 class="card-title">0
+                  </h3>
+                  {% endif %}
+
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons text-info">date_range</i>
+                    {% if vassmnth %} {{ vassmnth.count }} (Assigned this Month)
+                    {% else %}  
+                    0 (Assigned this Month)
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-warning card-header-icon">
                   <div class="card-icon">
                     <i class="material-icons">info_outline</i>
                   </div>
@@ -100,7 +102,7 @@
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
-                <div class="card-header card-header-danger card-header-icon">
+                <div class="card-header card-header-success card-header-icon">
                   <div class="card-icon">
                     <i class="material-icons">info_outline</i>
                   </div>
@@ -124,7 +126,7 @@
             </div>
           </div>
 
-          <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
     </div>
@@ -192,11 +194,6 @@
     
     });
 
-
-$("#request-vehicle").modalForm({
-        formURL: "{% url 'rrbnstaff:create_requisition' %}",
-        modalID: "#create-modal"
-    });
 
 
 </script>

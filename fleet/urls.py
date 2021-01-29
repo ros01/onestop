@@ -51,18 +51,20 @@ from .views import (
     RestockStationCredit,
     StationCreditRestockList,
     StationCreditRestockDetails,
-
-
-
 )
 
 
 app_name = 'fleet'
 
 urlpatterns = [
-	path('dashboard', DashboardTemplateView.as_view(), name='fleet_dashboard'),
+	path('dashboard/', DashboardTemplateView.as_view(), name='fleet_dashboard'),
     path('retrieve_station', views.retrieve_station, name='retrieve_station'),
     path('restock/', views.restock, name='restock'),
+    path('maintenance_records/', views.maintenance_records, name='maintenance_records'),
+    path('maintenance_records_pdf/', views.maintenance_records_pdf, name='maintenance_records_pdf'),
+    path('export_csv/', views.export_csv, name='export_csv'),
+    path('export_pdf/', views.export_pdf, name='export_pdf'),
+    path('export_excel/', views.export_excel, name='export_excel'),
     path('<uuid:id>/restock/', RestockStationCredit.as_view(), name='restock_station_credit'),
     path('restock_list/', StationCreditRestockList.as_view(), name='restock_list'), 
     path('<uuid:pk>/restock_details/', StationCreditRestockDetails.as_view(), name='restock_details'),
@@ -78,17 +80,16 @@ urlpatterns = [
     path('<uuid:id>/lock_vehicle/', views.lock_vehicle, name='lock_vehicle'),
     path('<uuid:id>/unlock_vehicle/', views.unlock_vehicle, name='unlock_vehicle'),
     path('request_list/', VehicleRequestList.as_view(), name='vehicle_request_list'),
+    path('<uuid:id>/request_detail/', VehicleRequestDetail.as_view(), name='vehicle_request_detail'),
     path('fueling_list/', FuelingListView.as_view(), name='fueling_list'),
-    path('allocations_list/', VehicleAssignmentList.as_view(), name='vehicles_allocations_list'),
+    path('assignment_list/', VehicleAssignmentList.as_view(), name='vehicle_assignment_list'),
     path('repairs_list/', RepairsListView.as_view(), name='repairs_list'),
     path('maintenance_list/', MaintenanceList.as_view(), name='maintenance_list'),
     path('schedule_list/', ScheduleListView.as_view(), name='schedule_list'),
     path('<uuid:pk>/workshop_detail/', WorkshopDetailView.as_view(), name='workshop_detail'),
     path('<uuid:pk>/station_detail/', StationDetailView.as_view(), name='station_detail'),
     path('<uuid:pk>/category_detail/', CategoryDetailView.as_view(), name='category_detail'),
-    path('<uuid:id>/request_detail/', VehicleRequestDetail.as_view(), name='vehicle_request_detail'),
     path('<uuid:id>/allocations_detail/', VehicleAllocationsDetail.as_view(), name='vehicles_allocations_detail'),
-    path('<uuid:id>/trip_history_details/', TripHistory.as_view(), name='trip_history_details'),
     path('<uuid:pk>/fueling_detail/', FuelingDetailView.as_view(), name='fueling_detail'),
     path('<uuid:pk>/vehicle_detail/', VehicleDetailView.as_view(), name='vehicle_detail'),
     path('<uuid:pk>/repairs_detail/', RepairsDetailView.as_view(), name='repairs_detail'),
@@ -110,12 +111,13 @@ urlpatterns = [
     #path('<uuid:id>/request_detail/', VehicleRequestDetail.as_view(), name='vehicle_request_detail'),
     path('<uuid:id>/release_allocation', FinalizeTrip.as_view(), name='finalize_trip'),
     path('trip_history/', TripHistoryList.as_view(), name='trip_history'), 
+    path('<uuid:id>/trip_history_details/', TripHistory.as_view(), name='trip_history_details'),
     path('record_fueling/', FuelingRecordView.as_view(), name='record_fueling'), 
     path('record_repairs/', RepairsRecordView.as_view(), name='record_repairs'),
     path('create_schedule/', ScheduleMaintenance.as_view(), name='create_maintenance_schedule'),
     path('<uuid:pk>/schedule_update/', ScheduleUpdateView.as_view(), name='schedule_update'),
     path('<uuid:id>/manage_schedule', RecordMaintenance.as_view(), name='create_maintenance_record'),
-    path('<uuid:id>/update_maintenance/', UpdateMaintenance.as_view(), name='update_maintenance'),
+    path('<uuid:pk>/update_maintenance/', UpdateMaintenance.as_view(), name='update_maintenance'),
     
     
 	

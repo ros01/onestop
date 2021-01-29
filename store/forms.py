@@ -142,23 +142,16 @@ class VendorModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
 
 
        
-class IssueRequisitionModelForm(forms.ModelForm):
-
-
+class IssueRequisitionModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
     class Meta:
         model = Issue
-
-        fields = ('requisition_no', 'item', 'department', 'requisition_date', 'quantity_requested','quantity_issued', 'requesting_staff', 'issued_by',)
-
+        fields = ('requisition_no', 'item_name', 'department', 'requisition_date', 'quantity_requested','quantity_issued', 'requesting_staff', 'issued_by',)
         widgets = {
         'department': forms.HiddenInput(),
         'requisition_date': forms.HiddenInput(),   
         'requesting_staff': forms.HiddenInput(),
-        
         'requisition_no': forms.TextInput(attrs={'readonly': True}), 
         'quantity_requested': forms.TextInput(attrs={'readonly': True}),
-
-
         }
 
         
@@ -170,11 +163,10 @@ class IssueRequisitionModelForm(forms.ModelForm):
                 'class': 'form-control',
             })
       
-      
        self.fields['requisition_no'].label = "Requisition No"
-       self.fields['item'].widget.attrs['value'] = self.instance.item
-       self.fields['item'].widget.attrs['readonly'] = 'readonly'
-       self.fields['item'].label = "Item Name"
+       self.fields['item_name'].widget.attrs['value'] = self.instance.item_name
+       self.fields['item_name'].widget.attrs['readonly'] = 'readonly'
+       self.fields['item_name'].label = "Item Name"
        self.fields['department'].label = "Department"
        self.fields['requisition_date'].label = "Requisition Date"
        self.fields['quantity_requested'].label = "Requested Quantity"
@@ -184,6 +176,14 @@ class IssueRequisitionModelForm(forms.ModelForm):
        self.fields['requesting_staff'].widget.attrs['placeholder'] = "Requesting Staff"
        self.fields['issued_by'].label = "Issueing Officer"
        self.fields['issued_by'].widget.attrs['placeholder'] = "Issuing Officer"
+
+    def save(self):
+      if not self.request.is_ajax():
+          instance = super(CreateUpdateAjaxMixin, self).save(commit=True)
+          instance.save()
+      else:
+          instance = super(CreateUpdateAjaxMixin, self).save(commit=False)
+      return instance
 
 
 

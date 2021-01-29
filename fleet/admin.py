@@ -48,10 +48,10 @@ admin.site.register(Fueling, FuelingAdmin)
 
 
 class AssignAdmin(admin.ModelAdmin):
-  list_display = ('request_no', 'vehicle_name', 'requesting_staff', 'department', 'start_date', 'end_date', 'assigned_by', 'approved_date', 'trip_status')
-  list_display_links = ('request_no', 'vehicle_name', 'start_date', 'end_date', 'assigned_by', 'approved_date')
-  list_filter = ('request_no', 'start_date', 'end_date', 'assigned_by', 'approved_date')
-  search_fields = ('request_no', 'vehicle_name', 'requesting_staff', 'department', 'start_date', 'end_date', 'assigned_by', 'approved_date')
+  list_display = ('request_no', 'vehicle_name', 'requesting_staff', 'department', 'approved_start_date', 'approved_end_date', 'assigned_by', 'approved_date', 'trip_status')
+  list_display_links = ('request_no', 'vehicle_name', 'approved_start_date', 'approved_end_date', 'assigned_by', 'approved_date')
+  list_filter = ('request_no', 'approved_start_date', 'approved_end_date', 'assigned_by', 'approved_date')
+  search_fields = ('request_no', 'vehicle_name', 'requesting_staff', 'department', 'approved_start_date', 'approved_end_date', 'assigned_by', 'approved_date')
   list_per_page = 25
 
 
@@ -60,10 +60,10 @@ admin.site.register(Assign, AssignAdmin)
 
 
 class ReleaseAdmin(admin.ModelAdmin):
-  list_display = ('request_no', 'vehicle_name', 'requesting_staff', 'department', 'start_date', 'end_date', 'released_by', 'trip_start_mileage', 'trip_end_mileage')
-  list_display_links = ('request_no', 'vehicle_name', 'start_date', 'end_date', 'released_by', 'trip_start_mileage')
-  list_filter = ('request_no', 'start_date', 'end_date', 'released_by', 'trip_start_mileage')
-  search_fields = ('request_no', 'vehicle_name', 'requesting_staff', 'department', 'start_date', 'end_date', 'released_by', 'trip_start_mileage')
+  list_display = ('request_no', 'vehicle_name', 'requesting_staff', 'department', 'actual_trip_start_date', 'actual_trip_end_date', 'released_by', 'trip_start_mileage', 'trip_end_mileage')
+  list_display_links = ('request_no', 'vehicle_name', 'actual_trip_start_date', 'actual_trip_end_date', 'released_by', 'trip_start_mileage')
+  list_filter = ('request_no', 'actual_trip_start_date', 'actual_trip_end_date', 'released_by', 'trip_start_mileage')
+  search_fields = ('request_no', 'vehicle_name', 'requesting_staff', 'department', 'actual_trip_start_date', 'actual_trip_end_date', 'released_by', 'trip_start_mileage')
   list_per_page = 25
 
 
@@ -81,10 +81,10 @@ admin.site.register(Schedule, ScheduleAdmin)
 
 
 class MaintenanceAdmin(admin.ModelAdmin):
-  list_display = ('schedule_no', 'vehicle', 'target_maintenance_date', 'current_maintenance_mileage', 'actual_maintenance_cost', 'next_maintenance_date', 'maintenance_recorded_by')
-  list_display_links = ('schedule_no', 'vehicle', 'target_maintenance_date', 'current_maintenance_mileage', 'actual_maintenance_cost', 'next_maintenance_date')
-  list_filter = ('schedule_no', 'target_maintenance_date', 'current_maintenance_mileage', 'actual_maintenance_cost', 'next_maintenance_date')
-  search_fields = ('schedule_no', 'vehicle', 'target_maintenance_date', 'current_maintenance_mileage', 'actual_maintenance_cost', 'next_maintenance_date')
+  list_display = ('schedule_no', 'vehicle', 'target_maintenance_date', 'current_mileage', 'maintenance_cost', 'maintenance_recorded_by')
+  list_display_links = ('schedule_no', 'vehicle', 'target_maintenance_date', 'current_mileage', 'maintenance_cost')
+  list_filter = ('schedule_no', 'target_maintenance_date', 'current_mileage', 'maintenance_cost')
+  search_fields = ('schedule_no', 'vehicle', 'target_maintenance_date', 'current_mileage', 'maintenance_cost')
   list_per_page = 25
 
 

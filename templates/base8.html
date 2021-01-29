@@ -1,0 +1,133 @@
+{% extends 'base9.html'%}
+{% load static %}
+{% load humanize %}
+{% block title%}| Vehicles Maintenance History {% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.8.2-web/css/allt.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
+<link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
+
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+{% include "_modal.html" %}
+<!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content">
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+
+    <!-- Page Heading -->
+    <br><br>
+
+    {% include 'partials/_alerts.html' %}
+
+    <!--<h3 class="col-12 text-info">Vehicle Maintenance History</h3>-->
+    <!-- DataTales Example -->
+    <div class="card shadow mb-2">
+    <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-success">Maintenance Details</h6>
+    </div>
+    <div class="card-body">
+
+    <div class="table-responsive-lg">
+    <table class="table table-bordered table-hover" id="mydata">
+    <thead>
+    <tr style="background: #41963F;">
+
+    <td style="color: #fff;" class="small-text" width="05%">S/N</td>
+    <td style="color: #fff;" class="small-text" width="10%">Schedule No</td>
+    <td style="color: #fff;" class="small-text" width="14%">Vehicle Name</td>
+    <td style="color: #fff;" class="small-text" width="14%">Workshop</td>
+    <td style="color: #fff;" class="small-text" width="12%">Target Date</td>
+    <td style="color: #fff;" class="small-text" width="12%">Target Mileage</td>
+    <td style="color: #fff;" class="small-text" width="12%">Current Mileage</td>
+    <td style="color: #fff;" class="small-text" width="12%">Maintenance Date</td>
+    <td style="color: #fff;" class="small-text" width="09%">Actions</td>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% if maintenance_qs %}
+    {% for object in maintenance_qs %}
+    <tr>
+    <td width="05%">{{forloop.counter}}</td>
+    <td width="10%">{{object.schedule_no}}</td>
+    <td width="14%">{{object.vehicle}}</td>
+    <td width="14%">{{object.workshop}}</td>
+    <td width="12%">{{object.target_maintenance_date_pretty}}</td>
+    <td width="12%">{{object.target_maintenance_mileage}}</td>
+    <td width="12%">{{object.current_mileage| intcomma}}</td>
+    <td width="12%">{{object.maintenance_date_pretty}}</td>
+    <td width="08%">
+
+    <a class="btn btn-success" href="{% url 'fleet:maintenance_detail' object.pk %}"><i class="fa fa-folder-open text-white"></i></a>
+
+    </td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+    </tbody>
+    </table>
+    </div>
+    </div>
+    </div>
+
+    </div>
+    <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+
+<!--Jquery plugin-->
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+
+<script type="text/javascript">
+    $(function() {
+    
+        $(".bs-modal").each(function () {
+          $(this).modalForm({
+              formURL: $(this).data('form-url')
+          });
+        });
+    
+    });
+
+</script>
+
+
+
+
+<script>
+  $('#mydata').dataTable();
+</script>
+
+
+
+
+
+
+
+{% endblock %}

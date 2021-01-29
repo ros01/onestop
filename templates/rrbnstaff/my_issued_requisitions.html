@@ -28,9 +28,8 @@
 
           <!-- Page Heading -->
          <br><br><br>
-
-      
-          <button type="button" id="create-requisition" class="bs-modal btn btn-success mt-1" data-form-url="{% url 'rrbnstaff:create_requisition' %}"><i class="fa fa-list text-white"></i> Request for Item</button><br>
+         
+          
 
           {% include 'partials/_alerts.html' %}
 
@@ -63,7 +62,7 @@
         <tr>
         <td width="05%">{{forloop.counter}}</td>
         <td width="15%">{{object.requisition_no}}</td>
-        <td width="15%">{{object.item}}</td>
+        <td width="15%">{{object.item_name}}</td>
         <td width="15%">{{object.quantity_requested}}</td>
         <td width="15%">{{object.requisition_date_pretty}}</td>
         <td width="15%">{{object.issue_date_pretty}}</td>

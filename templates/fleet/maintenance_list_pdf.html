@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+ <title>Maintenance List PDF</title>
+
+ <style>
+  @page {
+    size: "A4";
+    margin: 2.5cm 1.5cm 3.5cm 1.5cm;
+    @top-center {
+      content: 'Maintenance Report';
+    }
+    @bottom-right {
+      content: "Page " counter(page)" of " counter(pages);
+    }
+  }
+</style>
+</head>
+
+<body>
+  <img src="{% static 'img/log_add2.jpg' %}" alt="image" width="959px" height="117px"/>
+  <img src="{% static 'img/rrbn-logo.png' %}" alt="rrbn-logo"/>
+         
+<h2> Maintenance List </h2>
+<table class = "table">
+  <thead class = "thead">
+    <tr>
+      <th>S/N</th>
+      <th>Schedule No</th> 
+      <th>Vehicle Name</th>
+      <th>Mainteance Details</th>
+      <th>Maintenance Cost</th>
+      <th>Workshop</th>
+      <th>Current Mileage</th>
+      <th>Maintenance Date</th>
+    </tr>
+  </thead>
+
+
+  <tbody>
+    {% for maintenance in maintenance_qs %}
+    <tr>
+      <td>{{forloop.counter}}</td>
+      <td>{{maintenance.schedule_no}}</td> 
+      <td>{{maintenance.vehicle}}</td>
+      <td>{{maintenance.maintenance_details}}</td>
+      <td>{{maintenance.maintenance_cost}}</td>
+      <td>{{maintenance.workshop}}</td>
+      <td>{{maintenance.current_mileage}}</td>
+      <td>{{maintenance.maintenance_date}}</td>
+     </tr>
+     {% endfor %}
+  </tbody>
+   </table>
+
+
+
+  
+  
+
+
+</body>
+</html>

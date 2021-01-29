@@ -37,124 +37,118 @@
         </div>
 
         <div class="row">
-        <span class="col-5"><strong>Schedule No:</strong></span>
+        <span class="col-6"><strong>Schedule No:</strong></span>
         <span class="col-6 ">{{object.schedule_no}}</span>
         </div>
         
         <div class="row">
-        <span class="col-5"><strong>Vehicle Name:</strong></span>
+        <span class="col-6"><strong>Vehicle Name:</strong></span>
         <span class="col-6">{{object.vehicle}}</span>
         </div>           
                   
         <div class="row">
-        <span class="col-5"><strong>Vehicle Type:</strong></span>
+        <span class="col-6"><strong>Vehicle Type:</strong></span>
         <span class="col-6">{{object.vehicle.vehicle_type}}</span>
         </div>               
                   
                     
         <div class="row">
-        <span class="col-5"><strong>Target Maintenance Date:</strong></span>
+        <span class="col-6"><strong>Target Maintenance Date:</strong></span>
         <span class="col-6">{{object.target_maintenance_date_pretty}}</span>
         </div>
 
-        <div class="row">
-        <span class="col-5"><strong>Workshop Name:</strong></span>
-        <span class="col-6">{{object.workshop.workshop_name}}</span>
-        </div>  
-
-        <div class="row">
-        <span class="col-5"><strong>Mechanic Name:</strong></span>
-        <span class="col-6">  {{ object.workshop.mechanic_name }}</span>
-        </div>
+        
                   
         <div class="row">
-        <span class="col-5"><strong>Maintenance Scheduled By:</strong></span>
+        <span class="col-6"><strong>Maintenance Scheduled By:</strong></span>
         <span class="col-6">  {{ object.maintenance_scheduled_by.first_name }} {{ object.maintenance_scheduled_by.last_name }}</span>
         </div>
         
         <div class="row">
-        <span class="col-5"><strong>Maintenance Scheduled On:</strong></span>
+        <span class="col-6"><strong>Maintenance Scheduled On:</strong></span>
         <span class="col-6">{{ object.scheduled_on_pretty}}</span>
         </div> 
 
         {% for object in schedule %}
 
         <div class="row">
-        <span class="col-5"><strong>Current Mileage:</strong></span>
+        <span class="col-6"><strong>Workshop Name:</strong></span>
+        <span class="col-6">{{object.workshop.workshop_name}}</span>
+        </div>  
+
+        <div class="row">
+        <span class="col-6"><strong>Mechanic Name:</strong></span>
+        <span class="col-6">  {{ object.workshop.mechanic_name }}</span>
+        </div>
+        
+
+        <div class="row">
+        <span class="col-6"><strong>Current Mileage:</strong></span>
         <span class="col-6">{{ object.current_maintenance_mileage| intcomma}}</span>
         </div>  
         
         <div class="row">
-        <span class="col-5"><strong>Maintenance Cost:</strong></span>
+        <span class="col-6"><strong>Maintenance Cost:</strong></span>
         <span class="col-6">{{ object.actual_maintenance_cost| intcomma}}</span>
         </div>  
         
         <div class="row">
-        <span class="col-5"><strong>Actual Maintenance Done:</strong></span>
+        <span class="col-6"><strong>Actual Maintenance Done:</strong></span>
         <span class="col-6">{{ object.actual_maintenance_details}}</span>
         </div>  
                   
         <div class="row">
-        <span class="col-5"><strong>Next Maintenance Date:</strong></span>
+        <span class="col-6"><strong>Next Maintenance Date:</strong></span>
         <span class="col-6">{{ object.next_maintenance_date_pretty}}</span>
-        </div>  
-                  
+        </div>              
+        </div>
+        <br>
+        </div>   
 
-       
-                  
+        <div class="col-md-5 mt-0">
+        <p class="text-success lead">Control Details</p>
 
-     
-
-    
-                 
-    </div>
-    <br>
-    </div>   
-
-    <div class="col-md-5 mt-0">
-    <p class="text-success lead">Control Details</p>
-
-    <div class="row">
-    <span class="col-5"><strong>Maintenance Date:</strong></span>
-    <span class="col-6">{{ object.actual_maintenance_date_pretty}}</span>
-    </div> 
-    
-    <div class="row">
-    <span class="col-5"><strong>Documented By:</strong></span>
-    <span class="col-6">{{ object.maintenance_recorded_by.first_name}} {{ object.maintenance_recorded_by.last_name}}</span>
-    </div> 
-    {% endfor %}
-    
-
-    
-    <hr> 
-    <div class="d-flex justify-content-end">
-
-    {% for object in schedule %}
-
-   
-
-    <button type="button" id="update-maintenance" class="bs-modal btn btn-primary text-white py-1 mr-3 mt-1 mb-3" data-form-url="{% url 'fleet:update_maintenance' schedule.first.id %}"><i class="fa fa-list text-white"></i> Update Maintenance</button>
+        <div class="row">
+        <span class="col-5"><strong>Maintenance Date:</strong></span>
+        <span class="col-6">{{ object.actual_maintenance_date_pretty}}</span>
+        </div> 
         
-     {% endfor %}   
-       
-    <a href="{% url 'fleet:schedule_list' %}" class="btn btn-warning text-white py-1 mr-0 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Schedule List</a>
-    </div> 
+        <div class="row">
+        <span class="col-5"><strong>Documented By:</strong></span>
+        <span class="col-6">{{ object.maintenance_recorded_by.first_name}} {{ object.maintenance_recorded_by.last_name}}</span>
+        </div> 
+        {% endfor %}
         
 
-    </div> 
+        
+        <hr> 
+        <div class="d-flex justify-content-end">
+
+        {% for object in schedule %}
+
+       
+
+        <button type="button" id="update-maintenance" class="bs-modal btn btn-primary text-white py-1 mr-3 mt-1 mb-3" data-form-url="{% url 'fleet:update_maintenance' schedule.first.id %}"><i class="fa fa-list text-white"></i> Update Maintenance</button>
+            
+         {% endfor %}   
+           
+        <a href="{% url 'fleet:schedule_list' %}" class="btn btn-warning text-white py-1 mr-0 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Schedule List</a>
+        </div> 
+            
+
+        </div> 
 
 
-    </div>
-    <!-- /.container-fluid -->
-    </div>
-    </div>
-    <!-- End of Main Content -->
-    </div>
-    <!-- End of Content Wrapper -->
+        </div>
+        <!-- /.container-fluid -->
+        </div>
+        </div>
+        <!-- End of Main Content -->
+        </div>
+        <!-- End of Content Wrapper -->
 
-    </div>
-    <!-- End of Page Wrapper -->
+        </div>
+        <!-- End of Page Wrapper -->
 
 <script src="{% static 'js/jquery.js' %}"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>

@@ -3,9 +3,9 @@ from datetime import datetime
 import uuid
 from django.conf import settings
 from django.urls import reverse
+from django.utils import timezone
 
-
-
+ 
 # Create your models here.
 def increment_requisition_no():
 	last_requisition_no = Requisition.objects.all().order_by('requisition_no').last()
@@ -30,7 +30,7 @@ class Requisition(models.Model):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	requisition_no = models.CharField(max_length=500, null=True, blank=True, 
         default=increment_requisition_no)
-	item = models.ForeignKey("store.Item", null=True, blank=True, on_delete=models.DO_NOTHING)
+	item_name = models.CharField(max_length=200)
 	quantity_requested = models.IntegerField()
 	requesting_staff = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
 	department = models.CharField(max_length=200)
@@ -65,13 +65,15 @@ class Request(models.Model):
         default=increment_request_no)
 	vehicle_name = models.CharField(max_length=200)
 	department = models.CharField(max_length=200)
-	request_reason = models.TextField(blank=True, null=True)
+	request_reason = models.TextField()
 	destination = models.CharField(max_length=200)
 	request_duration = models.CharField(max_length=120, choices=REQUEST_DURATION_CHOICES, default='1 day')
 	requesting_staff = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
 	request_date = models.DateTimeField(auto_now_add=True, auto_now=False)
-	trip_date = models.DateTimeField(auto_now_add=True, auto_now=False)
+	projected_start_date = models.DateTimeField(default=datetime.now)
+	projected_end_date = models.DateTimeField(default=datetime.now)
 	request_status = models.IntegerField(default=1)
+	
 
 	def __str__(self):
 		return self.request_no
@@ -79,8 +81,11 @@ class Request(models.Model):
 	def request_date_pretty(self):
 		return self.request_date.strftime('%b %e %Y')
 
-	def trip_date_pretty(self):
-		return self.trip_date.strftime('%b %e %Y')
+	def projected_start_date_pretty(self):
+		return self.projected_start_date.strftime('%b %e %Y')
+
+	def projected_end_date_pretty(self):
+		return self.projected_end_date.strftime('%b %e %Y')
 
 	class Meta:
 		unique_together = ('request_no','requesting_staff')

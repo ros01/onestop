@@ -62,8 +62,6 @@ class Refill(models.Model):
     refill_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='refill_by',  on_delete=models.DO_NOTHING)
     refill_on = models.DateTimeField(default=datetime.now, blank=True)
 
-
-    
     def __str__(self):
         return str(self.station_name)
 
@@ -74,17 +72,11 @@ class Refill(models.Model):
     def refill_on_pretty(self):
         return self.refill_on.strftime('%b %e %Y')
 
-
     def save(self, *args, **kwargs):
         super(Refill, self).save(*args, **kwargs)
-        
-
         p = Station.objects.get(station_name=self.station_name)
         p.station_credit += self.refill_credit_value
         p.save()
-
-
-
 
 class Workshop(models.Model):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -137,6 +129,8 @@ class Vehicle(models.Model):
 		('ICT', 'ICT'),
 		('Stores', 'Stores'),
 		('Protocol', 'PR & Protocol'),
+		('Registrars Office', 'Registrars Office'),
+		('Zonal Office ', 'Zonal Office'),
 		)
 
 	TYPE = (
@@ -161,6 +155,7 @@ class Vehicle(models.Model):
 	CATEGORY = (
 		('Pool Vehicle', 'Pool Vehicle'),
 		('Departmental Vehicle', 'Departmental Vehicle'),
+		('Zonal Office Vehicle', 'Zonal Office Vehicle'),
 		)
 
 	LOCATION = (
@@ -186,9 +181,6 @@ class Vehicle(models.Model):
 		('interstate', 'Interstate Trip'),
 		)
 
-	
-	
-
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	vehicle_name = models.CharField(max_length=200)
 	description = models.TextField(blank=True, null=True)
@@ -202,7 +194,8 @@ class Vehicle(models.Model):
 	chasis_number = models.CharField(max_length=200)
 	colour = models.CharField(max_length=120, choices=COLOUR,  null=True, blank=True)
 	department_assigned = models.CharField(max_length=120, choices=DEPARTMENT,  null=True, blank=True)
-	license_no = models.CharField(max_length=200)
+	private_license_no = models.CharField(max_length=200)
+	official_license_no = models.CharField(max_length=200)
 	insurance_details = models.CharField(max_length=200)
 	entered_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
 	date_created = models.DateTimeField(auto_now_add=True, auto_now=False)
@@ -239,25 +232,26 @@ class Assign(models.Model):
 	driver =  models.CharField(max_length=200)
 	issue_status = models.IntegerField(default=1)
 	trip_status = models.CharField(max_length=120, choices=TRIP_STATUS, default='created')
-	current_mileage = models.DecimalField(max_digits=50, decimal_places=2)
-	start_date = models.DateTimeField(default=datetime.now, blank=True)
-	end_date = models.DateTimeField(default=datetime.now, blank=True)
+	projected_start_date = models.DateTimeField(default=datetime.now)
+	projected_end_date = models.DateTimeField(default=datetime.now)
+	approved_start_date = models.DateTimeField(default=datetime.now)
+	approved_end_date = models.DateTimeField(default=datetime.now)
 	assigned_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='assigning_staff',  on_delete=models.DO_NOTHING)
 	approved_date = models.DateTimeField(default=datetime.now, blank=True)
 
 
 	class Meta:
 	   unique_together = (('request_no', 'vehicle_name',), ('request_no', 'requesting_staff',))
-	   ordering = ["-approved_date"]
+	   ordering = ["-request_no"]
 
 	def __str__(self):
 		return self.request_no
 
-	def start_date_pretty(self):
-		return self.start_date.strftime('%b %e %Y')
+	def approved_start_date_pretty(self):
+		return self.approved_start_date.strftime('%b %e %Y')
 
-	def end_date_pretty(self):
-		return self.end_date.strftime('%b %e %Y')
+	def approved_end_date_pretty(self):
+		return self.approved_end_date.strftime('%b %e %Y')
 
 	def request_date_pretty(self):
 		return self.request_date.strftime('%b %e %Y')
@@ -299,8 +293,10 @@ class Release(models.Model):
 	requesting_staff = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='request_staff',  on_delete=models.DO_NOTHING)
 	department = models.CharField(max_length=200)
 	driver = models.CharField(max_length=200)
-	start_date = models.DateTimeField(default=datetime.now, blank=True)
-	end_date = models.DateTimeField(default=datetime.now, blank=True)
+	approved_start_date = models.DateTimeField(default=datetime.now)
+	approved_end_date = models.DateTimeField(default=datetime.now)
+	actual_trip_start_date = models.DateTimeField(default=datetime.now)
+	actual_trip_end_date = models.DateTimeField(default=datetime.now)
 	trip_start_mileage = models.DecimalField(max_digits=50, decimal_places=2)
 	trip_end_mileage = models.DecimalField(max_digits=50, decimal_places=2)
 	released_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='protocol_staff',  on_delete=models.DO_NOTHING)
@@ -314,11 +310,27 @@ class Release(models.Model):
 	def __str__(self):
 		return self.request_no
 
-	def start_date_pretty(self):
-		return self.start_date.strftime('%b %e %Y')
+	def request_date_pretty(self):
+		return self.request_date.strftime('%b %e %Y')
 
-	def end_date_pretty(self):
-		return self.end_date.strftime('%b %e %Y')
+	def approved_start_date_pretty(self):
+		return self.approved_start_date.strftime('%b %e %Y')
+
+	def approved_end_date_pretty(self):
+		return self.approved_end_date.strftime('%b %e %Y')
+
+	def actual_trip_start_date_pretty(self):
+		return self.actual_trip_start_date.strftime('%b %e %Y')
+
+	def actual_trip_end_date_pretty(self):
+		return self.actual_trip_end_date.strftime('%b %e %Y')
+
+	def release_date_pretty(self):
+		return self.release_date.strftime('%b %e %Y')
+
+	def get_full_name(self):
+		full_name = '%s %s' % (self.requesting_staff.first_name, self.requesting_staff.last_name)
+		return full_name.strip()
 
 	def save(self, *args, **kwargs):
 		super(Release, self).save(*args, **kwargs)
@@ -400,8 +412,8 @@ class Schedule(models.Model):
 	vehicle = models.ForeignKey('Vehicle', null=True, blank=True, on_delete=models.DO_NOTHING)
 	target_maintenance_mileage = models.DecimalField(max_digits=50, decimal_places=2,)
 	target_maintenance_date = models.DateTimeField(default=datetime.now, blank=True)
-	workshop = models.ForeignKey('Workshop', null=True, blank=True, on_delete=models.DO_NOTHING)
-	mechanic_name = models.ForeignKey('Workshop', null=True, blank=True, related_name='workshop_mechanic', on_delete=models.DO_NOTHING)
+	#workshop = models.ForeignKey('Workshop', null=True, blank=True, on_delete=models.DO_NOTHING)
+	#mechanic_name = models.ForeignKey('Workshop', null=True, blank=True, related_name='workshop_mechanic', on_delete=models.DO_NOTHING)
 	schedule_status = models.IntegerField(default=1)
 	maintenance_scheduled_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='maintenance_scheduler', on_delete=models.DO_NOTHING)
 	scheduled_on = models.DateTimeField(default=datetime.now, blank=True)
@@ -429,20 +441,20 @@ class Maintenance(models.Model):
 	vehicle = models.ForeignKey('Vehicle', null=True, blank=True, on_delete=models.DO_NOTHING)
 	driver = models.CharField(max_length=200)
 	target_maintenance_date = models.DateTimeField(default=datetime.now, blank=True)
+	target_maintenance_mileage = models.DecimalField(max_digits=50, decimal_places=2,)
 	workshop = models.ForeignKey('Workshop', null=True, blank=True, on_delete=models.DO_NOTHING)
 	mechanic_name = models.ForeignKey('Workshop', null=True, blank=True, related_name='maintenance_mechanic', on_delete=models.DO_NOTHING)
 	maintenance_scheduled_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
 	scheduled_on = models.DateTimeField(default=datetime.now, blank=True)
-	current_maintenance_mileage = models.DecimalField(max_digits=50, decimal_places=2,)
-	actual_maintenance_cost = models.DecimalField(max_digits=50, decimal_places=2,)
-	actual_maintenance_details = models.TextField(null=True, blank=True)
-	next_maintenance_date = models.DateTimeField(default=datetime.now, blank=True)
+	current_mileage = models.DecimalField(max_digits=50, decimal_places=2,)
+	maintenance_cost = models.DecimalField(max_digits=50, decimal_places=2,)
+	maintenance_details = models.TextField(null=True, blank=True)
 	maintenance_recorded_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='maintenance_recorded_by', on_delete=models.DO_NOTHING)
-	actual_maintenance_date = models.DateTimeField(default=datetime.now, blank=True)
+	maintenance_date = models.DateTimeField(default=datetime.now, blank=True, null=True)
 
 	class Meta:
 	   unique_together = ('schedule_no', 'vehicle')
-	   ordering = ["-actual_maintenance_date"]
+	   ordering = ["-schedule_no"]
 
 	def scheduled_on_pretty(self):
 		return self.scheduled_on.strftime('%b %e %Y')
@@ -450,11 +462,8 @@ class Maintenance(models.Model):
 	def target_maintenance_date_pretty(self):
 		return self.target_maintenance_date.strftime('%b %e %Y')
 
-	def next_maintenance_date_pretty(self):
-		return self.next_maintenance_date.strftime('%b %e %Y')
-
-	def actual_maintenance_date_pretty(self):
-		return self.actual_maintenance_date.strftime('%b %e %Y')
+	def maintenance_date_pretty(self):
+		return self.maintenance_date.strftime('%b %e %Y')
 
 	def __str__(self):
 		return self.driver

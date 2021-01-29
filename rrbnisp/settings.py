@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'multiselectfield',
     'tempus_dominus',
     'bootstrap_datepicker_plus',
+    
+   
 ]
 
 
@@ -88,6 +90,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
                 
             ],
         },
@@ -103,7 +106,7 @@ WSGI_APPLICATION = 'rrbnisp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'rrbnonestopdb',
+        'NAME': 'rrbnonestopdb1',
         'USER': 'postgres',
         'PASSWORD': 'blackstone1',
         'HOST': 'localhost',
@@ -134,7 +137,7 @@ AUTH_PASSWORD_VALIDATORS = [
 #SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_AGE = 60 * 5 # Session will expiry after 30 minutes idle.
+SESSION_COOKIE_AGE = 600 
 SESSION_SAVE_EVERY_REQUEST = True
 LOGIN_URL = '/accounts/signin'
 
@@ -150,6 +153,9 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+TEMPUS_DOMINUS_LOCALIZE = False
+
 
 AUTH_USER_MODEL = 'accounts.User'
 

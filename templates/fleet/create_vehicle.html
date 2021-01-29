@@ -72,14 +72,17 @@
 
 <div class="form-row">
 <div class="form-group col-md-6">
-{{ form.license_no|as_crispy_field }}
+{{ form.private_license_no|as_crispy_field }}
 </div>
 <div class="form-group col-md-6">
-{{ form.insurance_details|as_crispy_field }}
+{{ form.official_license_no|as_crispy_field }}
 </div>
 </div>
 
 <div class="form-row">
+<div class="form-group col-md-6">
+{{ form.insurance_details|as_crispy_field }}
+</div>
 <div class="form-group col-md-6">
 {{ form.category|as_crispy_field }}
 </div>

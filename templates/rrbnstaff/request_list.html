@@ -43,12 +43,12 @@
           <thead>
           <tr style="background: #41963F;">
           <td style="color: #fff;" class="small-text" width="05%">S/N</td>
-          <td style="color: #fff;" class="small-text" width="15%">Requisition No</td>
-          <td style="color: #fff;" class="small-text" width="15%">Vehicle Name</td>
-          <td style="color: #fff;" class="small-text" width="10%">Department</td>
+          <td style="color: #fff;" class="small-text" width="10%">Request No</td>
+          <td style="color: #fff;" class="small-text" width="20%">Vehicle Name</td>
+          <td style="color: #fff;" class="small-text" width="15%">Purpose</td>
           <td style="color: #fff;" class="small-text" width="15%">Destination</td>
-          <td style="color: #fff;" class="small-text" width="15%">Trip Duration</td>
-          <td style="color: #fff;" class="small-text" width="15%">Requisition Date</td>
+          <td style="color: #fff;" class="small-text" width="12%">Trip Duration</td>
+          <td style="color: #fff;" class="small-text" width="13%">Request Date</td>
           <td style="color: #fff;" class="small-text" width="10%">Actions</td>
           </tr>
           </thead>
@@ -59,14 +59,19 @@
           {% for object in request_qs %}
           <tr>
           <td width="05%">{{forloop.counter}}</td>
-          <td width="15%">{{object.request_no}}</td>
-          <td width="15%">{{object.vehicle_name}}</td>
-          <td width="10%">{{object.department}}</td>
+          <td width="10%">{{object.request_no}}</td>
+          <td width="20%">{{object.vehicle_name}}</td>
+          <td width="15%">{{object.request_reason}}</td>
           <td width="15%">{{object.destination}}</td>
-          <td width="15%">{{object.request_duration}}</td>
-          <td width="15%">{{object.request_date_pretty}}</td>
+          <td width="12%">{{object.request_duration}}</td>
+          <td width="13%">{{object.request_date_pretty}}</td>
           <td width="10%">
-          <button type="button" id="update-request" class="bs-modal btn btn-small btn-warning mt-1 p-1" data-form-url="{% url 'rrbnstaff:vehicle_request_update' object.pk %}"><i class="fas fa-redo"></i></button>
+
+          
+          <a class="btn btn-primary p-1" href="{% url 'rrbnstaff:request_list_details' object.pk %}"><i class="fa fa-folder-open text-white"></i></a>
+
+
+          <!-- <button type="button" id="update-request" class="bs-modal btn btn-small btn-warning mt-1 p-1" data-form-url="{% url 'rrbnstaff:vehicle_request_update' object.pk %}"><i class="fas fa-redo"></i></button>-->
           <button type="button" id="delete-request" class="bs-modal btn btn-small btn-danger mt-1 p-1" data-form-url="{% url 'rrbnstaff:vehicle_request_delete' object.id %}"><i class="fas fa-trash-alt"></i></button>
           </td>
 

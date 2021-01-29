@@ -1,15 +1,15 @@
-{% extends 'base0.html'%}
+{% extends 'base7.html'%}
 {% load static %}
 {% load humanize %}
 
 {% block title%}| Vehicle Allocation Details {% endblock %}
 
 {% block styles %}
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous" />
+<script src="{% static 'js/tempusdominus-bootstrap-4.js' %}"></script>
+
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
-<!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
-<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
-<link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
-<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
 
 {% endblock %}
 
@@ -17,18 +17,20 @@
 {% include "_modal.html" %}
 
 <!-- Page Wrapper -->
-  <div id="wrapper">
+  <div id="wrapper" class="bg-light pb-4">
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
       <!-- Main Content -->
       <div id="content">
 
+
       <!-- Begin Page Content -->
-        <div class="container-fluid">
-           <br>
+     <div class="container">
+        <br>
+        <br>
 
         <div class="row ml-4 mt-4 pt-4">
-        <h4 class="col-12 text-success">Allocated Vehicle Details</h4>
+        
         </div>
 
         <div class="row mx-4 mt-2 pt-3 bg-white">
@@ -36,7 +38,7 @@
         <div class="col-md-12">
         <div class="row">
         <br>
-        <p class="col-12 text-success lead">Vehicle Details</p>
+        <p class="col-12 text-success lead">Vehicle Allocation Details</p>
         </div>
 
         <div class="row">
@@ -80,26 +82,21 @@
         <span class="col-5"><strong>Assigned Driver:</strong></span>
         <span class="col-6">  {{ object.driver }}</span>
         </div>
-                   
+                  
         <div class="row">
-        <span class="col-5"><strong>Vehicle Current Milleage:</strong></span>
-        <span class="col-6">  {{ object.current_mileage| intcomma }}</span>
+        <span class="col-5"><strong>Approved Start Date:</strong></span>
+        <span class="col-6">  {{ object.approved_start_date_pretty }}</span>
         </div>
                   
         <div class="row">
-        <span class="col-5"><strong>Trip Start Date:</strong></span>
-        <span class="col-6">  {{ object.start_date_pretty }}</span>
-        </div>
-                  
-        <div class="row">
-        <span class="col-5"><strong>Trip End Date:</strong></span>
-        <span class="col-6">  {{ object.end_date_pretty }}</span>
+        <span class="col-5"><strong>Approved End Date:</strong></span>
+        <span class="col-6">  {{ object.approved_end_date_pretty }}</span>
         </div>
         </div>
         <br>
         </div>   
 
-        <div class="col-md-5 mt-0">
+        <div class="col-md-6 mt-5">
         <p class="text-success lead">Control Details</p>
             
 
@@ -114,53 +111,48 @@
              
         <hr> 
         <div class="d-flex justify-content-end">  
-        <button type="button" id="finalize-trip" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'fleet:finalize_trip' object.id %}"><i class="fa fa-list text-white"></i> Finalize Trip</button>
+        <button type="button" id="finalize-trip" class="bs-modal btn btn-outline-success btn-sm py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'fleet:finalize_trip' object.id %}"><i class="fa fa-list"></i> Finalize Trip</button>
         <a href="{% url 'fleet:vehicles_allocations_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Assigned Vehicles List</a>  
              
-        </div>  
+       </div>  
         </div>
 
-
-      
-      </div>
+        </div>
         <!-- /.container-fluid -->
-      </div>
-      </div>
-      <!-- End of Main Content -->
-    </div>
-    <!-- End of Content Wrapper -->
+        </div>
+        </div>
+        <!-- End of Main Content -->
+        </div>
+        <!-- End of Content Wrapper -->
 
-  </div>
-  <!-- End of Page Wrapper -->
+        </div>
+        <!-- End of Page Wrapper -->
+
+<!--Jquery plugin-->
+
 
 
 <script src="{% static 'js/jquery.js' %}"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 
+
 <script type="text/javascript">
+
     $(function() {
-    
         $(".bs-modal").each(function () {
           $(this).modalForm({
-              formURL: $(this).data('form-url')
+              formURL: $(this).data('form-url')  
           });
         });
-    
     });
-
 </script>
 
-
-
-
-<script>
-  $('#mydata').dataTable();
-</script>
-
-
-
-
+ <script>
+      $(function () {
+        $("#datepicker").datepicker();
+      });
+  </script>
 
 
 

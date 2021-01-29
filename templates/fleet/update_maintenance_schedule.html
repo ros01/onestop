@@ -1,7 +1,14 @@
 {% load widget_tweaks %}
 {% load crispy_forms_tags %}
+{% load static %}
 
+<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css">
+<script src="{% static 'js/moment.min.js' %}"></script>
 
+<link href="{% static 'bootstrap-datepicker/css/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet"/>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous" /> -->
+<script src="{% static 'js/tempusdominus-bootstrap-4.js' %}"></script>
 
 <!-- Content Wrapper -->
 <div id="content-wrapper bg-light" class="d-flex flex-column">
@@ -27,36 +34,59 @@
 
 
 <input type="hidden" name="maintenance_scheduled_by" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_maintenance_scheduled_by">
+
+
+
+<div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+{% for error in form.non_field_errors %}
+{{ error }}
+{% endfor %}
+</div>
+
+
 {{ form.schedule_no|as_crispy_field }}
+<div class="{% if form.schedule_no.errors %} invalid{% endif %}">
+{% for error in field.errors %}
+<p class="help-block">{{ error }}</p>
+{% endfor %}
+</div>
+
+
 <div class="form-row">
 <div class="form-group col-md-6">
-
 {{ form.vehicle|as_crispy_field }}
+<div class="{% if form.vehicle.errors %} invalid{% endif %}">
+{% for error in field.errors %}
+<p class="help-block">{{ error }}</p>
+{% endfor %}
 </div>
+</div>
+
+
 <div class="form-group col-md-6">
 {{ form.target_maintenance_mileage|as_crispy_field }}
+<div class="{% if form.target_maintenance_mileage.errors %} invalid{% endif %}">
+{% for error in field.errors %}
+<p class="help-block">{{ error }}</p>
+{% endfor %}
 </div>
 </div>
-<div class="form-row">
-
-
-<div class="form-group col-md-6 mt-2 pt-2">
- <label for="id_target_maintenance_date" class=" requiredField">Target Maintenance Date<span class="asteriskField">*</span></label>
- <input type="date" name="target_maintenance_date" class="form-control" required id="id_target_maintenance_date"  id="div_id_target_maintenance_date">
- </div>
 
 
 
 
-<div class="form-group col-md-6">
-{{ form.workshop|as_crispy_field }}
-</div>
 </div>
 <div class="form-row">
 <div class="form-group col-md-6">
-{{ form.mechanic_name|as_crispy_field }}
+{{ form.target_maintenance_date|as_crispy_field }}
+<div class="{% if form.target_maintenance_date.errors %} invalid{% endif %}">
+{% for error in field.errors %}
+<p class="help-block">{{ error }}</p>
+{% endfor %}
 </div>
 </div>
+</div>
+
  
 
 <div class="form-row">

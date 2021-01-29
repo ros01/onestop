@@ -40,11 +40,11 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class IssueAdmin(admin.ModelAdmin):
-  list_display = ('requisition_no', 'item', 'quantity_requested', 'quantity_issued', 'requesting_staff',
+  list_display = ('requisition_no', 'item_name', 'quantity_requested', 'quantity_issued', 'requesting_staff',
                   'issued_by', 'issue_date')
-  list_display_links = ('requisition_no', 'item', 'quantity_requested', 'quantity_issued', 'issue_date')
-  list_filter = ('requisition_no', 'item', 'issued_by', 'quantity_issued', 'issue_date')
-  search_fields = ('requisition_no', 'item', 'quantity_issued', 'requesting_staff',
+  list_display_links = ('requisition_no', 'item_name', 'quantity_requested', 'quantity_issued', 'issue_date')
+  list_filter = ('requisition_no', 'item_name', 'issued_by', 'quantity_issued', 'issue_date')
+  search_fields = ('requisition_no', 'item_name', 'quantity_issued', 'requesting_staff',
                    'issued_by', 'issue_date')
   list_per_page = 25
 

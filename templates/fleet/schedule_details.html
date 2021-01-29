@@ -1,14 +1,15 @@
-{% extends 'base0.html'%}
+{% extends 'base9.html'%}
 {% load static %}
 {% load humanize %}
 {% block title%}| Schedule Details {% endblock %}
 
 {% block styles %}
+
+<link rel="stylesheet" href="{% static 'bootstrap-datepicker/css/tempusdominus-bootstrap-4.min.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
-<!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
-<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
-<link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
-<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+
+
 
 {% endblock %}
 
@@ -64,16 +65,7 @@
         <span class="col-6"><strong>Target Maintenance Date:</strong></span>
         <span class="col-6">{{object.target_maintenance_date_pretty}}</span>
         </div> 
-                    
-        <div class="row">
-        <span class="col-6"><strong>Repair Workshop:</strong></span>
-        <span class="col-6">{{object.workshop}}</span>
-        </div> 
-                    
-        <div class="row">
-        <span class="col-6"><strong>Mechanic Name:</strong></span>
-        <span class="col-6">{{object.workshop.mechanic_name}}</span>
-        </div> 
+                
                 
         </div>
         <br>

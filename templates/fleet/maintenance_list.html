@@ -1,4 +1,4 @@
-{% extends 'base0.html'%}
+{% extends 'base9.html'%}
 {% load static %}
 {% load humanize %}
 {% block title%}| Vehicles Maintenance History {% endblock %}
@@ -32,6 +32,8 @@
     <!-- Page Heading -->
     <br><br>
 
+    {% include 'partials/_alerts.html' %}
+
     <!--<h3 class="col-12 text-info">Vehicle Maintenance History</h3>-->
     <!-- DataTales Example -->
     <div class="card shadow mb-2">
@@ -40,6 +42,14 @@
     </div>
     <div class="card-body">
 
+    <a href="{% url 'fleet:export_pdf' %}" class="btn btn-info">Export PDF</a>
+
+    <a href="{% url 'fleet:export_excel' %}" class="btn btn-primary ml-3">Export Excel</a>
+
+    <a href="{% url 'fleet:export_csv' %}" class="btn btn-secondary ml-3">Export CSV</a>
+
+
+
     <div class="table-responsive-lg">
     <table class="table table-bordered table-hover" id="mydata">
     <thead>
@@ -47,13 +57,13 @@
 
     <td style="color: #fff;" class="small-text" width="05%">S/N</td>
     <td style="color: #fff;" class="small-text" width="10%">Schedule No</td>
-    <td style="color: #fff;" class="small-text" width="12%">Vehicle Name</td>
-    <td style="color: #fff;" class="small-text" width="10%">Workshop</td>
-    <td style="color: #fff;" class="small-text" width="14%">Target Maintenance Date</td>
+    <td style="color: #fff;" class="small-text" width="14%">Vehicle Name</td>
+    <td style="color: #fff;" class="small-text" width="14%">Workshop</td>
+    <td style="color: #fff;" class="small-text" width="12%">Target Date</td>
+    <td style="color: #fff;" class="small-text" width="12%">Target Mileage</td>
     <td style="color: #fff;" class="small-text" width="12%">Current Mileage</td>
-    <td style="color: #fff;" class="small-text" width="15%">Next Maintenance Date</td>
-    <td style="color: #fff;" class="small-text" width="15%">Actual Maintenance Date</td>
-    <td style="color: #fff;" class="small-text" width="07%">Actions</td>
+    <td style="color: #fff;" class="small-text" width="12%">Maintenance Date</td>
+    <td style="color: #fff;" class="small-text" width="09%">Actions</td>
     </tr>
     </thead>
 
@@ -63,13 +73,13 @@
     <tr>
     <td width="05%">{{forloop.counter}}</td>
     <td width="10%">{{object.schedule_no}}</td>
-    <td width="12%">{{object.vehicle}}</td>
-    <td width="10%">{{object.workshop}}</td>
-    <td width="14%">{{object.target_maintenance_date_pretty}}</td>
-    <td width="12%">{{object.current_maintenance_mileage| intcomma}}</td>
-    <td width="15%">{{object.next_maintenance_date_pretty}}</td>
-    <td width="15%">{{object.actual_maintenance_date_pretty}}</td>
-    <td width="6%">
+    <td width="14%">{{object.vehicle}}</td>
+    <td width="14%">{{object.workshop}}</td>
+    <td width="12%">{{object.target_maintenance_date_pretty}}</td>
+    <td width="12%">{{object.target_maintenance_mileage}}</td>
+    <td width="12%">{{object.current_mileage| intcomma}}</td>
+    <td width="12%">{{object.maintenance_date_pretty}}</td>
+    <td width="08%">
 
     <a class="btn btn-success" href="{% url 'fleet:maintenance_detail' object.pk %}"><i class="fa fa-folder-open text-white"></i></a>
 

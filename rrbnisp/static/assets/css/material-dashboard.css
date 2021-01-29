@@ -13989,6 +13989,25 @@ fieldset[disabled] .form-group .form-control {
   display: block;
 }
 
+
+.navbar .notification_nill {
+  position: absolute;
+  top: 5px;
+  border: 1px solid #FFF;
+  right: 10px;
+  font-size: 9px;
+  background: #6bab61;
+  color: #FFFFFF;
+  min-width: 20px;
+  padding: 0px 5px;
+  height: 20px;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 19px;
+  vertical-align: middle;
+  display: block;
+}
+
 .navbar .navbar-minimize {
   padding: 3px 0 0 15px;
 }

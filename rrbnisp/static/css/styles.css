@@ -145,10 +145,10 @@ a:hover{
 }
 
 .nav-link{
-  color:rgb(2, 68, 2);
+  color:rgb(0, 0, 0);
 }
 .nav-link:hover{
-  color: rgb(78, 228, 78);
+  color: rgb(0, 0, 0);
 }
 /* Nav Bar CSS Ends Here */
 

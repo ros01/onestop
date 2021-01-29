@@ -89,7 +89,7 @@ class Category(models.Model):
 
 class Issue(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    item = models.ForeignKey('Item', null=True, blank=True, on_delete=models.DO_NOTHING)
+    item_name = models.CharField(max_length=200)
     requisition_no = models.CharField(max_length=200)
     department = models.CharField(max_length=200)
     requisition_date = models.DateTimeField(default=datetime.now, blank=True)
@@ -103,7 +103,7 @@ class Issue(models.Model):
         return str(self.quantity_issued)
 
     class Meta:
-       unique_together = (('requisition_no', 'item',), ('requisition_no', 'requesting_staff',))
+       unique_together = (('requisition_no', 'item_name',), ('requisition_no', 'requesting_staff',))
        ordering = ["-issue_date"]
 
 
@@ -133,7 +133,7 @@ class Issue(models.Model):
             requisition.save()
 
 
-        p = Item.objects.get(item_name=self.item)
+        p = Item.objects.get(item_name=self.item_name)
         p.quantity -= self.quantity_issued
         p.save()
   

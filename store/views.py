@@ -49,11 +49,11 @@ class DashboardTemplateView(LoginRequiredMixin, TemplateView):
         context['requ'] = Requisition.objects.all()
         context['iss'] = Issue.objects.all()
         context['ite'] = Item.objects.filter(re_order_no__gt=F('quantity'))
-        context['res'] = Item.objects.filter(Q(quantity__lt=0))
+        context['res'] = Item.objects.filter(Q(quantity__lte=0))
         context['reqmnth'] = Requisition.objects.filter(requisition_date__lt=this_month)
         context['issmnth'] = Issue.objects.filter(issue_date__lt=this_month)
         context['itemnth'] = Item.objects.filter(re_order_no__gt=F('quantity'), below_re_order_date__lt=this_month)
-        context['resmnth'] = Item.objects.filter(Q(quantity__lt=0), below_re_order_date__lt=this_month)
+        context['resmnth'] = Item.objects.filter(Q(quantity__lte=0), below_re_order_date__lt=this_month)
         return context
 
 
@@ -210,19 +210,6 @@ class RequisitionListView(LoginRequiredMixin, ListView):
         return obj
 
 
-class RequisitionListView(LoginRequiredMixin, ListView):
-    template_name = "store/requisitions_list2.html"
-    context_object_name = 'object'
-
-    def get_queryset(self):
-        return Requisition.objects.order_by('-requisition_date')
-        
-
-    def get_context_data(self, **kwargs):
-        obj = super(RequisitionListView, self).get_context_data(**kwargs)
-        obj['requisition_qs'] = Requisition.objects.filter(requisition_status=1)
-        return obj
-
 
 class IssuedRequisitions(LoginRequiredMixin, ListView):
     template_name = "store/issued_requisitions.html"
@@ -293,39 +280,62 @@ class IssueObjectMixin(object):
             obj = get_object_or_404(self.model, id=id)
         return obj 
 
+
+
 class IssueRequisition(LoginRequiredMixin, RequisitionObjectMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'store/issue_requisition.html'
-    template_name1 = 'store/issue_requisition_details2.html'
-    def get(self, request,  *args, **kwargs):
+    form_class = IssueRequisitionModelForm
+    success_message = 'Requisition issued successfully'
+    success_url = reverse_lazy('store:issue_list') 
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(IssueRequisition, self).get_context_data(**kwargs)
         context = {}
         obj = self.get_object()
         if obj is not None:
             form = IssueRequisitionModelForm(instance=obj)
-            context['object'] = obj
+            context['object'] = obj  
             context['form'] = form
-
-        return render(request, self.template_name, context)
-
-
-    def post(self, request,  *args, **kwargs):
-        
-        form = IssueRequisitionModelForm(request.POST)
-        if form.is_valid():
-            if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
-                form.save(commit=False)
-            else:
-                form.save(commit=True)
-            
+        return context   
+   
+    def form_invalid(self, form):
+        form = self.get_form()
         context = {}
-
         obj = self.get_object()
-        if obj is not None:
-            form = IssueRequisitionModelForm(instance=obj)
-            context['object'] = obj
-            context['form'] = form
-            context['issue'] = Issue.objects.filter (requisition_no=obj.requisition_no)
+        if obj is not None:  
+           context['object'] = obj
+           context['form'] = form 
+        return self.render_to_response(context)
 
-        return render(request, self.template_name1, context)
+#class IssueRequisition(LoginRequiredMixin, RequisitionObjectMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
+    #template_name = 'store/issue_requisition.html'
+    #template_name1 = 'store/issue_requisition_details2.html'
+    #def get(self, request,  *args, **kwargs):
+        #context = {}
+        #obj = self.get_object()
+        #if obj is not None:
+            #form = IssueRequisitionModelForm(instance=obj)
+            #context['object'] = obj
+            #context['form'] = form
+
+        #return render(request, self.template_name, context)
+
+
+    #def post(self, request,  *args, **kwargs):
+        #form = IssueRequisitionModelForm(request.POST)
+        #if form.is_valid():
+            #if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
+                #form.save(commit=False)
+            #else:
+                #form.save(commit=True)  
+        #context = {}
+        #obj = self.get_object()
+        #if obj is not None:
+            #form = IssueRequisitionModelForm(instance=obj)
+            #context['object'] = obj
+            #context['form'] = form
+            #context['issue'] = Issue.objects.filter (requisition_no=obj.requisition_no)
+        #return render(request, self.template_name1, context)
 
 
 class ItemDetailView(LoginRequiredMixin, DetailView):

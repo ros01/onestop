@@ -16,6 +16,8 @@
 
   <div class="wrapper">
     <br>
+
+     {% include 'partials/_alerts.html' %}
     <form class="form-signin" action="{% url 'accounts:login' %}" method="POST">
         {% csrf_token %}     
         <h3 class="form-signin-heading text-info">Staff Login</h3>

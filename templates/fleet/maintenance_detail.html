@@ -1,14 +1,22 @@
-{% extends 'base0.html'%}
+{% extends 'base9.html'%}
 {% load static %}
 {% load humanize %}
 {% block title%}| Maintenance Details {% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
-<!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+
+
+
+
+
 <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
-<link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
-<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+
+
+
+<!--<script src="{% static 'js/moment.min.js' %}"></script>-->
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
 
 {% endblock %}
 
@@ -37,126 +45,127 @@
         </div>
 
         <div class="row">
-        <span class="col-5"><strong>Schedule No:</strong></span>
+        <span class="col-6"><strong>Schedule No:</strong></span>
         <span class="col-6 ">{{object.schedule_no}}</span>
         </div>
         
         <div class="row">
-        <span class="col-5"><strong>Vehicle Name:</strong></span>
+        <span class="col-6"><strong>Vehicle Name:</strong></span>
         <span class="col-6">{{object.vehicle}}</span>
         </div>           
                   
         <div class="row">
-        <span class="col-5"><strong>Vehicle Type:</strong></span>
+        <span class="col-6"><strong>Vehicle Type:</strong></span>
         <span class="col-6">{{object.vehicle.vehicle_type}}</span>
         </div>               
                   
                     
         <div class="row">
-        <span class="col-5"><strong>Target Maintenance Date:</strong></span>
+        <span class="col-6"><strong>Target Maintenance Date:</strong></span>
         <span class="col-6">{{object.target_maintenance_date_pretty}}</span>
         </div>
 
+
         <div class="row">
-        <span class="col-5"><strong>Workshop Name:</strong></span>
+        <span class="col-6"><strong>Target Maintenance Mileage:</strong></span>
+        <span class="col-6">{{object.target_maintenance_mileage}}</span>
+        </div>
+
+
+        <div class="row">
+        <span class="col-6"><strong>Current Mileage:</strong></span>
+        <span class="col-6">{{ object.current_mileage| intcomma}}</span>
+        </div>  
+
+
+        <div class="row">
+        <span class="col-6"><strong>Workshop Name:</strong></span>
         <span class="col-6">{{object.workshop.workshop_name}}</span>
         </div>  
 
         <div class="row">
-        <span class="col-5"><strong>Mechanic Name:</strong></span>
+        <span class="col-6"><strong>Mechanic Name:</strong></span>
         <span class="col-6">  {{ object.workshop.mechanic_name }}</span>
         </div>
                   
         <div class="row">
-        <span class="col-5"><strong>Maintenance Scheduled By:</strong></span>
+        <span class="col-6"><strong>Maintenance Scheduled By:</strong></span>
         <span class="col-6">  {{ object.maintenance_scheduled_by.first_name }} {{ object.maintenance_scheduled_by.last_name }}</span>
         </div>
         
         <div class="row">
-        <span class="col-5"><strong>Maintenance Scheduled On:</strong></span>
+        <span class="col-6"><strong>Maintenance Scheduled On:</strong></span>
         <span class="col-6">{{ object.scheduled_on_pretty}}</span>
         </div> 
 
-       
-
+        
         <div class="row">
-        <span class="col-5"><strong>Current Mileage:</strong></span>
-        <span class="col-6">{{ object.current_maintenance_mileage| intcomma}}</span>
+        <span class="col-6"><strong>Maintenance Cost:</strong></span>
+        <span class="col-6">{{ object.maintenance_cost| intcomma}}</span>
         </div>  
         
         <div class="row">
-        <span class="col-5"><strong>Maintenance Cost:</strong></span>
-        <span class="col-6">{{ object.actual_maintenance_cost| intcomma}}</span>
+        <span class="col-6"><strong>Maintenance Details:</strong></span>
+        <span class="col-6">{{ object.maintenance_details}}</span>
         </div>  
-        
+
         <div class="row">
-        <span class="col-5"><strong>Actual Maintenance Done:</strong></span>
-        <span class="col-6">{{ object.actual_maintenance_details}}</span>
-        </div>  
-                  
-        <div class="row">
-        <span class="col-5"><strong>Next Maintenance Date:</strong></span>
-        <span class="col-6">{{ object.next_maintenance_date_pretty}}</span>
-        </div>  
-                  
-
-       
-                  
-
-     
-
-    
+        <span class="col-6"><strong>Driver:</strong></span>
+        <span class="col-6">{{ object.driver}}</span>
+        </div> 
+                      
                  
-    </div>
-    <br>
-    </div>   
+        </div>
+        <br>
+        </div>   
 
-    <div class="col-md-5 mt-0">
-    <p class="text-success lead">Control Details</p>
+        <div class="col-md-6 mt-0">
+        <p class="text-success lead">Control Details</p>
 
-    <div class="row">
-    <span class="col-5"><strong>Maintenance Date:</strong></span>
-    <span class="col-6">{{ object.actual_maintenance_date_pretty}}</span>
-    </div> 
-    
-    <div class="row">
-    <span class="col-5"><strong>Documented By:</strong></span>
-    <span class="col-6">{{ object.maintenance_recorded_by.first_name}} {{ object.maintenance_recorded_by.last_name}}</span>
-    </div> 
- 
-    
-
-    
-    <hr> 
-    <div class="d-flex justify-content-end"> 
-
-      
-
-    <button type="button" id="update-maintenance" class="bs-modal btn btn-primary text-white py-1 mr-3 mt-1 mb-3" data-form-url="{% url 'fleet:update_maintenance' object.id %}"><i class="fa fa-list text-white"></i> Update Maintenance</button>
+        <div class="row">
+        <span class="col-4"><strong>Maintenance Date:</strong></span>
+        <span class="col-6">{{ object.maintenance_date_pretty}}</span>
+        </div> 
         
-        
-       
-    <a href="{% url 'fleet:maintenance_list' %}" class="btn btn-warning text-white py-1 mr-0 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Maintenance List</a>
-    </div> 
+        <div class="row">
+        <span class="col-4"><strong>Documented By:</strong></span>
+        <span class="col-6">{{ object.maintenance_recorded_by.first_name}} {{ object.maintenance_recorded_by.last_name}}</span>
+        </div> 
+     
         
 
-    </div> 
+        
+        <hr class="mr-4"> 
+        <div class="d-flex justify-content-end mr-4"> 
+
+          
+
+        <button type="button" id="update-maintenance" class="bs-modal btn btn-primary text-white py-1 mr-3 mt-1 mb-3" data-form-url="{% url 'fleet:update_maintenance' object.id %}"><i class="fa fa-list text-white"></i> Update Maintenance</button>
+            
+            
+           
+        <a href="{% url 'fleet:maintenance_list' %}" class="btn btn-warning text-white py-1 mr-0 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Maintenance List</a>
+        </div> 
+            
+
+        </div> 
 
 
-    </div>
-    <!-- /.container-fluid -->
-    </div>
-    </div>
-    <!-- End of Main Content -->
-    </div>
-    <!-- End of Content Wrapper -->
+        </div>
+        <!-- /.container-fluid -->
+        </div>
+        </div>
+        <!-- End of Main Content -->
+        </div>
+        <!-- End of Content Wrapper -->
 
-    </div>
-    <!-- End of Page Wrapper -->
+        </div>
+        <!-- End of Page Wrapper -->
 
 <script src="{% static 'js/jquery.js' %}"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
 
 <script type="text/javascript">
     $(function() {

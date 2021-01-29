@@ -1,15 +1,18 @@
-{% extends 'base0.html'%}
+{% extends 'base9.html'%}
 {% load static %}
 {% block title%}| Vehicle Requests {% endblock %}
 
 {% block styles %}
+
 <link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.8.2-web/css/allt.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
 <!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+
 <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
 <link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
 
 <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
 
 {% endblock %}
 
@@ -74,7 +77,10 @@
     <td width="11%">{{object.request_date_pretty}}</td>
     <td width="11%">
 
-    <a href="{% url 'fleet:vehicle_request_detail' object.pk %}" class="btn btn-outline-warning btn-sm">Assign Vehicle</a></td>
+    <!-- <a href="{% url 'fleet:vehicle_request_detail' object.pk %}" class="btn btn-outline-warning btn-sm">Assign Vehicle</a> -->
+    <button type="button" id="allocate-vehicle" class="bs-modal btn btn-outline-success btn-sm py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'fleet:issue_vehicle_request' object.id %}"> Assign Vehicle</button>
+
+    </td>
 
     </td>
     </tr>
@@ -102,8 +108,11 @@
 <!--Jquery plugin-->
 <script src="{% static 'js/jquery.js' %}"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+
+
 
 <script type="text/javascript">
     $(function() {

@@ -2191,7 +2191,8 @@ var TempusDominusBootstrap4 = function ($) {
                     toggle.removeClass('disabled');
                 } else {
                     toggle.addClass('disabled');
-                }
+                }                                                                                           
+                                                                                                       
             }
             timeComponents.filter('[data-time-component=hours]').text(this._getLastPickedDate().format('' + (this.use24Hours ? 'HH' : 'hh')));
             timeComponents.filter('[data-time-component=minutes]').text(this._getLastPickedDate().format('mm'));
@@ -2467,6 +2468,11 @@ var TempusDominusBootstrap4 = function ($) {
         //public
 
 
+
+
+
+
+
         TempusDominusBootstrap4.prototype.hide = function hide() {
             var transitioning = false;
             if (!this.widget) {
@@ -2507,6 +2513,8 @@ var TempusDominusBootstrap4 = function ($) {
 
             this._viewDate = this._getLastPickedDate().clone();
         };
+
+
 
         TempusDominusBootstrap4.prototype.show = function show() {
             var currentMoment = void 0;
@@ -2578,6 +2586,7 @@ var TempusDominusBootstrap4 = function ($) {
                 type: DateTimePicker.Event.SHOW
             });
         };
+
 
         TempusDominusBootstrap4.prototype.destroy = function destroy() {
             this.hide();
@@ -2676,8 +2685,6 @@ var TempusDominusBootstrap4 = function ($) {
         };
 
         //static
-
-
         TempusDominusBootstrap4._jQueryHandleThis = function _jQueryHandleThis(me, option, argument) {
             var data = $(me).data(DateTimePicker.DATA_KEY);
             if ((typeof option === 'undefined' ? 'undefined' : _typeof(option)) === 'object') {
@@ -2774,6 +2781,8 @@ var TempusDominusBootstrap4 = function ($) {
     };
 
     return TempusDominusBootstrap4;
+
+
 }(jQuery);
 
 }();

@@ -48,39 +48,44 @@
     <tr style="background: #41963F;">
 
     <td style="color: #fff;" class="small-text" width="05%">S/N</td>
-    <td style="color: #fff;" class="small-text" width="10%">Request No</td>
+    <td style="color: #fff;" class="small-text" width="08%">Request No</td>
     <td style="color: #fff;" class="small-text" width="12%">Requesting Staff</td>
-    <td style="color: #fff;" class="small-text" width="10%">Department</td>
+    <td style="color: #fff;" class="small-text" width="12%">Department</td>
     <td style="color: #fff;" class="small-text" width="10%">Vehicle Name</td>
-    <td style="color: #fff;" class="small-text" width="14%">Destination</td>
-    <td style="color: #fff;" class="small-text" width="11%">Start Date</td>
-    <td style="color: #fff;" class="small-text" width="11%">End Date</td>
-    <td style="color: #fff;" class="small-text" width="11%">Approved On</td>
-    <td style="color: #fff;" class="small-text" width="11%">Actions</td>
+    <td style="color: #fff;" class="small-text" width="11">Request Date</td>
+    <td style="color: #fff;" class="small-text" width="11%">Approved Start Date</td>
+    <td style="color: #fff;" class="small-text" width="11">Approved End Date</td>
+    <td style="color: #fff;" class="small-text" width="11%">Release Date</td>
+    
+    <td style="color: #fff;" class="small-text" width="09%">Actions</td>
     </tr>
     </thead>
 
     <tbody>
-    {% if trip_history_qs %}
-    {% for object in trip_history_qs %}
+    
+    {% for object in trip_qs %}
     <tr>
     <td width="05%">{{forloop.counter}}</td>
-    <td width="10%">{{object.request_no}}</td>
+    <td width="08%">{{object.request_no}}</td>
     <td width="12%">{{object.requesting_staff.first_name}} {{object.requesting_staff.last_name}}</td>
-    <td width="10%">{{object.department}}</td>
+    <td width="12%">{{object.department}}</td>
     <td width="10%">{{object.vehicle_name}}</td>
-    <td width="14%">{{object.destination}}</td>
-    <td width="11%">{{object.start_date_pretty}}</td>
-    <td width="11%">{{object.end_date_pretty}}</td>
-    <td width="11%">{{object.approved_date_pretty}}</td>
-    <td width="11%">
+    <td width="11%">{{object.request_date_pretty}}</td> 
+    <td width="11%">{{object.approved_start_date_pretty}}</td>
+    <td width="11%">{{object.approved_end_date_pretty}}</td>
+    <td width="11%">{{object.release_date_pretty}}</td>  
+    
+    <td width="09%">
 
-    <a href="{% url 'fleet:trip_history_details' object.id %}" class="btn btn-outline-warning btn-sm">View Trip History</a></td>
+    <a href="{% url 'fleet:trip_history_details' object.id %}" class="btn btn-outline-warning btn-sm">View History</a></td>
 
     </td>
+    
+    
     </tr>
+    
     {% endfor %}
-    {% endif %}
+    
     </tbody>
     </table>
     </div>

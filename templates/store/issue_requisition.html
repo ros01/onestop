@@ -8,6 +8,9 @@
   {{ form.requesting_staff|as_crispy_field }}
   {{ form.department|as_crispy_field }}
 
+  <input type="hidden" name="issued_by" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_issued_by"  id="div_id_issued_by">
+
+
  <div class="modal-header">
     <h5 class="modal-title text-success">Issue Requisition</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -16,18 +19,39 @@
   </div>
 
   <div class="modal-body">
+  <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+      {% for error in form.non_field_errors %}
+        {{ error }}
+      {% endfor %}
+    </div>
+
     <div class="row">
     <div class="form-group col-md-4">
     {{ form.requisition_no|as_crispy_field }}
+    <div class="{% if form.requisition_no.errors %} invalid{% endif %}">
+          {% for error in field.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+    </div>
     </div>
 
     <div class="form-group col-md-4">
-    {{ form.item|as_crispy_field }}
+    {{ form.item_name|as_crispy_field }}
+    <div class="{% if form.item_name.errors %} invalid{% endif %}">
+          {% for error in field.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+    </div>
     </div>
 
     
     <div class="form-group col-md-4">
     {{ form.quantity_requested|as_crispy_field }}
+    <div class="{% if form.quantity_requested.errors %} invalid{% endif %}">
+          {% for error in field.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+    </div>
     </div>
 
     </div>
@@ -35,11 +59,14 @@
     <div class="row">
     <div class="form-group col-md-4">
     {{ form.quantity_issued|as_crispy_field }}
+    <div class="{% if form.quantity_issued.errors %} invalid{% endif %}">
+          {% for error in field.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+    </div>
     </div>
 
-    <div class="form-group col-md-4">
-    <input type="hidden" name="issued_by" class="form-control" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_issued_by"  id="div_id_issued_by">
-    </div> 
+    
     </div>
 
   </div>

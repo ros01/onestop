@@ -52,6 +52,8 @@ def login(request):
         
         if user.department == 'Monitoring':
             return redirect('rrbnstaff:staff_dashboard')
+        if user.department == 'Registrars Office':
+            return redirect('rrbnstaff:staff_dashboard')
 
         #if user.department == 'Monitoring':
             #return redirect('store:store_dashboard')
@@ -74,7 +76,7 @@ def login(request):
         if user.role == 'Fleet Managment':
             return redirect('fleet:fleet_dashboard')
         if user.role == 'Human Resources':
-            return redirect('store:store_dashboard')
+            return redirect('hr:hr_dashboard')
         if user.role == 'Procurement':
             return redirect('store:store_dashboard')
         if user.role == 'Registrars':

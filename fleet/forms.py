@@ -7,7 +7,8 @@ from django.utils import timezone
 from bootstrap_modal_forms.forms import BSModalModelForm
 from bootstrap_modal_forms.mixins import PassRequestMixin, PopRequestMixin, CreateUpdateAjaxMixin
 from bootstrap_datepicker_plus import DatePickerInput, TimePickerInput, DateTimePickerInput, MonthPickerInput, YearPickerInput
-from tempus_dominus.widgets import DatePicker
+from tempus_dominus.widgets import DatePicker, DateTimePicker
+
 
 class WorkshopModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
 
@@ -129,7 +130,7 @@ class VehicleModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
 
     class Meta:
         model = Vehicle
-        fields = ('vehicle_name', 'description', 'vehicle_type', 'model', 'purchase_year', 'location', 'category', 'engine_number', 'chasis_number', 'colour', 'department_assigned', 'license_no', 'insurance_details', 'entered_by',)
+        fields = ('vehicle_name', 'description', 'vehicle_type', 'model', 'purchase_year', 'location', 'category', 'engine_number', 'chasis_number', 'colour', 'department_assigned', 'private_license_no', 'official_license_no', 'insurance_details', 'entered_by',)
 
         widgets = {
             'description': forms.Textarea(attrs={'rows':2, 'cols':3}),   
@@ -162,8 +163,10 @@ class VehicleModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
        self.fields['chasis_number'].widget.attrs['placeholder'] = "Enter Chasis Number"
        self.fields['colour'].label = "Vehicle Colour"
        self.fields['department_assigned'].label = "Department Assigned"
-       self.fields['license_no'].label = "License Number"
-       self.fields['license_no'].widget.attrs['placeholder'] = "Enter License Number"
+       self.fields['private_license_no'].label = "Private License Number"
+       self.fields['private_license_no'].widget.attrs['placeholder'] = "Enter Private License Number"
+       self.fields['official_license_no'].label = "Official License Number"
+       self.fields['official_license_no'].widget.attrs['placeholder'] = "Enter Official License Number"
        self.fields['insurance_details'].label = "Insurance Certificate Number"
        self.fields['insurance_details'].widget.attrs['placeholder'] = "Enter Insurance Certificate Number"
        
@@ -179,13 +182,44 @@ class VehicleModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
       return instance
 
 
-class IssueVehicleRequestModelForm(forms.ModelForm):
- 
+class IssueVehicleRequestModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+    approved_start_date = forms.DateTimeField(
+      widget=DateTimePicker(
+        options={
+
+                'format': 'YYYY-MM-DD HH:mm',
+                'useCurrent': True,
+                'collapse': False,
+  
+            },
+        attrs={
+                'append': 'fa fa-calendar',
+                'icon_toggle': True,
+                'sideBySide': True,
+            }
+            ),
+      )
+
+    approved_end_date = forms.DateTimeField(
+      widget=DateTimePicker(
+        options={
+
+                'format': 'YYYY-MM-DD HH:mm',
+                'useCurrent': True,
+                'collapse': False,
+  
+            },
+        attrs={
+                'append': 'fa fa-calendar',
+                'icon_toggle': True,
+                'sideBySide': True,
+            }
+            ),
+      )
+    
     class Meta:
         model = Assign
-
-        fields = ('request_no', 'vehicle_name', 'department', 'request_date', 'request_reason','destination', 'requesting_staff', 'driver', 'current_mileage', 'start_date', 'end_date','assigned_by')
-
+        fields = ('request_no', 'vehicle_name', 'requesting_staff', 'department', 'request_reason', 'destination', 'request_date', 'driver', 'projected_start_date', 'projected_end_date', 'approved_start_date', 'approved_end_date','assigned_by')
         widgets = {
         'department': forms.HiddenInput(),
         'request_date': forms.HiddenInput(),   
@@ -193,9 +227,8 @@ class IssueVehicleRequestModelForm(forms.ModelForm):
         'request_no': forms.TextInput(attrs={'readonly': True}), 
         'request_reason': forms.TextInput(attrs={'readonly': True}),
         'destination': forms.TextInput(attrs={'readonly': True}),
-    
-
-
+        'projected_start_date': forms.TextInput(attrs={'readonly': True}),
+        'projected_end_date': forms.TextInput(attrs={'readonly': True}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -204,33 +237,78 @@ class IssueVehicleRequestModelForm(forms.ModelForm):
             self.fields[name].widget.attrs.update({
                 'class': 'form-control',
             })
-      
-      
        self.fields['request_no'].label = "Request No"
        self.fields['vehicle_name'].widget.attrs['value'] = self.instance.vehicle_name
        self.fields['vehicle_name'].widget.attrs['readonly'] = 'readonly'
        self.fields['vehicle_name'].label = "Vehicle Name"
        self.fields['department'].label = "Department"
        self.fields['driver'].label = "Driver"
+       self.fields['projected_start_date'].label = "Projected Start Date"
+       self.fields['projected_end_date'].label = "Projected End Date"
+       self.fields['approved_start_date'].label = "Approved Start Date"
+       self.fields['approved_end_date'].label = "Approved End Date"
        self.fields['requesting_staff'].label = "Requesting Staff"
        self.fields['requesting_staff'].widget.attrs['placeholder'] = "Requesting Staff"
        self.fields['assigned_by'].label = "Issuing Officer"
+
+    def save(self):
+      if not self.request.is_ajax():
+          instance = super(CreateUpdateAjaxMixin, self).save(commit=True)
+          instance.save()
+      else:
+          instance = super(CreateUpdateAjaxMixin, self).save(commit=False)
+      return instance
        
 
-class FinalizeTripModelForm(forms.ModelForm):
+class FinalizeTripModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+    actual_trip_start_date = forms.DateTimeField(
+      widget=DateTimePicker(
+        options={
+
+                'format': 'YYYY-MM-DD HH:mm',
+                'useCurrent': True,
+                'collapse': False,
+  
+            },
+        attrs={
+                'append': 'fa fa-calendar',
+                'icon_toggle': True,
+                'sideBySide': True,
+            }
+            ),
+      )
+
+    actual_trip_end_date = forms.DateTimeField(
+      widget=DateTimePicker(
+        options={
+
+                'format': 'YYYY-MM-DD HH:mm',
+                'useCurrent': True,
+                'collapse': False,
+  
+            },
+        attrs={
+                'append': 'fa fa-calendar',
+                'icon_toggle': True,
+                'sideBySide': True,
+            }
+            ),
+      )
  
     class Meta:
         model = Release
 
-        fields = ('request_no', 'vehicle_name', 'department', 'request_date', 'requesting_staff', 'driver', 'start_date', 'end_date', 'trip_start_mileage', 'trip_end_mileage', 'released_by')
+        fields = ('request_no', 'vehicle_name', 'department', 'request_date', 'requesting_staff', 'driver', 'approved_start_date', 'approved_end_date', 'actual_trip_start_date', 'actual_trip_end_date', 'trip_start_mileage', 'trip_end_mileage', 'released_by')
 
         widgets = {
         'department': forms.HiddenInput(),
         'request_date': forms.HiddenInput(),   
-        'requesting_staff': forms.TextInput(attrs={'readonly': True}),
+        #'requesting_staff': forms.TextInput(attrs={'readonly': True}),
         #'vehicle': forms.TextInput(attrs={'readonly': True}),
         'request_no': forms.TextInput(attrs={'readonly': True}), 
         'driver': forms.TextInput(attrs={'readonly': True}),
+        'approved_start_date': forms.TextInput(attrs={'readonly': True}),
+        'approved_end_date': forms.TextInput(attrs={'readonly': True}),
 
         }
 
@@ -247,14 +325,28 @@ class FinalizeTripModelForm(forms.ModelForm):
        self.fields['vehicle_name'].widget.attrs['value'] = self.instance.vehicle_name
        self.fields['vehicle_name'].widget.attrs['readonly'] = 'readonly'
        self.fields['vehicle_name'].label = "Vehicle Name"
-       self.fields['driver'].label = "Driver"
+       self.fields['requesting_staff'].widget.attrs['readonly'] = 'readonly'
+       self.fields['requesting_staff'].label_from_instance = lambda obj: "%s %s" % (obj.first_name, obj.last_name)
        self.fields['requesting_staff'].label = "Requesting Staff"
+       self.fields['driver'].label = "Driver"
        self.fields['released_by'].label = "Released By:"
        self.fields['requesting_staff'].widget.attrs['placeholder'] = "Requesting Staff"
+       self.fields['approved_start_date'].label = "Approved Start Date"
+       self.fields['approved_end_date'].label = "Approved End Date"
+       self.fields['actual_trip_start_date'].label = "Trip Start Date"
+       self.fields['actual_trip_end_date'].label = "Trip End Date"
        self.fields['trip_start_mileage'].label = "Starting Mileage:"
        self.fields['trip_start_mileage'].widget.attrs['placeholder'] = "Enter Start Mileage"
        self.fields['trip_end_mileage'].label = "Mileage at Return:"
        self.fields['trip_end_mileage'].widget.attrs['placeholder'] = "Enter Mileage at Return"
+
+    def save(self):
+      if not self.request.is_ajax():
+          instance = super(CreateUpdateAjaxMixin, self).save(commit=True)
+          instance.save()
+      else:
+          instance = super(CreateUpdateAjaxMixin, self).save(commit=False)
+      return instance
 
 
 
@@ -300,14 +392,6 @@ class FuelingModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
       return instance
 
 
-
-
-
-
-     
-
-
-
 class RepairsModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
 
     class Meta:
@@ -319,7 +403,7 @@ class RepairsModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
             'repair_details': forms.Textarea(attrs={'rows':2, 'cols':3}),  
             }
 
-                
+          
 
     def __init__(self, *args, **kwargs):
        super(RepairsModelForm, self).__init__(*args, **kwargs)
@@ -354,11 +438,27 @@ class RepairsModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
 
 
 class ScheduleModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+    target_maintenance_date = forms.DateTimeField(
+      widget=DateTimePicker(
+        options={
+
+                'format': 'YYYY-MM-DD HH:mm',
+                'useCurrent': True,
+                'collapse': False,
+  
+            },
+        attrs={
+                'append': 'fa fa-calendar',
+                'icon_toggle': True,
+                'sideBySide': True,
+            }
+            ),
+      )
     
 
     class Meta:
         model = Schedule
-        fields = ('schedule_no', 'vehicle', 'target_maintenance_mileage', 'target_maintenance_date', 'workshop', 'mechanic_name', 'maintenance_scheduled_by')
+        fields = ('schedule_no', 'vehicle', 'target_maintenance_mileage', 'target_maintenance_date', 'maintenance_scheduled_by')
         widgets = {
             
             'schedule_no': forms.HiddenInput(),
@@ -369,8 +469,8 @@ class ScheduleModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm)
     def __init__(self, *args, **kwargs):
        super(ScheduleModelForm, self).__init__(*args, **kwargs)
        self.fields['vehicle'].label = "Vehicle Name"
-       self.fields['workshop'].label = "Workshop Name"
-       self.fields['mechanic_name'].label = "Mechanic Name"
+       #self.fields['workshop'].label = "Workshop Name"
+       #self.fields['mechanic_name'].label = "Mechanic Name"
        self.fields['target_maintenance_mileage'].label = "Target Maintenance Mileage"
        self.fields['target_maintenance_mileage'].widget.attrs['placeholder'] = "Enter Target Maintenance Mileage"
        self.fields['target_maintenance_date'].label = "Target Maintenance Date"
@@ -394,35 +494,79 @@ class ScheduleModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm)
       
 
 
-class RecordMaintenanceModelForm(forms.ModelForm):
+#class RecordMaintenanceModelForm(forms.ModelForm):
  
+    #class Meta:
+        #model = Maintenance
+
+        #fields = ('schedule_no', 'vehicle', 'driver', 'target_maintenance_date', 'workshop', 'mechanic_name', 'maintenance_scheduled_by', 'scheduled_on', 'current_maintenance_mileage', 'actual_maintenance_cost', 'actual_maintenance_details', 'next_maintenance_date', 'maintenance_recorded_by', 'actual_maintenance_date')
+
+        #widgets = {
+        #'maintenance_scheduled_by': forms.HiddenInput(),
+        #'scheduled_on': forms.HiddenInput(),
+        #'schedule_no': forms.TextInput(attrs={'readonly': True}), 
+        #'target_maintenance_date':forms.TextInput(attrs={'readonly': True}),
+        #'actual_maintenance_details': forms.Textarea(attrs={'rows':2, 'cols':3}), 
+        #}
+
+    #def __init__(self, *args, **kwargs):
+       #super(RecordMaintenanceModelForm, self).__init__(*args, **kwargs)
+       #for name in self.fields.keys():
+            #elf.fields[name].widget.attrs.update({
+                #'class': 'form-control',
+           # })
+      
+      
+       #self.fields['schedule_no'].label = "Schedule No"
+       #self.fields['vehicle'].widget.attrs['value'] = self.instance.vehicle
+       #self.fields['vehicle'].widget.attrs['readonly'] = 'readonly'
+       #self.fields['vehicle'].label = "Vehicle Name"
+       #self.fields['driver'].label = "Driver"
+       #self.fields['driver'].widget.attrs['placeholder'] = "Enter Driver Name"
+       #self.fields['target_maintenance_date'].label = "Target Maintenance Date"
+       #self.fields['next_maintenance_date'].label = "Next Maintenance Date"
+       #self.fields['actual_maintenance_date'].label = "Actual Maintenance Date"
+       #self.fields['workshop'].label = "Workshop"
+       #self.fields['mechanic_name'].label = "Mechanic Name"
+       #self.fields['current_maintenance_mileage'].label = "Current Mileage:"
+       #self.fields['current_maintenance_mileage'].widget.attrs['placeholder'] = "Enter Mileage at Maintenance"
+       #self.fields['actual_maintenance_cost'].label = "Actual Maintenance Cost:"
+       #self.fields['actual_maintenance_cost'].widget.attrs['placeholder'] = "Enter Actual Cost of Maintenance"
+       #self.fields['actual_maintenance_details'].label = "Actual Maintenance Details:"
+       #self.fields['actual_maintenance_details'].widget.attrs['placeholder'] = "Enter Actual Maintenance Details"
+      
+
+ 
+
+class RecordMaintenanceModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+    maintenance_date = forms.DateTimeField(
+      widget=DateTimePicker(
+        options={
+
+                'format': 'YYYY-MM-DD HH:mm',
+                'useCurrent': True,
+                'collapse': False,
+  
+            },
+        attrs={
+                'append': 'fa fa-calendar',
+                'icon_toggle': True,
+                'sideBySide': True,
+            }
+            ),
+      )
+    
+    
     class Meta:
         model = Maintenance
-
-        fields = ('schedule_no', 'vehicle', 'driver', 'target_maintenance_date', 'workshop', 'mechanic_name', 'maintenance_scheduled_by', 'scheduled_on', 'current_maintenance_mileage', 'actual_maintenance_cost', 'actual_maintenance_details', 'next_maintenance_date', 'maintenance_recorded_by', 'actual_maintenance_date')
-
+        fields = ('schedule_no', 'vehicle', 'driver', 'target_maintenance_date', 'target_maintenance_mileage', 'workshop', 'mechanic_name', 'maintenance_scheduled_by', 'scheduled_on', 'current_mileage', 'maintenance_cost', 'maintenance_details', 'maintenance_recorded_by', 'maintenance_date')
         widgets = {
-        #'department': forms.HiddenInput(),
-        #'request_date': forms.HiddenInput(),   
-        #'requesting_staff': forms.HiddenInput(),
-        
-        #'driver': forms.HiddenInput(),
         'maintenance_scheduled_by': forms.HiddenInput(),
         'scheduled_on': forms.HiddenInput(),
         'schedule_no': forms.TextInput(attrs={'readonly': True}), 
         'target_maintenance_date':forms.TextInput(attrs={'readonly': True}),
-        'actual_maintenance_details': forms.Textarea(attrs={'rows':2, 'cols':3}), 
-        #'vehicle': forms.TextInput(attrs={'readonly': True}),
-        #'last_maintenance_mileage': forms.TextInput(attrs={'readonly': True}),
-        #'last_maintenance_date': forms.TextInput(attrs={'readonly': True}),
-        
-        #'maintenance_cost_estimate': forms.TextInput(attrs={'readonly': True}),
-        #'projected_maintenance': forms.Textarea(attrs={'readonly': True,'rows':2, 'cols':3}),
-        
-        #'next_maintenance_date': DateTimePickerInput(),
-        #'actual_maintenance_date': DateTimePickerInput(),
-
-
+        'target_maintenance_mileage':forms.TextInput(attrs={'readonly': True}),
+        'maintenance_details': forms.Textarea(attrs={'rows':2, 'cols':3}), 
         }
 
     def __init__(self, *args, **kwargs):
@@ -431,34 +575,30 @@ class RecordMaintenanceModelForm(forms.ModelForm):
             self.fields[name].widget.attrs.update({
                 'class': 'form-control',
             })
-      
-      
        self.fields['schedule_no'].label = "Schedule No"
        self.fields['vehicle'].widget.attrs['value'] = self.instance.vehicle
        self.fields['vehicle'].widget.attrs['readonly'] = 'readonly'
        self.fields['vehicle'].label = "Vehicle Name"
        self.fields['driver'].label = "Driver"
        self.fields['driver'].widget.attrs['placeholder'] = "Enter Driver Name"
-       #self.fields['last_maintenance_mileage'].label = "Mileage at Last Maintenance"
-       #self.fields['last_maintenance_date'].label = "Last Maintenance Date"
        self.fields['target_maintenance_date'].label = "Target Maintenance Date"
-       self.fields['next_maintenance_date'].label = "Next Maintenance Date"
-       self.fields['actual_maintenance_date'].label = "Actual Maintenance Date"
+       self.fields['maintenance_date'].label = "Maintenance Date"
        self.fields['workshop'].label = "Workshop"
        self.fields['mechanic_name'].label = "Mechanic Name"
-       #self.fields['maintenance_cost_estimate'].label = "Estimated Cost of Maintenance"
-       #self.fields['projected_maintenance'].label = "Projected Maintenance Details"
-       #self.fields['maintenance_scheduled_by'].label = "Maintenance Scheduled By:"
-       #self.fields['scheduled_on'].label = "Maintenance Schedule Created On:"
-       self.fields['current_maintenance_mileage'].label = "Current Mileage:"
-       self.fields['current_maintenance_mileage'].widget.attrs['placeholder'] = "Enter Mileage at Maintenance"
-       self.fields['actual_maintenance_cost'].label = "Actual Maintenance Cost:"
-       self.fields['actual_maintenance_cost'].widget.attrs['placeholder'] = "Enter Actual Cost of Maintenance"
-       self.fields['actual_maintenance_details'].label = "Actual Maintenance Details:"
-       self.fields['actual_maintenance_details'].widget.attrs['placeholder'] = "Enter Actual Maintenance Details"
-       #self.fields['maintenance_recorded_by'].label = "Maintenance Recorded By:"
+       self.fields['current_mileage'].label = "Current Mileage:"
+       self.fields['current_mileage'].widget.attrs['placeholder'] = "Enter Mileage at Maintenance"
+       self.fields['maintenance_cost'].label = "Maintenance Cost:"
+       self.fields['maintenance_cost'].widget.attrs['placeholder'] = "Enter Cost of Maintenance"
+       self.fields['maintenance_details'].label = "Maintenance Details:"
+       self.fields['maintenance_details'].widget.attrs['placeholder'] = "Enter Maintenance Details"
 
-    
+    def save(self):
+      if not self.request.is_ajax():
+          instance = super(CreateUpdateAjaxMixin, self).save(commit=True)
+          instance.save()
+      else:
+          instance = super(CreateUpdateAjaxMixin, self).save(commit=False)
+      return instance   
 
     
 

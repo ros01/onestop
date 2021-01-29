@@ -1,16 +1,16 @@
-{% extends 'base1.html'%}
+{% extends 'base3.html'%}
 {% load static %}
-{% load widget_tweaks %}
-{% load crispy_forms_tags %}
+{% load humanize %}
 {% block title%}| Vehicle Availability {% endblock %}
 
 {% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.8.2-web/css/allt.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
 <!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
 <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
 <link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
-<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
 
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
 
 {% endblock %}
 
@@ -28,18 +28,17 @@
     <!-- Begin Page Content -->
     <div class="container">
 
+
     <!-- Page Heading -->
     <br><br>
 
     {% include 'partials/_alerts.html' %}
 
     <!-- DataTales Example -->
-    <div class="card shadow mb-4">
+   <div class="card shadow mb-4">
             
-    <div class="card-body">
-
-
-    <div class="row pr-2 mr-2 pt-4 justify-content-center align-items-center"> 
+   <div class="card-body">
+   <div class="row pr-2 mr-2 pt-4 justify-content-center align-items-center"> 
 
     <div class="col-md-11"> 
        
@@ -52,11 +51,6 @@
 
     <div class="mb-4" style="background-color: #bfe3f8; padding:5px; border-right:4px solid #ecd863; border-left:4px solid #ecd863"> <b>PLEASE NOTE:</b> Vehicle assignment is stictly on availability. Please specify your location and your trip type to retrieve available vehicles most suited to your request. retrieve available vehicles most suited to your request. 
     </div> 
-    
-
-
-      
-
       
       <form method="GET" action="{% url 'rrbnstaff:find_vehicle' %}">
         
@@ -171,16 +165,15 @@
     </div>
     <!-- End of Content Wrapper -->
 
-  </div>
-   <!-- End of Page Wrapper -->
+ 
 
 
 
+<!--Jquery plugin-->
 <script src="{% static 'js/jquery.js' %}"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
-
-
+<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
 
 
 
