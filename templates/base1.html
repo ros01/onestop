@@ -138,6 +138,27 @@
 
           {% endif %}
 
+          {% if "retrieve_item" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:requisition_list' %}">
+              <i class="material-icons">find_in_page</i>
+              <p>Item Requisitions</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:requisition_list' %}">
+              <i class="material-icons">find_in_page</i>
+              <p>Item Requisitions</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+
           {% if "request_list" in request.path %}
 
           <li class="nav-item active ">
@@ -224,6 +245,66 @@
             <a class="nav-link" href="{% url 'rrbnstaff:my_vehicles_allocations_list' %}">
               <i class="material-icons">vpn_lock</i>
               <p>My Assigned Vehicles</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "leave_requests" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_leave_requests_list' %}">
+              <i class="material-icons">home_work</i>
+              <p>My Leave Requests</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_leave_requests_list' %}">
+              <i class="material-icons">home_work</i>
+              <p>My Leave Requests</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "approv" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_approved_leaves' %}">
+              <i class="material-icons">done</i>
+              <p>My Approved Leaves</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_approved_leaves' %}">
+              <i class="material-icons">done</i>
+              <p>My Approved Leaves</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "leave_history" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_leave_history' %}">
+              <i class="material-icons">history</i>
+              <p>My Leave History</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_leave_history' %}">
+              <i class="material-icons">history</i>
+              <p>My Leave History</p>
             </a>
           </li>
 

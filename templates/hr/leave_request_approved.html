@@ -1,0 +1,135 @@
+{% extends 'base11.html'%}
+{% load static %}
+{% block title%}| Staff Leave Details {% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
+<link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+{% include "_modal.html" %}
+
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
+<!-- Main Content -->
+<div id="content">
+<!-- Begin Page Content -->
+<div class="container-fluid">
+<br>
+<br>
+<br>
+
+{% include 'partials/_alerts.html' %}
+
+
+<div class="row mx-4 mt-2 bg-white">
+<div class="col-md-12">
+<div class="row">
+<hr>
+<p class="col-12 text-success lead ml-4 mt-0">Leave Request Assignment</p>
+</div>
+
+<div class="row rounded mx-1" style="background-color: #bfe3f8;">
+<div class="col-md-12 pt-2 pb-0 ml-0">
+<p class="lead" style="color: #05567b;">
+<strong>{{object.staff_name.first_name}} {{object.staff_name.last_name}}'s leave request</strong> is due for leave days assignment. Click on the Assign Leave button below to assign leave days for this request</p>           
+</div>
+</div>
+
+
+
+<div class="row">
+
+<p class="col-12 text-success lead ml-4 mt-4 mb-1">Leave Request Details</p>
+</div>
+
+<div class="row ml-2">
+<span class="col-3"><strong>Staff Name:</strong></span>
+<span class="col-3 ">{{object.staff_name.first_name}} {{object.staff_name.last_name}}</span>
+</div>
+
+<div class="row ml-2">
+<span class="col-3"><strong> Request No:</strong></span>
+<span class="col-3">{{object.request_no}}</span>
+</div>
+                
+<div class="row ml-2">
+<span class="col-3"><strong> Requested Leave Start Date:</strong></span>
+<span class="col-3">{{object.requested_start_date_pretty}}</span>
+</div>
+
+<div class="row ml-2">
+<span class="col-3"><strong> Requested Leave End Date:</strong></span>
+<span class="col-3">{{object.requested_end_date_pretty}}</span>
+</div>
+
+<div class="row ml-2">
+<span class="col-3"><strong> Leave Type:</strong></span>
+<span class="col-3">{{object.leave_type}}</span>
+</div>
+                  
+<div class="row ml-2">
+<span class="col-3"><strong> Leave Status:</strong></span>
+<span class="col-3">{{object.leave_status}}</span>
+</div>
+
+<div class="row ml-2">
+<span class="col-3"><strong> Leave Application Date:</strong></span>
+<span class="col-3">{{object.leave_application_date_pretty}}</span>
+</div>
+<br>
+          
+
+<div class="d-flex justify-content-end">
+<hr>   
+
+<button type="button" id="assign_leave" class="bs-modal btn btn-success py-1 px-3 mt-1 mb-3 mr-2" data-form-url="{% url 'hr:assign_leave_request' object.id %}"><i class="fa fa-check" aria-hidden="true"></i> Assign Leave Days</button>
+
+  
+<a href="{% url 'hr:leave_request_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Request List</a> 
+ 
+</div>           
+</div>
+</div>
+<!-- /.container-fluid -->
+</div>
+</div>
+<!-- End of Main Content -->
+</div>
+<!-- End of Content Wrapper -->
+</div>
+  <!-- End of Page Wrapper -->
+
+<!-- End of Skills -->
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<script type="text/javascript">
+    $(function() {
+    
+        $(".bs-modal").each(function () {
+          $(this).modalForm({
+              formURL: $(this).data('form-url')
+          });
+        });
+    
+    });
+
+</script>
+
+
+
+
+<script>
+  $('#mydata').dataTable();
+</script>
+{% endblock %}

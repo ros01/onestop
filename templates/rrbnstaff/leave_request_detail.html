@@ -1,0 +1,132 @@
+{% extends 'base12.html'%}
+{% load static %}
+{% block title%}| My Leave Detail {% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}"><link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.8.2-web/css/allt.css' %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
+<link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+{% include "_modal.html" %}
+
+<!-- Page Wrapper -->
+  <div id="wrapper">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <!-- Main Content -->
+      <div id="content">
+
+
+      <!-- Begin Page Content -->
+        <div class="container-fluid">
+           <br>
+
+        <div class="row ml-4 mt-4 pt-4">
+        <h3 class="col-12 text-info">Leave Request Details</h3>
+        </div>
+
+      <div class="row mx-4 mt-2 pt-3 bg-white">
+      <div class="col-md-6 mt-0">
+      <div class="col-md-12">
+      <div class="row">
+      <br>
+      <p class="col-12 text-success lead">Leave Request Details</p>
+      </div>
+
+                     <div class="row">
+                        <span class="col-5"><strong>Staff Name:</strong></span>
+                        <span class="col-5 ">{{object.staff_name.first_name}} {{object.staff_name.last_name}}</span>
+                    </div>
+
+                    <div class="row">
+                      <span class="col-5"><strong> Request No:</strong></span>
+                      <span class="col-5">{{object.request_no}}</span>
+                  </div>
+                
+
+                    <div class="row">
+                      <span class="col-5"><strong> Requested Start Date:</strong></span>
+                      <span class="col-5">{{object.requested_start_date}}</span>
+                  </div>
+
+                  <div class="row">
+                      <span class="col-5"><strong> Requested End Date:</strong></span>
+                      <span class="col-5">{{object.requested_end_date_pretty}}</span>
+                  </div>
+                  <div class="row">
+                      <span class="col-5"><strong> Leave Type:</strong></span>
+                      <span class="col-5">{{object.leave_type}}</span>
+                  </div>
+                  <div class="row">
+                      <span class="col-5"><strong> Leave Status:</strong></span>
+                      <span class="col-5">{{object.leave_status}}</span>
+                  </div>
+                  <div class="row">
+                      <span class="col-5"><strong> Leave Application Date:</strong></span>
+                      <span class="col-5">{{object.leave_application_date_pretty}}</span>
+                  </div>
+                 
+                </div>
+                <br>
+              </div>   
+
+    <div class="col-md-5 mt-0 pb-3">
+          
+    <p class="text-success lead text-right">Control Details</p>
+    <div class="d-flex justify-content-end">    
+    <button type="button" id="update_leave_request" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'rrbnstaff:leave_request_update' object.pk %}"><i class="fas fa-redo"></i> Update Request</button>
+    <a href="{% url 'rrbnstaff:my_leave_requests_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Request List</a>  
+    </div>  
+  
+    </div>
+
+
+      </div>            
+      </div>
+        <!-- /.container-fluid -->
+      </div>
+      </div>
+      <!-- End of Main Content -->
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<script type="text/javascript">
+    $(function() {
+    
+        $(".bs-modal").each(function () {
+          $(this).modalForm({
+              formURL: $(this).data('form-url')
+          });
+        });
+    
+    });
+
+</script>
+
+
+
+
+<script>
+  $('#mydata').dataTable();
+</script>
+
+
+
+
+
+
+
+{% endblock %}

@@ -12,12 +12,12 @@ from django.views.generic import (
      DeleteView,
      TemplateView
 )
-from .forms import RequisitionModelForm, OrderModelForm, VehicleFilterForm, StaffProfileModelForm
+from .forms import RequisitionModelForm, OrderModelForm, VehicleFilterForm, StaffProfileModelForm, LeaveRequestModelForm
 from bootstrap_modal_forms.generic import BSModalCreateView
 from .models import Requisition, Request
 from store.models import Issue, Item
 from fleet.models import Assign, Vehicle
-from hr.models import Employee
+from hr.models import Employee, Leave, Specify, Document, Training, Record, Appraisal, Schedule, Performance, Discipline, Compliance
 from django.contrib.messages.views import SuccessMessageMixin
 from bootstrap_modal_forms.mixins import PassRequestMixin, CreateUpdateAjaxMixin
 from django.contrib.auth.models import User
@@ -508,4 +508,216 @@ class MyProfileDeleteView(LoginRequiredMixin, ProfileObjectMixin, View):
             return redirect('rrbnstaff:my_profile_list')
         return render(request, self.template_name, context)
 
+
+
+class MyLeaveRequestListView(LoginRequiredMixin, ListView):
+    template_name = "rrbnstaff/my_leave_request_list.html"
+    context_object_name = 'object'
+    
+
+    def get_queryset(self):
+        return Leave.objects.all()
+        
+    def get_context_data(self, **kwargs):
+        obj = super(MyLeaveRequestListView, self).get_context_data(**kwargs)
+        obj['leave_requests_qs'] = Leave.objects.filter(leave_status="Pending Approval", staff_name=self.request.user)
+        return obj
+
+class LeaveRequestCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
+    template_name = 'rrbnstaff/create_leave_request.html'
+    form_class = LeaveRequestModelForm
+    success_message = 'Leave Request Created Successfully'
+
+    success_url = reverse_lazy('rrbnstaff:my_leave_requests_list')
+
+class LeaveRequestDetailView(LoginRequiredMixin, DetailView):
+    template_name = "rrbnstaff/leave_request_detail.html"
+    model = Leave
+
+
+class LeaveRequestUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
+    model = Leave
+    template_name = 'rrbnstaff/update_leave_request.html'
+    form_class = LeaveRequestModelForm
+    success_message = 'Leave Request Updated Successfully'
+    success_url = reverse_lazy('rrbnstaff:my_leave_requests_list')
+
+class LeaveObjectMixin(object):
+    model = Leave
+    def get_object(self):
+        id = self.kwargs.get('id')
+        obj = None
+        if id is not None:
+            obj = get_object_or_404(self.model, id=id)
+        return obj 
+
+class LeaveRequestDeleteView(LoginRequiredMixin, LeaveObjectMixin, View):
+    template_name = "rrbnstaff/leave_request_delete.html" # DetailView
+    def get(self, request, id=None, *args, **kwargs):
+        # GET method
+        context = {}
+        obj = self.get_object()
+        if obj is not None:
+            context['object'] = obj
+        return render(request, self.template_name, context)
+
+    def post(self, request, id=None,  *args, **kwargs):
+        # POST method
+        context = {}
+        obj = self.get_object()
+        if obj is not None:
+            obj.delete()
+            context['object'] = None
+            return redirect('rrbnstaff:my_leave_requests_list')
+        return render(request, self.template_name, context)
+
+
+class MyApprovedLeaves(LoginRequiredMixin, ListView):
+    template_name = "rrbnstaff/my_approved_leaves.html"
+    context_object_name = 'object'
+    
+
+    def get_queryset(self):
+        return Leave.objects.order_by('-leave_application_date')
+        
+    def get_context_data(self, **kwargs):
+        obj = super(MyApprovedLeaves, self).get_context_data(**kwargs)
+        obj['approved_leaves_qs'] = Leave.objects.filter(leave_status="Approved", staff_name=self.request.user)
+        return obj
+
+class MyAssignedLeaves(LoginRequiredMixin, ListView):
+    template_name = "rrbnstaff/my_assigned_leaves.html"
+    context_object_name = 'object'
+    
+
+    def get_queryset(self):
+        return Leave.objects.order_by('-leave_application_date')
+        
+    def get_context_data(self, **kwargs):
+        obj = super(MyAssignedLeaves, self).get_context_data(**kwargs)
+        obj['assigned_leaves_qs'] = Specify.objects.filter(leave_status="Leave Days Assigned", staff_name=self.request.user)
+        return obj
+
+
+class MyLeaveHistory(LoginRequiredMixin, ListView):
+    template_name = "rrbnstaff/my_leave_history.html"
+    context_object_name = 'object'
+    
+
+    def get_queryset(self):
+        return Leave.objects.order_by('-leave_application_date')
+        
+    def get_context_data(self, **kwargs):
+        obj = super(MyLeaveHistory, self).get_context_data(**kwargs)
+        obj['leave_history_qs'] = Document.objects.filter(leave_status="Leave Completed", staff_name=self.request.user)
+        return obj
+
+
+class LeaveApprovalDetailView(LoginRequiredMixin, DetailView):
+    template_name = "rrbnstaff/leave_approval_detail.html"
+    model = Leave
+
+
+class LeaveAssignmentDetailView(LoginRequiredMixin, DetailView):
+    template_name = "rrbnstaff/leave_assignment_detail.html"
+    model = Specify
+
+class LeaveHistoryDetailView(LoginRequiredMixin, DetailView):
+    template_name = "rrbnstaff/leave_history_detail.html"
+    model = Document
+
+
+    
+class MyScheduledTrainings(LoginRequiredMixin, ListView):
+    template_name = "rrbnstaff/my_programs_list.html"
+    context_object_name = 'object'
+    
+
+    def get_queryset(self):
+        return Training.objects.order_by('-date_added')
+        
+    def get_context_data(self, **kwargs):
+        obj = super(MyScheduledTrainings, self).get_context_data(**kwargs)
+        obj['my_training_list_qs'] = Training.objects.filter(staff_name=self.request.user)
+        return obj
+
+
+class MyScheduledTrainingsDetails(LoginRequiredMixin, DetailView):
+    template_name = "rrbnstaff/my_training_details.html"
+    model = Training
+
+
+class MyPromotionInterviewListView(LoginRequiredMixin, ListView):
+    template_name = "rrbnstaff/my_scheduled_promotion_interviews.html"
+    context_object_name = 'object'
+  
+    def get_queryset(self):
+        return Schedule.objects.all()
+        
+    def get_context_data(self, **kwargs):
+        obj = super(MyPromotionInterviewListView, self).get_context_data(**kwargs)
+        obj['my_schedule_list_qs'] = Schedule.objects.filter(staff_name=self.request.user, appraisal_status="Scheduled")
+        return obj
+
+
+class MyPromotionInterviewDetailView(LoginRequiredMixin, DetailView):
+    template_name = "rrbnstaff/my_scheduled_interview_details.html"
+    model = Schedule
+
+
+
+
+class MyPerformanceEvaluationListView(LoginRequiredMixin, ListView):
+    template_name = "rrbnstaff/my_performance_evaluations_list.html"
+    context_object_name = 'object'
+  
+    def get_queryset(self):
+        return Performance.objects.all()
+        
+    def get_context_data(self, **kwargs):
+        obj = super(MyPerformanceEvaluationListView, self).get_context_data(**kwargs)
+        obj['my_performance_list_qs'] = Performance.objects.filter(staff_name=self.request.user, appraisal_status="Appraised")
+        return obj
+
+
+class MyPerformanceEvaluationDetailView(LoginRequiredMixin, DetailView):
+    template_name = "rrbnstaff/my_performance_evaluation_details.html"
+    model = Performance
+
+
+
+class ReprisalListView(LoginRequiredMixin, ListView):
+    template_name = "rrbnstaff/my_reprisal_list.html"
+    context_object_name = 'object'
+  
+    def get_queryset(self):
+        return Discipline.objects.all()
+        
+    def get_context_data(self, **kwargs):
+        obj = super(ReprisalListView, self).get_context_data(**kwargs)
+        obj['repraisal_list_qs'] = Discipline.objects.filter(staff_name=self.request.user, case_status="In Progress")
+        return obj
+
+class ReprisalDetailView(LoginRequiredMixin, DetailView):
+    template_name = "rrbnstaff/my_reprisal_details.html"
+    model = Discipline
+
+
+
+class RestitutionListView(LoginRequiredMixin, ListView):
+    template_name = "rrbnstaff/restitution_list.html"
+    context_object_name = 'object'
+  
+    def get_queryset(self):
+        return Compliance.objects.all()
+        
+    def get_context_data(self, **kwargs):
+        obj = super(RestitutionListView, self).get_context_data(**kwargs)
+        obj['restitution_list_qs'] = Compliance.objects.filter(staff_name=self.request.user, case_status="Completed")
+        return obj
+
+
+class RestitutionDetailView(LoginRequiredMixin, DetailView):
+    template_name = "rrbnstaff/restitution_detail.html"
+    model = Compliance
 

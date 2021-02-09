@@ -171,7 +171,7 @@
             </a>
           </li>
 
-          {% elif "request_detail" in request.path %}
+          {% elif "request_list" in request.path %}
 
           <li class="nav-item active">
             <a class="nav-link" href="{% url 'rrbnstaff:request_list' %}">
@@ -211,6 +211,8 @@
 
           {% endif %}
 
+          
+
           {% if "allocat" in request.path %}
 
           <li class="nav-item active ">
@@ -230,6 +232,188 @@
           </li>
 
           {% endif %}
+
+          {% if "leave_request" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_leave_requests_list' %}">
+              <i class="material-icons">home_work</i>
+              <p>My Leave Requests</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_leave_requests_list' %}">
+              <i class="material-icons">home_work</i>
+              <p>My Leave Requests</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "approv" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_approved_leaves' %}">
+              <i class="material-icons">swipe</i>
+              <p>My Approved Leaves</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_approved_leaves' %}">
+              <i class="material-icons">swipe</i>
+              <p>My Approved Leaves</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "assigned" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_assigned_leaves' %}">
+              <i class="material-icons">task_alt</i>
+              <p>My Assigned Leaves</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_assigned_leaves' %}">
+              <i class="material-icons">task_alt</i>
+              <p>My Assigned Leaves</p>
+            </a>
+          </li>
+
+          {% endif %}
+          
+
+          {% if "leave_history" in request.path %}
+          
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_leave_history' %}">
+              <i class="material-icons">history</i>
+              <p>My Leave History</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_leave_history' %}">
+              <i class="material-icons">history</i>
+              <p>My Leave History</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "program" in request.path %}
+          
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_programs' %}">
+              <i class="material-icons">list_alt</i>
+              <p>My Sheduled Trainings</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_programs' %}">
+              <i class="material-icons">list_alt</i>
+              <p>My Sheduled Trainings</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "promotion" in request.path %}
+          
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_promotion_interviews' %}">
+              <i class="material-icons">notes</i>
+              <p>My Sheduled Interviews</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_promotion_interviews' %}">
+              <i class="material-icons">notes</i>
+              <p>My Sheduled Interviews</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "evaluation" in request.path %}
+          
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:evaluation_list' %}">
+              <i class="material-icons">mode_edit</i>
+              <p>My Performance Reviews</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:evaluation_list' %}">
+              <i class="material-icons">mode_edit</i>
+              <p>My Performance Reviews</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "reprisal" in request.path %}
+          
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:reprisal_list' %}">
+              <i class="material-icons">scatter_plot</i>
+              <p>My Reprisals</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:reprisal_list' %}">
+              <i class="material-icons">scatter_plot</i>
+              <p>My Reprisals</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "restituion" in request.path %}
+          
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:restitution_list' %}">
+              <i class="material-icons">auto_stories</i>
+              <p>My Restituions</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:restitution_list' %}">
+              <i class="material-icons">auto_stories</i>
+              <p>My Restituions</p>
+            </a>
+          </li>
+
+          {% endif %}
+
 
 
 
@@ -282,7 +466,7 @@
               </li>
              
               <li class="nav-item dropdown">
-                <a class="nav-link" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{request.user.first_name}} {{request.user.last_name}}
+                <a class="nav-link" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{user.first_name}} {{user.last_name}}
                   <i class="material-icons">person</i>
                   <p class="d-lg-none d-md-block">
                     Account

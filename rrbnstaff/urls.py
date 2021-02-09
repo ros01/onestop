@@ -26,6 +26,32 @@ from .views import (
     MyProfileDetailView,
     MyProfileUpdateView,
     MyProfileDeleteView,
+    MyLeaveRequestListView,
+    LeaveRequestCreateView,
+    LeaveRequestDetailView,
+    LeaveRequestUpdateView,
+    LeaveRequestDeleteView,
+    MyApprovedLeaves,
+    MyAssignedLeaves,
+    MyLeaveHistory,
+    LeaveApprovalDetailView,
+    LeaveAssignmentDetailView,
+    LeaveHistoryDetailView,
+    MyScheduledTrainings,
+    MyScheduledTrainingsDetails,
+    MyPromotionInterviewListView,
+    MyPromotionInterviewDetailView,
+    MyPerformanceEvaluationListView,
+    MyPerformanceEvaluationDetailView,
+    ReprisalListView,
+    ReprisalDetailView,
+    RestitutionListView,
+    RestitutionDetailView,
+
+
+
+
+
 
 
 )
@@ -63,5 +89,27 @@ urlpatterns = [
     path('<uuid:pk>/my_profile_detail/', MyProfileDetailView.as_view(), name='my_profile_detail'),
     path('<uuid:pk>/my_profile_update/', MyProfileUpdateView.as_view(), name='my_profile_update'),
     path('<uuid:id>/my_profile_delete/', MyProfileDeleteView.as_view(), name='my_profile_delete'),
+    path('my_leave_requests_list/', MyLeaveRequestListView.as_view(), name='my_leave_requests_list'),
+    path('my_approved_leaves/', MyApprovedLeaves.as_view(), name='my_approved_leaves'),
+    path('my_assigned_leaves/', MyAssignedLeaves.as_view(), name='my_assigned_leaves'),
+    path('my_leave_history/', MyLeaveHistory.as_view(), name='my_leave_history'),
+    path('create_leave_request/', LeaveRequestCreateView.as_view(), name='create_leave_request'),
+    path('<uuid:pk>/leave_request_detail/', LeaveRequestDetailView.as_view(), name='leave_request_detail'),
+    path('<uuid:pk>/leave_request_update/', LeaveRequestUpdateView.as_view(), name='leave_request_update'),
+    path('<uuid:id>/leave_request_delete/', LeaveRequestDeleteView.as_view(), name='leave_request_delete'),
+    path('<uuid:pk>/leave_approval_detail/', LeaveApprovalDetailView.as_view(), name='leave_approval_detail'),
+    path('<uuid:pk>/leave_assignment_detail/', LeaveAssignmentDetailView.as_view(), name='leave_assignment_detail'),
+    path('<uuid:pk>/leave_history_detail/', LeaveHistoryDetailView.as_view(), name='leave_history_detail'),
+    path('my_programs/', MyScheduledTrainings.as_view(), name='my_programs'),
+    path('<uuid:pk>/program_details/', MyScheduledTrainingsDetails.as_view(), name='program_details'),
+    path('my_promotion_interviews/', MyPromotionInterviewListView.as_view(), name='my_promotion_interviews'), 
+    path('<uuid:pk>/my_promotion_interview_details/', MyPromotionInterviewDetailView.as_view(), name='my_promotion_interview_details'),
+    path('evaluation_list/', MyPerformanceEvaluationListView.as_view(), name='evaluation_list'), 
+    path('<uuid:pk>/evaluation_detail/', MyPerformanceEvaluationDetailView.as_view(), name='evaluation_detail'),
+    path('reprisal_list/', ReprisalListView.as_view(), name='reprisal_list'), 
+    path('<uuid:pk>/reprisal_detail/', ReprisalDetailView.as_view(), name='reprisal_detail'),
+    path('restitution_list/', RestitutionListView.as_view(), name='restitution_list'), 
+    path('<uuid:pk>/restitution_detail/', RestitutionDetailView.as_view(), name='restitution_detail'),
+    
     
     ]

@@ -1,0 +1,136 @@
+{% extends 'base11.html'%}
+{% load static %}
+{% block title%}| 
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.8.2-web/css/allt.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
+<link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
+
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+{% include "_modal.html" %}
+<!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content">
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+    <!-- Page Heading -->
+    <br><br>
+
+    <!-- <h3 class="col-12 text-info">Manage Workshop Details</h3>-->
+    <button type="button" id="create-discipline" class="bs-modal btn btn-small btn-success mt-2" data-form-url="{% url 'hr:add_discipline' %}"><i class="fa fa-list text-white"></i> Add Discipline</button><br>
+
+    
+    {% include 'partials/_alerts.html' %}
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-2">
+    <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-success">Staff Disciplinary List</h6>
+    </div>
+    <div class="card-body">
+
+    <div class="table-responsive-lg">
+    <table class="table table-bordered table-hover" id="mydata">
+    <thead>
+    <tr style="background: #41963F;">
+
+    <td style="color: #fff;" class="small-text" width="05%">S/N</td>
+    <td style="color: #fff;" class="small-text" width="12%">Staff Name</td>
+    <td style="color: #fff;" class="small-text" width="08%">Case No</td>
+    <td style="color: #fff;" class="small-text" width="13%">Case Name</td>
+    <td style="color: #fff;" class="small-text" width="14%">Penalty</td>
+    <td style="color: #fff;" class="small-text" width="13%">Due Date</td>
+    <td style="color: #fff;" class="small-text" width="13%">Case Status</td>
+    <td style="color: #fff;" class="small-text" width="12%">Assigned On</td>
+     <td style="color: #fff;" class="small-text" width="10%">Actions</td>
+    </tr>
+    </thead>
+    <tbody>
+    {% if discipline_list_qs %}
+    {% for object in discipline_list_qs %}
+    <tr>
+    <td width="05%">{{forloop.counter}}</td>
+    <td width="12%">{{object.staff_name.first_name}} {{object.staff_name.last_name}}</td>
+    <td width="08%">{{object.case_no}}</td>
+    <td width="13%">{{object.case_name}}</td>
+    <td width="14%">{{object.penalty}}</td> 
+    <td width="13%">{{object.due_date}}</td>
+    <td width="13%">{{object.case_status}}</td>
+    <td width="12%">{{object.assigned_on}}</td>
+     <td width="10%">
+
+    <a class="btn btn-primary p-1" href="{% url 'hr:discipline_detail' object.id %}"><i class="fa fa-folder-open text-white"></i></a>  
+    <button type="button" id="update-discipline" class="bs-modal btn btn-small btn-warning mt-1 p-1" data-form-url="{% url 'hr:discipline_update' object.pk %}"><i class="fas fa-redo"></i></button>
+    <button type="button" id="delete-discipline" class="bs-modal btn btn-small btn-danger mt-1 p-1" data-form-url="{% url 'hr:discipline_delete' object.id %}"><i class="fas fa-trash-alt"></i></button> 
+    
+    </td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+    </tbody>
+    </table>
+    </div>
+             </div>
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+
+<!--Jquery plugin-->
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+
+
+<script type="text/javascript">
+    $(function() {
+    
+        $(".bs-modal").each(function () {
+          $(this).modalForm({
+              formURL: $(this).data('form-url')
+          });
+        });
+    
+    });
+
+</script>
+
+
+
+
+<script>
+  $('#mydata').dataTable();
+</script>
+
+
+
+
+
+
+
+{% endblock %}

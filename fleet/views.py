@@ -476,6 +476,18 @@ class VehicleRequestList(LoginRequiredMixin, ListView):
         obj['request_qs'] = Request.objects.filter(request_status=1)
         return obj
 
+class VehicleAssignmentList(LoginRequiredMixin, ListView):
+    template_name = "fleet/assigned_vehicles_list2.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return Assign.objects.all()
+        
+    def get_context_data(self, **kwargs):
+        obj = super(VehicleAssignmentList, self).get_context_data(**kwargs)
+        obj['vehicle_assignment_qs'] = Assign.objects.filter(trip_status="created")
+        return obj
+        
 class RequestObjectMixin(object):
     model = Request
     def get_object(self):
@@ -667,6 +679,7 @@ class AssignObjectMixin(object):
             obj = get_object_or_404(self.model, id=id)
         return obj 
 
+
 class UpdateVehicleAssignemt(LoginRequiredMixin, AssignObjectMixin, View):
     template_name = "fleet/update_assign_vehicle.html" 
     template_name1 = "fleet/assigned_vehicle_details2.html" 
@@ -695,17 +708,7 @@ class UpdateVehicleAssignemt(LoginRequiredMixin, AssignObjectMixin, View):
         messages.success(request, ('Vehicle Assignment Update Successful'))
         return render(request, self.template_name1, context)
 
-class VehicleAssignmentList(LoginRequiredMixin, ListView):
-    template_name = "fleet/assigned_vehicles_list2.html"
-    context_object_name = 'object'
 
-    def get_queryset(self):
-        return Assign.objects.all()
-        
-    def get_context_data(self, **kwargs):
-        obj = super(VehicleAssignmentList, self).get_context_data(**kwargs)
-        obj['vehicle_assignment_qs'] = Assign.objects.filter(trip_status="created")
-        return obj
 
 class VehicleAllocationsDetail(LoginRequiredMixin, AssignObjectMixin, View):
     template_name = "fleet/vehicle_allocation_details.html" 

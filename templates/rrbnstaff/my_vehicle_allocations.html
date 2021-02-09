@@ -1,4 +1,4 @@
-{% extends 'base1.html'%}
+{% extends 'base12.html'%}
 {% load static %}
 {% block title%}| Vehicle Allocations {% endblock %}
 
@@ -49,14 +49,14 @@
         <thead>
         <tr style="background: #41963F;">
         <td style="color: #fff;" class="small-text" width="05%">S/N</td>
-        <td style="color: #fff;" class="small-text" width="08%">Request No</td>
-        <td style="color: #fff;" class="small-text" width="15%">Vehicle Name</td>
-        <td style="color: #fff;" class="small-text" width="14%">Destination</td>
-        <td style="color: #fff;" class="small-text" width="10%">Purpose</td>
-        <td style="color: #fff;" class="small-text" width="10%">Approved Start Date</td>
-        <td style="color: #fff;" class="small-text" width="10%">Approved End Date</td>
-        <td style="color: #fff;" class="small-text" width="10%">Approval Date</td>
-        <td style="color: #fff;" class="small-text" width="08%">Actions</td>
+        <td style="color: #fff;" class="small-text" width="09%">Request No</td>
+        <td style="color: #fff;" class="small-text" width="17%">Vehicle Name</td>
+        <td style="color: #fff;" class="small-text" width="16%">Destination</td>
+        <td style="color: #fff;" class="small-text" width="16%">Purpose</td>
+        <td style="color: #fff;" class="small-text" width="14%">Approved Start Date</td>
+        <td style="color: #fff;" class="small-text" width="14%">Approved End Date</td>
+        
+        <td style="color: #fff;" class="small-text" width="09%">Actions</td>
         </tr>
         </thead>
 
@@ -65,15 +65,14 @@
         {% for object in assign_qs %}
         <tr>
         <td width="05%">{{forloop.counter}}</td>
-        <td width="08%">{{object.request_no}}</td>
-        <td width="15%">{{object.vehicle_name}}</td>
-        
-        <td width="14%">{{object.destination}}</td>
-        <td width="10%">{{object.request_reason}}</td>
-        <td width="10%">{{object.approved_start_date_pretty}}</td>
-        <td width="10%">{{object.approved_end_date_pretty}}</td>
-        <td width="10%">{{object.approved_date_pretty}}</td>
-        <td width="08%">
+        <td width="09%">{{object.request_no}}</td>
+        <td width="17%">{{object.vehicle_name}}</td>
+        <td width="16%">{{object.destination}}</td>
+        <td width="16%">{{object.request_reason}}</td>
+        <td width="14%">{{object.approved_start_date_pretty}}</td>
+        <td width="14%">{{object.approved_end_date_pretty}}</td>
+       
+        <td width="09%">
 
         <a class="btn btn-primary p-1" href="{% url 'rrbnstaff:allocated_vehicle_details' object.pk %}"><i class="fa fa-folder-open text-white"></i></a>           
         </td>

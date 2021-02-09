@@ -7,7 +7,7 @@ from django.utils import timezone
 from bootstrap_modal_forms.forms import BSModalModelForm, BSModalForm
 from bootstrap_modal_forms.mixins import PassRequestMixin, PopRequestMixin, CreateUpdateAjaxMixin
 from fleet.models import Vehicle
-from hr.models import Employee
+from hr.models import Employee, Leave
 from tempus_dominus.widgets import DatePicker, DateTimePicker
 
 
@@ -115,12 +115,6 @@ class OrderModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
       return instance
 
 
-    
-
-
-
-
-
 LOCATION_CHOICES = (
   ('HQ', 'HQ'),
   ('Lagos Zonal Office ', 'Lagos Zonal Office'),
@@ -173,13 +167,14 @@ class VehicleFilterForm(forms.ModelForm):
        self.fields['trip_type'].label = "Trip Type"
        
 
+
 class StaffProfileModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
 
-    dob = forms.DateTimeField(
-      widget=DateTimePicker(
+    dob = forms.DateField(
+      widget=DatePicker(
         options={
 
-                'format': 'YYYY-MM-DD HH:mm',
+                'format': 'YYYY-MM-DD',
                 'useCurrent': True,
                 'collapse': False,
   
@@ -192,11 +187,11 @@ class StaffProfileModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelF
             ),
       )
 
-    date_joined = forms.DateTimeField(
-      widget=DateTimePicker(
+    date_joined = forms.DateField(
+      widget=DatePicker(
         options={
 
-                'format': 'YYYY-MM-DD HH:mm',
+                'format': 'YYYY-MM-DD',
                 'useCurrent': True,
                 'collapse': False,
   
@@ -210,11 +205,11 @@ class StaffProfileModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelF
       )
 
 
-    pension_date = forms.DateTimeField(
-      widget=DateTimePicker(
+    pension_date = forms.DateField(
+      widget=DatePicker(
         options={
 
-                'format': 'YYYY-MM-DD HH:mm',
+                'format': 'YYYY-MM-DD',
                 'useCurrent': True,
                 'collapse': False,
   
@@ -310,6 +305,70 @@ class StaffProfileModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelF
 
 
 
+
+class LeaveRequestModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+
+    requested_start_date = forms.DateField(
+      widget=DatePicker(
+        options={
+
+                'format': 'YYYY-MM-DD',
+                'useCurrent': True,
+                'collapse': False,
+  
+            },
+        attrs={
+                'append': 'fa fa-calendar',
+                'icon_toggle': True,
+                'sideBySide': True,
+            }
+            ),
+      )
+
+    requested_end_date = forms.DateField(
+      widget=DatePicker(
+        options={
+
+                'format': 'YYYY-MM-DD',
+                'useCurrent': True,
+                'collapse': False,
+  
+            },
+        attrs={
+                'append': 'fa fa-calendar',
+                'icon_toggle': True,
+                'sideBySide': True,
+            }
+            ),
+      )
+ 
+    class Meta:
+        model = Leave
+        fields = ('staff_name', 'requested_start_date', 'requested_end_date', 'leave_type')
+            
+    def __init__(self, *args, **kwargs):
+       super(LeaveRequestModelForm, self).__init__(*args, **kwargs)
+       for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'form-control',
+            })
+       self.fields['requested_start_date'].label = "Requested Start Date"
+       self.fields['requested_start_date'].widget.attrs['placeholder'] = "Enter Requested Start Date"
+       self.fields['requested_end_date'].label = "Requested End Date"
+       self.fields['requested_end_date'].widget.attrs['placeholder'] = "Enter Requested End Date"
+       self.fields['leave_type'].label = "Leave Type"
+       self.fields['leave_type'].widget.attrs['placeholder'] = "Enter Leave Type"
+       
+           
+    def save(self):
+
+      if not self.request.is_ajax():
+          instance = super(CreateUpdateAjaxMixin, self).save(commit=True)
+          instance.save()
+      else:
+          instance = super(CreateUpdateAjaxMixin, self).save(commit=False)
+
+      return instance
 
 
 
