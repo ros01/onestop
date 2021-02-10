@@ -1,49 +1,60 @@
 {% load widget_tweaks %}
 {% load crispy_forms_tags %}
+{% load static %}
+<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css">
+<script src="{% static 'js/moment2.min.js' %}"></script>
 
+<link href="{% static 'bootstrap-datepicker/css/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet"/>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous" /> -->
+<script src="{% static 'js/tempusdominus-bootstrap-4.js' %}"></script>
 
-    <!-- Content Wrapper -->
-    <div id="content-wrapper bg-light" class="d-flex flex-column">
-
-      <!-- Main Content -->
-    <div id="content">
-
-    <!-- Begin Page Content -->
-    <div class="container-fluid">
-
-    <div class="modal-header">
+<form method="POST" action=".">
+  {% csrf_token %}
+  <input type="hidden" name="added_by" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_added_by"  id="div_id_added_by">
+  
+ <div class="modal-header">
     <h5 class="modal-title text-success">Update Job Title</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
-    </div>
+  </div>
 
-    <div class="modal-body">
+  <div class="modal-body">
+  <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+      {% for error in form.non_field_errors %}
+        {{ error }}
+      {% endfor %}
+  </div>
+
     <div class="row">
-    <div class="col">
-    <form method="POST" action="." enctype="multipart/form-data">
-    {% csrf_token %}
-    
-    <div class="form-row">
     <div class="form-group col-md-6">
-    {{ form.job_title|as_crispy_field }}
+     {{ form.job_title|as_crispy_field }}
+     <div class="{% if form.job_title.errors %} invalid{% endif %}">
+          {% for error in field.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
     </div>
+    </div>
+    
+
     <div class="form-group col-md-6">
     {{ form.description|as_crispy_field }}
-    </div>
-    </div>
-    </form>
+    <div class="{% if form.description.errors %} invalid{% endif %}">
+          {% for error in field.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
     </div>
     </div>
     </div>
 
-    <div class="modal-footer">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-    <button type="button" class="submit-btn btn btn-success ml-4 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i> Update Job Title</button>
 
-    </div>
-    </div>
-    <!-- /.container-fluid -->
-    </div>
-    <!-- End of Main Content -->
-    </div>
+ </form>
+
+ <div class="modal-footer">
+<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+<button type="button" class="submit-btn btn btn-success ml-4 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i>&nbsp;Update Job Title</button>
+
+ </div>
+
+

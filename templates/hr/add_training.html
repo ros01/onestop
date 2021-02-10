@@ -27,108 +27,103 @@
       {% endfor %}
   </div>
 
-    <div class="row">
-    <div class="form-group col-md-4">
-     {{ form.training_name|as_crispy_field }}
-     <div class="{% if form.training_name.errors %} invalid{% endif %}">
-          {% for error in field.errors %}
-            <p class="help-block">{{ error }}</p>
-          {% endfor %}
-    </div>
-    </div>
-    
-
-   
-    <div class="form-group col-md-4">
-    {{ form.training_description|as_crispy_field }}
-    <div class="{% if form.training_description.errors %} invalid{% endif %}">
-          {% for error in field.errors %}
-            <p class="help-block">{{ error }}</p>
-          {% endfor %}
-    </div>
-    </div>
-    
-    <div class="form-group col-md-4">
-    {{ form.category|as_crispy_field }}
-    <div class="{% if form.category.errors %} invalid{% endif %}">
-          {% for error in field.errors %}
-            <p class="help-block">{{ error }}</p>
-          {% endfor %}
-    </div>
-    </div>
-
-    </div>
-
-    <div class="row">
-    <div class="form-group col-md-4">
-    {{ form.vendor|as_crispy_field }}
-    <div class="{% if form.vendor.errors %} invalid{% endif %}">
-          {% for error in field.errors %}
-            <p class="help-block">{{ error }}</p>
-          {% endfor %}
-    </div>
-    </div>
-
-    <div class="form-group col-md-4">
-    {{ form.staff_name|as_crispy_field }}
-    <div class="{% if form.staff_name.errors %} invalid{% endif %}">
-          {% for error in field.errors %}
-            <p class="help-block">{{ error }}</p>
-          {% endfor %}
-    </div>
-    </div>
-
-    <div class="form-group col-md-4">
-    {{ form.training_venue|as_crispy_field }}
-    <div class="{% if form.training_venue.errors %} invalid{% endif %}">
-          {% for error in field.errors %}
-            <p class="help-block">{{ error }}</p>
-          {% endfor %}
-    </div>
-    </div> 
-  </div>
-
   <div class="row">
-    <div class="form-group col-md-4">
-      {{ form.projected_start_date|as_crispy_field }}
-      <div class="{% if form.projected_start_date.errors %} invalid{% endif %}">
-          {% for error in form.projected_start_date.errors %}
-            <p class="text-danger">{{ error }}</p>
-          {% endfor %}
-    </div>
-  </div>
-
   <div class="form-group col-md-4">
-      {{ form.projected_end_date|as_crispy_field }}
-      <div class="{% if form.projected_end_date.errors %} invalid{% endif %}">
-          {% for error in form.projected_end_date.errors %}
-            <p class="text-danger">{{ error }}</p>
-          {% endfor %}
-    </div>
-    </div>
+  {{ form.training_name|as_crispy_field }}
+  <div class="{% if form.training_name.errors %} invalid{% endif %}">
+  {% for error in field.errors %}
+  <p class="help-block">{{ error }}</p>
+  {% endfor %}
+  </div>
+  </div>
+    
 
    <div class="form-group col-md-4">
-    {{ form.training_budget|as_crispy_field }}
-    <div class="{% if form.training_budget.errors %} invalid{% endif %}">
-          {% for error in field.errors %}
-            <p class="help-block">{{ error }}</p>
-          {% endfor %}
-    </div>
-    </div>
-  </div>
- </form>
+   {{ form.training_description|as_crispy_field }}
+   <div class="{% if form.training_description.errors %} invalid{% endif %}">
+   {% for error in field.errors %}
+   <p class="help-block">{{ error }}</p>
+   {% endfor %}
+   </div>
+   </div>
+    
+   <div class="form-group col-md-4">
+   {{ form.category|as_crispy_field }}
+   <div class="{% if form.category.errors %} invalid{% endif %}">
+   {% for error in field.errors %}
+   <p class="help-block">{{ error }}</p>
+   {% endfor %}
+   </div>
+   </div>
+
+   </div>
+
+   <div class="row">
+   <div class="form-group col-md-4">
+   {{ form.vendor|as_crispy_field }}
+   <div class="{% if form.vendor.errors %} invalid{% endif %}">
+   {% for error in field.errors %}
+   <p class="help-block">{{ error }}</p>
+   {% endfor %}
+   </div>
+   </div>
+
+   <div class="form-group col-md-4">
+   {{ form.staff_name|as_crispy_field }}
+   <div class="{% if form.staff_name.errors %} invalid{% endif %}">
+   {% for error in field.errors %}
+   <p class="help-block">{{ error }}</p>
+   {% endfor %}
+   </div>
+   </div>
+
+   <div class="form-group col-md-4">
+   {{ form.training_venue|as_crispy_field }}
+   <div class="{% if form.training_venue.errors %} invalid{% endif %}">
+   {% for error in field.errors %}
+   <p class="help-block">{{ error }}</p>
+   {% endfor %}
+   </div>
+   </div> 
+   </div>
+
+   <div class="row">
+   <div class="form-group col-md-4">
+   {{ form.projected_start_date|as_crispy_field }}
+   <div class="{% if form.projected_start_date.errors %} invalid{% endif %}">
+   {% for error in form.projected_start_date.errors %}
+   <p class="text-danger">{{ error }}</p>    
+   {% endfor %}
+   </div>
+   </div>
+
+   <div class="form-group col-md-4">
+   {{ form.projected_end_date|as_crispy_field }}
+   <div class="{% if form.projected_end_date.errors %} invalid{% endif %}">
+   {% for error in form.projected_end_date.errors %}
+   <p class="text-danger">{{ error }}</p>
+   {% endfor %}
+   </div>
+   </div>
+
+   <div class="form-group col-md-4">
+   {{ form.training_budget|as_crispy_field }}
+   <div class="{% if form.training_budget.errors %} invalid{% endif %}">
+   {% for error in field.errors %}
+   <p class="help-block">{{ error }}</p>
+   {% endfor %}
+   </div>
+   </div>
+   </div>
+   </form>
 
     
-    
+   <div class="modal-footer">
 
+   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+   <button type="button" class="submit-btn btn btn-success ml-4 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i>&nbsp;Add Training</button>
 
-
-    <div class="modal-footer">
-
-    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-    <button type="button" class="submit-btn btn btn-success ml-4 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i>&nbsp;Add Training</button>
-
-    </div>
+   </div>
 
 
 

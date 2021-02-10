@@ -199,6 +199,15 @@
             </a>
           </li>
 
+          {% elif "request_list" in request.path %}
+
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'rrbnstaff:request_list' %}">
+              <i class="material-icons">local_taxi</i>
+              <p>Vehicle Requests</p>
+            </a>
+          </li>
+
           {% else %}
 
           <li class="nav-item ">
@@ -290,6 +299,27 @@
 
           {% endif %}
 
+
+          {% if "assigned" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_assigned_leaves' %}">
+              <i class="material-icons">task_alt</i>
+              <p>My Assigned Leaves</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_assigned_leaves' %}">
+              <i class="material-icons">task_alt</i>
+              <p>My Assigned Leaves</p>
+            </a>
+          </li>
+
+          {% endif %}
+
           {% if "leave_history" in request.path %}
 
           <li class="nav-item active ">
@@ -309,6 +339,107 @@
           </li>
 
           {% endif %}
+
+          {% if "program" in request.path %}
+          
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_programs' %}">
+              <i class="material-icons">list_alt</i>
+              <p>My Sheduled Trainings</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_programs' %}">
+              <i class="material-icons">list_alt</i>
+              <p>My Sheduled Trainings</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "promotion" in request.path %}
+          
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_promotion_interviews' %}">
+              <i class="material-icons">notes</i>
+              <p>My Sheduled Interviews</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:my_promotion_interviews' %}">
+              <i class="material-icons">notes</i>
+              <p>My Sheduled Interviews</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "evaluation" in request.path %}
+          
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:evaluation_list' %}">
+              <i class="material-icons">mode_edit</i>
+              <p>My Performance Reviews</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:evaluation_list' %}">
+              <i class="material-icons">mode_edit</i>
+              <p>My Performance Reviews</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "reprisal" in request.path %}
+          
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:reprisal_list' %}">
+              <i class="material-icons">scatter_plot</i>
+              <p>My Reprisals</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:reprisal_list' %}">
+              <i class="material-icons">scatter_plot</i>
+              <p>My Reprisals</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "restituion" in request.path %}
+          
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'rrbnstaff:restitution_list' %}">
+              <i class="material-icons">auto_stories</i>
+              <p>My Restituions</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'rrbnstaff:restitution_list' %}">
+              <i class="material-icons">auto_stories</i>
+              <p>My Restituions</p>
+            </a>
+          </li>
+
+          {% endif %}
+
 
 
 

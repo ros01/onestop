@@ -515,6 +515,11 @@ class Performance(models.Model):
         return str(self.staff_name)
 
 
+    class Meta:
+        unique_together = ('schedule_no','staff_name')
+        ordering = ["-documented_on"]
+
+
     def save(self, *args, **kwargs):
         super(Performance, self).save(*args, **kwargs)
         

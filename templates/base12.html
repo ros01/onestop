@@ -171,6 +171,15 @@
             </a>
           </li>
 
+          {% elif "request_detail" in request.path %}
+
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'rrbnstaff:request_list' %}">
+              <i class="material-icons">local_taxi</i>
+              <p>Vehicle Requests</p>
+            </a>
+          </li>
+
           {% elif "request_list" in request.path %}
 
           <li class="nav-item active">

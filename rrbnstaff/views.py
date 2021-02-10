@@ -193,8 +193,7 @@ class VehiclesFilter(FilterSet):
         model = Vehicle
         fields = [
             'location',
-            'trip_type',
-            
+            'trip_type',   
         ]
 
 
@@ -217,35 +216,20 @@ class ItemObjectMixin(object):
             obj = get_object_or_404(self.model, id=id)
         return obj
 
-class CreateVehicleRequest(LoginRequiredMixin, VehicleObjectMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
-    template_name = 'rrbnstaff/create_vehicle_request.html'
-    form_class = OrderModelForm
-    success_message = 'Vehicle Request created successfully.'
-    success_url = reverse_lazy('rrbnstaff:request_list') 
 
-    def get_context_data(self, *args, **kwargs):
-        context = super(CreateVehicleRequest, self).get_context_data(**kwargs)
-        context = {}
-        obj = self.get_object()
-        if obj is not None:
-            form = OrderModelForm(instance=obj)
-            context['object'] = obj  
-            context['form'] = form
-        return context   
-   
-    def form_invalid(self, form):
-        form = self.get_form()
+class RequisitionsListView(LoginRequiredMixin, ListView):
+    template_name = "rrbnstaff/requisition_list2.html"
+    context_object_name = 'object'
 
-        context = {}
-        obj = self.get_object()
-        if obj is not None:
-          
-           context['object'] = obj
-           context['form'] = form 
-          
-        return self.render_to_response(context)
+    def get_queryset(self):
+        return Requisition.objects.all()
         
- 
+
+    def get_context_data(self, **kwargs):
+        obj = super(RequisitionsListView, self).get_context_data(**kwargs)
+        obj['requisition_qs'] = Requisition.objects.filter(requisition_status=1, requesting_staff=self.request.user)
+        return obj
+
 
 class RequisitionCreateView(LoginRequiredMixin, ItemObjectMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'rrbnstaff/create_requisition.html'
@@ -275,46 +259,8 @@ class RequisitionCreateView(LoginRequiredMixin, ItemObjectMixin, PassRequestMixi
           
         return self.render_to_response(context)
 
-#class RequisitionCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
-    #template_name = 'rrbnstaff/create_requisition.html'
-    #form_class = RequisitionModelForm
-    #success_message = 'Requisition created successfully.'
-    #success_url = reverse_lazy('rrbnstaff:requisition_list') 
-
-#class CreateVehicleRequest(PassRequestMixin, SuccessMessageMixin, CreateView):
-    #template_name = 'rrbnstaff/create_vehicle_request.html'
-    #form_class = RequestModelForm
-    #success_message = 'Vehicle Request created successfully.'
-    #success_url = reverse_lazy('rrbnstaff:request_list') 
-
-
-class RequisitionsListView(LoginRequiredMixin, ListView):
-    template_name = "rrbnstaff/requisition_list2.html"
-    context_object_name = 'object'
-
-    def get_queryset(self):
-        return Requisition.objects.all()
-        
-
-    def get_context_data(self, **kwargs):
-        obj = super(RequisitionsListView, self).get_context_data(**kwargs)
-        obj['requisition_qs'] = Requisition.objects.filter(requisition_status=1, requesting_staff=self.request.user)
-        return obj
-
-
-class RequestListView(LoginRequiredMixin, ListView):
-    template_name = "rrbnstaff/request_list.html"
-    context_object_name = 'object'
-
-    def get_queryset(self):
-        return Request.objects.all()
-        
-
-    def get_context_data(self, **kwargs):
-        obj = super(RequestListView, self).get_context_data(**kwargs)
-        obj['request_qs'] = Request.objects.filter(request_status=1, requesting_staff=self.request.user)
-        return obj
-
+      
+ 
 class RequisitionObjectMixin(object):
     model = Requisition
     def get_object(self):
@@ -334,6 +280,17 @@ class RequestObjectMixin(object):
         return obj 
 
 
+#class RequisitionCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
+    #template_name = 'rrbnstaff/create_requisition.html'
+    #form_class = RequisitionModelForm
+    #success_message = 'Requisition created successfully.'
+    #success_url = reverse_lazy('rrbnstaff:requisition_list') 
+
+#class CreateVehicleRequest(PassRequestMixin, SuccessMessageMixin, CreateView):
+    #template_name = 'rrbnstaff/create_vehicle_request.html'
+    #form_class = RequestModelForm
+    #success_message = 'Vehicle Request created successfully.'
+    #success_url = reverse_lazy('rrbnstaff:request_list') 
 
 class RequisitionDetailView(LoginRequiredMixin, RequisitionObjectMixin, View):
     template_name = "rrbnstaff/requisition_detail.html"
@@ -342,27 +299,12 @@ class RequisitionDetailView(LoginRequiredMixin, RequisitionObjectMixin, View):
         context = {'object': self.get_object()}
         return render(request, self.template_name, context)
 
-
-class VehicleRequestDetailView(LoginRequiredMixin, DetailView):
-    template_name = "rrbnstaff/vehicle_request_detail.html"
-    model = Request
-
 class RequisitionUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
     model = Requisition
     template_name = 'rrbnstaff/requisition_update.html'
     form_class = RequisitionModelForm
     success_message = 'Requisition updated Successfully'
     success_url = reverse_lazy('rrbnstaff:requisition_list')
-
-
-
-class VehicleRequestUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
-    model = Request
-    template_name = 'rrbnstaff/update_vehicle_request.html'
-    form_class = OrderModelForm
-    success_message = 'Vehicle Request updated Successfully'
-    success_url = reverse_lazy('rrbnstaff:request_list')
-
 
 
 class RequisitionDeleteView(LoginRequiredMixin, RequisitionObjectMixin, View):
@@ -385,6 +327,77 @@ class RequisitionDeleteView(LoginRequiredMixin, RequisitionObjectMixin, View):
             return redirect('rrbnstaff:requisition_list')
         return render(request, self.template_name, context)
 
+class MyIssuedRequisitions(LoginRequiredMixin, ListView):
+    template_name = "rrbnstaff/my_issued_requisitions.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return Issue.objects.all()
+        
+
+    def get_context_data(self, **kwargs):
+        obj = super(MyIssuedRequisitions, self).get_context_data(**kwargs)
+        obj['issue_qs'] = Issue.objects.filter(requesting_staff=self.request.user)
+        return obj 
+
+class MyIssuedRequisitionsDetails(LoginRequiredMixin, DetailView):
+    template_name = "rrbnstaff/my_issued_requisitions_details.html"
+    model = Issue 
+
+
+class RequestListView(LoginRequiredMixin, ListView):
+    template_name = "rrbnstaff/request_list.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return Request.objects.all()
+        
+    def get_context_data(self, **kwargs):
+        obj = super(RequestListView, self).get_context_data(**kwargs)
+        obj['request_qs'] = Request.objects.filter(request_status=1, requesting_staff=self.request.user)
+        return obj
+
+class CreateVehicleRequest(LoginRequiredMixin, VehicleObjectMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
+    template_name = 'rrbnstaff/create_vehicle_request.html'
+    form_class = OrderModelForm
+    success_message = 'Vehicle Request created successfully.'
+    success_url = reverse_lazy('rrbnstaff:request_list') 
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CreateVehicleRequest, self).get_context_data(**kwargs)
+        context = {}
+        obj = self.get_object()
+        if obj is not None:
+            form = OrderModelForm(instance=obj)
+            context['object'] = obj  
+            context['form'] = form
+        return context   
+   
+    def form_invalid(self, form):
+        form = self.get_form()
+
+        context = {}
+        obj = self.get_object()
+        if obj is not None:
+          
+           context['object'] = obj
+           context['form'] = form 
+          
+        return self.render_to_response(context)
+
+class VehicleRequestDetailView(LoginRequiredMixin, DetailView):
+    template_name = "rrbnstaff/vehicle_request_detail.html"
+    model = Request
+
+
+class VehicleRequestUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
+    model = Request
+    template_name = 'rrbnstaff/update_vehicle_request.html'
+    form_class = OrderModelForm
+    success_message = 'Vehicle Request updated Successfully'
+    success_url = reverse_lazy('rrbnstaff:request_list')
+
+
 class VehicleRequestDeleteView(LoginRequiredMixin, RequestObjectMixin, View):
     template_name = "rrbnstaff/vehicle_request_delete.html" # DetailView
     def get(self, request, id=None, *args, **kwargs):
@@ -406,21 +419,6 @@ class VehicleRequestDeleteView(LoginRequiredMixin, RequestObjectMixin, View):
         return render(request, self.template_name, context)
 
 
-
-class MyIssuedRequisitions(LoginRequiredMixin, ListView):
-    template_name = "rrbnstaff/my_issued_requisitions.html"
-    context_object_name = 'object'
-
-    def get_queryset(self):
-        return Issue.objects.all()
-        
-
-    def get_context_data(self, **kwargs):
-        obj = super(MyIssuedRequisitions, self).get_context_data(**kwargs)
-        obj['issue_qs'] = Issue.objects.filter(requesting_staff=self.request.user)
-        return obj 
-
-
 class MyVehicleAllocations(LoginRequiredMixin, ListView):
     template_name = "rrbnstaff/my_vehicle_allocations.html"
     context_object_name = 'object'
@@ -428,16 +426,10 @@ class MyVehicleAllocations(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Assign.objects.all()
         
-
     def get_context_data(self, **kwargs):
         obj = super(MyVehicleAllocations, self).get_context_data(**kwargs)
         obj['assign_qs'] = Assign.objects.filter(requesting_staff=self.request.user)
         return obj 
-
-
-class MyIssuedRequisitionsDetails(LoginRequiredMixin, DetailView):
-    template_name = "rrbnstaff/my_issued_requisitions_details.html"
-    model = Issue 
 
 class AssignedVehicleDetails(LoginRequiredMixin, DetailView):
     template_name = "rrbnstaff/assigned_vehicle_details.html"
@@ -449,7 +441,6 @@ class StaffProfileCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessag
     success_message = 'Staff Profile Created Successfully.'
     success_url = reverse_lazy('rrbnstaff:my_profile_list')
     
-
 class MyProfileListView(LoginRequiredMixin, ListView):
     template_name = "rrbnstaff/my_profile_list.html"
     context_object_name = 'object'
@@ -463,7 +454,6 @@ class MyProfileListView(LoginRequiredMixin, ListView):
         obj['my_profile_qs'] = Employee.objects.filter(staff_name=self.request.user)
         return obj    
 
-
 class MyProfileDetailView(LoginRequiredMixin, DetailView):
     template_name = "rrbnstaff/my_profile_detail.html"
     model = Employee
@@ -475,8 +465,6 @@ class MyProfileUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMi
     form_class = StaffProfileModelForm
     success_message = 'Profile Updated Successfully'
     success_url = reverse_lazy('rrbnstaff:my_profile_list')
-
-
 
 class ProfileObjectMixin(object):
     model = Employee
@@ -507,7 +495,6 @@ class MyProfileDeleteView(LoginRequiredMixin, ProfileObjectMixin, View):
             context['object'] = None
             return redirect('rrbnstaff:my_profile_list')
         return render(request, self.template_name, context)
-
 
 
 class MyLeaveRequestListView(LoginRequiredMixin, ListView):
@@ -542,6 +529,7 @@ class LeaveRequestUpdateView(LoginRequiredMixin, PassRequestMixin, SuccessMessag
     success_message = 'Leave Request Updated Successfully'
     success_url = reverse_lazy('rrbnstaff:my_leave_requests_list')
 
+
 class LeaveObjectMixin(object):
     model = Leave
     def get_object(self):
@@ -571,12 +559,10 @@ class LeaveRequestDeleteView(LoginRequiredMixin, LeaveObjectMixin, View):
             return redirect('rrbnstaff:my_leave_requests_list')
         return render(request, self.template_name, context)
 
-
 class MyApprovedLeaves(LoginRequiredMixin, ListView):
     template_name = "rrbnstaff/my_approved_leaves.html"
     context_object_name = 'object'
     
-
     def get_queryset(self):
         return Leave.objects.order_by('-leave_application_date')
         
@@ -589,7 +575,6 @@ class MyAssignedLeaves(LoginRequiredMixin, ListView):
     template_name = "rrbnstaff/my_assigned_leaves.html"
     context_object_name = 'object'
     
-
     def get_queryset(self):
         return Leave.objects.order_by('-leave_application_date')
         
@@ -598,12 +583,10 @@ class MyAssignedLeaves(LoginRequiredMixin, ListView):
         obj['assigned_leaves_qs'] = Specify.objects.filter(leave_status="Leave Days Assigned", staff_name=self.request.user)
         return obj
 
-
 class MyLeaveHistory(LoginRequiredMixin, ListView):
     template_name = "rrbnstaff/my_leave_history.html"
     context_object_name = 'object'
     
-
     def get_queryset(self):
         return Leave.objects.order_by('-leave_application_date')
         
@@ -617,7 +600,6 @@ class LeaveApprovalDetailView(LoginRequiredMixin, DetailView):
     template_name = "rrbnstaff/leave_approval_detail.html"
     model = Leave
 
-
 class LeaveAssignmentDetailView(LoginRequiredMixin, DetailView):
     template_name = "rrbnstaff/leave_assignment_detail.html"
     model = Specify
@@ -627,12 +609,10 @@ class LeaveHistoryDetailView(LoginRequiredMixin, DetailView):
     model = Document
 
 
-    
 class MyScheduledTrainings(LoginRequiredMixin, ListView):
     template_name = "rrbnstaff/my_programs_list.html"
     context_object_name = 'object'
-    
-
+  
     def get_queryset(self):
         return Training.objects.order_by('-date_added')
         
@@ -641,11 +621,9 @@ class MyScheduledTrainings(LoginRequiredMixin, ListView):
         obj['my_training_list_qs'] = Training.objects.filter(staff_name=self.request.user)
         return obj
 
-
 class MyScheduledTrainingsDetails(LoginRequiredMixin, DetailView):
     template_name = "rrbnstaff/my_training_details.html"
     model = Training
-
 
 class MyPromotionInterviewListView(LoginRequiredMixin, ListView):
     template_name = "rrbnstaff/my_scheduled_promotion_interviews.html"
@@ -664,9 +642,6 @@ class MyPromotionInterviewDetailView(LoginRequiredMixin, DetailView):
     template_name = "rrbnstaff/my_scheduled_interview_details.html"
     model = Schedule
 
-
-
-
 class MyPerformanceEvaluationListView(LoginRequiredMixin, ListView):
     template_name = "rrbnstaff/my_performance_evaluations_list.html"
     context_object_name = 'object'
@@ -684,8 +659,6 @@ class MyPerformanceEvaluationDetailView(LoginRequiredMixin, DetailView):
     template_name = "rrbnstaff/my_performance_evaluation_details.html"
     model = Performance
 
-
-
 class ReprisalListView(LoginRequiredMixin, ListView):
     template_name = "rrbnstaff/my_reprisal_list.html"
     context_object_name = 'object'
@@ -702,8 +675,6 @@ class ReprisalDetailView(LoginRequiredMixin, DetailView):
     template_name = "rrbnstaff/my_reprisal_details.html"
     model = Discipline
 
-
-
 class RestitutionListView(LoginRequiredMixin, ListView):
     template_name = "rrbnstaff/restitution_list.html"
     context_object_name = 'object'
@@ -715,7 +686,6 @@ class RestitutionListView(LoginRequiredMixin, ListView):
         obj = super(RestitutionListView, self).get_context_data(**kwargs)
         obj['restitution_list_qs'] = Compliance.objects.filter(staff_name=self.request.user, case_status="Completed")
         return obj
-
 
 class RestitutionDetailView(LoginRequiredMixin, DetailView):
     template_name = "rrbnstaff/restitution_detail.html"
