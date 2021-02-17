@@ -24,30 +24,6 @@
       <div class="content">
         <div class="container-fluid ">
           <div class="row">
-            <div class="col-lg-3 col-md-6 col-sm-6">
-              <div class="card card-stats">
-                <div class="card-header card-header-warning card-header-icon">
-                  <div class="card-icon">
-                    <i class="material-icons">update</i>
-                  </div>
-                  <p class="card-category">Pending Leave Requests</p>
-                   {% if vreq_pend %}<h3 class="card-title">{{ vreq_pend.count }}
-                  </h3>
-                  {% else %}  
-                  <h3 class="card-title">0
-                  </h3>
-                  {% endif %}
-                </div>
-                <div class="card-footer">
-                  <div class="stats">
-                    <i class="material-icons text-info">date_range</i> {% if vreq_pend_mnth %} {{ vreq_pend_mnth.count }} (Pending this Month)
-                    {% else %}  
-                    0 (Pending this Month)
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
-            </div>
 
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
@@ -55,7 +31,7 @@
                   <div class="card-icon">
                     <i class="material-icons">content_copy</i>
                   </div>
-                  <p class="card-category">Approved Leave Requests</p>
+                  <p class="card-category">Awarded Contracts</p>
                   {% if vass %}<h3 class="card-title">{{ vass.count }}
                   </h3>
                   {% else %}  
@@ -67,22 +43,48 @@
                 <div class="card-footer">
                   <div class="stats">
                     <i class="material-icons text-info">date_range</i>
-                    {% if vassmnth %} {{ vassmnth.count }} (Assigned this Month)
+                    {% if vassmnth %} {{ vassmnth.count }} (Awarded this Month)
                     {% else %}  
-                    0 (Assigned this Month)
+                    0 (Awarded this Month)
                     {% endif %}
                   </div>
                 </div>
               </div>
             </div>
-          
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
                 <div class="card-header card-header-warning card-header-icon">
                   <div class="card-icon">
-                    <i class="material-icons">info_outline</i>
+                    <i class="material-icons">update</i>
                   </div>
-                  <p class="card-category">Scheduled Trainings</p>
+                  <p class="card-category">Projects In Progress</p>
+                   {% if vreq_pend %}<h3 class="card-title">{{ vreq_pend.count }}
+                  </h3>
+                  {% else %}  
+                  <h3 class="card-title">0
+                  </h3>
+                  {% endif %}
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons text-info">date_range</i> {% if vreq_pend_mnth %} {{ vreq_pend_mnth.count }} (Ongoing this Month)
+                    {% else %}  
+                    0 (Ongoing this Month)
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            
+          
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">add_task</i>
+                  </div>
+                  <p class="card-category">Completed Projects</p>
                   {% if sch_pend %}<h3 class="card-title">{{ sch_pend.count }}
                   </h3>
                   {% else %}  
@@ -92,9 +94,9 @@
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons text-info">date_range</i>{% if sch_pend_mnth %} {{ sch_pend_mnth.count }} (Pending this Month)
+                    <i class="material-icons text-info">date_range</i>{% if sch_pend_mnth %} {{ sch_pend_mnth.count }} (Completed this Month)
                     {% else %}  
-                    0 (Pending this Month)
+                    0 (Completed this Month)
                     {% endif %}
                   </div>
                 </div>
@@ -102,11 +104,11 @@
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
-                <div class="card-header card-header-success card-header-icon">
+                <div class="card-header card-header-danger card-header-icon">
                   <div class="card-icon">
                     <i class="material-icons">info_outline</i>
                   </div>
-                  <p class="card-category">Concluded Trainings</p>
+                  <p class="card-category">Abandoned Projects</p>
                  {% if rep %}<h3 class="card-title">{{ rep.count }}
                   </h3>
                   {% else %}  
@@ -116,9 +118,9 @@
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons text-info">date_range</i> {% if rep_mnth %} {{ rep_mnth.count }} (Repaired this Month)
+                    <i class="material-icons text-info">date_range</i> {% if rep_mnth %} {{ rep_mnth.count }} (Abandoned this Month)
                     {% else %}  
-                    0 (Repaired this Month)
+                    0 (Abandoned this Month)
                     {% endif %}
                   </div>
                 </div>
@@ -136,25 +138,25 @@
           <div class="row">
 
 
-          <div class="col-md-4" onclick="window.location='{% url 'hr:leave_request_list' %}';" style="cursor: pointer;">
+          <div class="col-md-4" onclick="window.location='{% url 'procurement:contract_list' %}';" style="cursor: pointer;">
               <div class="card remove-borer">
                 <div class="card-body">
-                <button type="button" class="btn info text-info pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/barcode.png' %}" alt="shop"> View Leave Requests</button>
+                <button type="button" class="btn info text-info pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/barcode.png' %}" alt="shop"> View Contract Awards</button>
                 </div>
                 </div>
               </div> 
       
-              <div class="col-md-4" onclick="window.location='{% url 'hr:training_list' %}';" style="cursor: pointer;">
+              <div class="col-md-4" onclick="window.location='{% url 'procurement:projects_list' %}';" style="cursor: pointer;">
               <div class="card remove-borer">
                 <div class="card-body">
-                <button type="button" class="btn warning text-warning pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/reports.png' %}" alt="shop"> View Scheduled Trainings</button>
+                <button type="button" class="btn warning text-warning pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/reports.png' %}" alt="shop"> View Projects</button>
                 </div>
                 </div>
               </div> 
 
           
 
-            <div class="col-md-4" onclick="window.location='{% url 'hr:staff_profile_list' %}';" style="cursor: pointer;">
+            <div class="col-md-4" onclick="window.location='{% url 'procurement:vendor_list' %}';" style="cursor: pointer;">
               <div class="card remove-borer">
                 <div class="card-body">
                 <button type="button" class="btn danger text-danger pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/view-requisition.png' %}" alt="shop"> Reports</button>

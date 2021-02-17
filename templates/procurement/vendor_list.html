@@ -49,13 +49,12 @@
     <tr style="background: #41963F;">
 
     <td style="color: #fff;" class="small-text" width="05%">S/N</td>
-    <td style="color: #fff;" class="small-text" width="15%">Vendor Name</td>
-    <td style="color: #fff;" class="small-text" width="18%">Address</td>
+    <td style="color: #fff;" class="small-text" width="22%">Vendor Name</td>
+    <td style="color: #fff;" class="small-text" width="25%">Address</td>
     <td style="color: #fff;" class="small-text" width="13%">Phone</td>
-    <td style="color: #fff;" class="small-text" width="13%">Email Name</td>
-    <td style="color: #fff;" class="small-text" width="15%">Vendor Description</td>
-    <td style="color: #fff;" class="small-text" width="12%">Date Created</td>
-     <td style="color: #fff;" class="small-text" width="09%">Actions</td>
+    <td style="color: #fff;" class="small-text" width="14%">Email Name</td>
+    <td style="color: #fff;" class="small-text" width="10%">Date Created</td>
+     <td style="color: #fff;" class="small-text" width="11%">Actions</td>
     </tr>
     </thead>
     <tbody>
@@ -63,13 +62,12 @@
     {% for object in vendor_list_qs %}
     <tr>
     <td width="05%">{{forloop.counter}}</td>
-    <td width="15%">{{object.vendor_name}}</td>
-    <td width="18%">{{object.address}}</td>
+    <td width="22%">{{object.vendor_name}}</td>
+    <td width="25%">{{object.address}}</td>
     <td width="13%">{{object.phone}}</td>
-    <td width="13%">{{object.email}}</td> 
-    <td width="15%">{{object.description}}</td>
-    <td width="12%">{{object.date_created}}</td>
-    <td width="09%">
+    <td width="14%">{{object.email}}</td> 
+    <td width="10%">{{object.date_created}}</td>
+    <td width="11%">
     <a class="btn btn-primary p-1" href="{% url 'procurement:vendor_detail' object.id %}"><i class="fa fa-folder-open text-white"></i></a>  
     <button type="button" id="update-vedor" class="bs-modal btn btn-small btn-warning mt-1 p-1" data-form-url="{% url 'procurement:vendor_update' object.pk %}"><i class="fas fa-redo"></i></button>
     <button type="button" id="delete-vendor" class="bs-modal btn btn-small btn-danger mt-1 p-1" data-form-url="{% url 'procurement:vendor_delete' object.id %}"><i class="fas fa-trash-alt"></i></button>  
