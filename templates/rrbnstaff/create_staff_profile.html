@@ -35,9 +35,46 @@
     
     <form method="POST" action="." enctype="multipart/form-data">
     {% csrf_token %}
-    <input type="hidden" name="staff_name" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_staff_name">
     
     <div class="row">
+    <div class="form-group col-md-4">
+    {{ form.staff_name|as_crispy_field }}
+    <div class="{% if form.staff_name.errors %} invalid{% endif %}">
+    {% for error in field.errors %}
+    <p class="help-block">{{ error }}</p>
+    {% endfor %}
+    </div>
+    </div>
+
+    <div class="form-group col-md-4">
+    {{ form.department|as_crispy_field }}
+    <div class="{% if form.department.errors %} invalid{% endif %}">
+    {% for error in field.errors %}
+    <p class="help-block">{{ error }}</p>
+    {% endfor %}
+    </div>
+    </div>
+
+    <div class="form-group col-md-4">
+    {{ form.email|as_crispy_field }}
+    <div class="{% if form.email.errors %} invalid{% endif %}">
+    {% for error in field.errors %}
+    <p class="help-block">{{ error }}</p>
+    {% endfor %}
+    </div>
+    </div>
+    </div>
+   
+    <div class="row">
+    <div class="form-group col-md-4">
+    {{ form.phone|as_crispy_field }}
+    <div class="{% if form.phone.errors %} invalid{% endif %}">
+    {% for error in field.errors %}
+    <p class="help-block">{{ error }}</p>
+    {% endfor %}
+    </div>
+    </div>
+
     <div class="form-group col-md-4">
     {{ form.dob|as_crispy_field }}
     <div class="{% if form.dob.errors %} invalid{% endif %}">
@@ -55,7 +92,10 @@
     {% endfor %}
     </div>
     </div>
+    </div>
+    
 
+    <div class="row">
     <div class="form-group col-md-4">
     {{ form.marital_status|as_crispy_field }}
     <div class="{% if form.marital_status.errors %} invalid{% endif %}">
@@ -64,10 +104,6 @@
     {% endfor %}
     </div>
     </div>
-    </div>
-    
-
-    <div class="row">
 
     <div class="form-group col-md-4">
    {{ form.next_of_kin|as_crispy_field }}
@@ -86,48 +122,19 @@
     {% endfor %}
     </div>
     </div>
-
-    <div class="form-group col-md-4">
-    {{ form.email|as_crispy_field }}
-    <div class="{% if form.email.errors %} invalid{% endif %}">
-    {% for error in field.errors %}
-    <p class="help-block">{{ error }}</p>
-    {% endfor %}
-    </div>
     </div>
 
-    </div>
 
     <div class="row">
     <div class="form-group col-md-4">
-    {{ form.phone|as_crispy_field }}
-    <div class="{% if form.phone.errors %} invalid{% endif %}">
+    {{ form.zone|as_crispy_field }}
+    <div class="{% if form.zone.errors %} invalid{% endif %}">
     {% for error in field.errors %}
     <p class="help-block">{{ error }}</p>
     {% endfor %}
     </div>
     </div>
 
-    <div class="form-group col-md-4">
-   {{ form.zone|as_crispy_field }}
-   <div class="{% if form.zone.errors %} invalid{% endif %}">
-    {% for error in field.errors %}
-    <p class="help-block">{{ error }}</p>
-    {% endfor %}
-    </div>
-    </div>
-
-    <div class="form-group col-md-4">
-     {{ form.department|as_crispy_field }}
-     <div class="{% if form.department.errors %} invalid{% endif %}">
-    {% for error in field.errors %}
-    <p class="help-block">{{ error }}</p>
-    {% endfor %}
-    </div>
-    </div>
-    </div>
-
-    <div class="row">
     <div class="form-group col-md-4">
     {{ form.designation|as_crispy_field }}
     <div class="{% if form.designation.errors %} invalid{% endif %}">
@@ -137,6 +144,7 @@
     </div>
     </div>
 
+    
     <div class="form-group col-md-4">
     {{ form.pay_grade|as_crispy_field }}
     <div class="{% if form.pay_grade.errors %} invalid{% endif %}">
@@ -145,7 +153,9 @@
     {% endfor %}
     </div>
     </div>
+    </div>
 
+    <div class="row">
     <div class="form-group col-md-4">
     {{ form.employee_id|as_crispy_field }}
     <div class="{% if form.employee_id.errors %} invalid{% endif %}">
@@ -154,9 +164,7 @@
     {% endfor %}
     </div>
     </div>
-    </div>
 
-    <div class="row">
     <div class="form-group col-md-4">
     {{ form.contact_address|as_crispy_field }}
     <div class="{% if form.contact_address.errors %} invalid{% endif %}">
@@ -174,7 +182,9 @@
     {% endfor %}
     </div>
     </div>
+    </div>
 
+    <div class="row">
     <div class="form-group col-md-4">
     {{ form.state|as_crispy_field }}
     <div class="{% if form.state.errors %} invalid{% endif %}">
@@ -183,9 +193,7 @@
     {% endfor %}
     </div>
     </div>
-    </div>
 
-    <div class="row">
     <div class="form-group col-md-4">
     {{ form.state_of_origin|as_crispy_field }}
     <div class="{% if form.state_of_origin.errors %} invalid{% endif %}">
@@ -203,25 +211,25 @@
     {% endfor %}
     </div>
     </div>
-
-    <div class="form-group col-md-4">
-    {{ form.date_joined|as_crispy_field }}
-    <div class="{% if form.date_joined.errors %} invalid{% endif %}">
-   {% for error in form.date_joined.errors %}
-   <p class="text-danger">{{ error }}</p>    
-   {% endfor %}
-   </div>
-    </div>
     </div>
 
     <div class="row">
     <div class="form-group col-md-4">
+    {{ form.date_joined|as_crispy_field }}
+    <div class="{% if form.date_joined.errors %} invalid{% endif %}">
+    {% for error in form.date_joined.errors %}
+    <p class="text-danger">{{ error }}</p>    
+    {% endfor %}
+    </div>
+    </div>
+
+    <div class="form-group col-md-4">
     {{ form.pension_date|as_crispy_field }}
     <div class="{% if form.pension_date.errors %} invalid{% endif %}">
-   {% for error in form.pension_date.errors %}
-   <p class="text-danger">{{ error }}</p>    
-   {% endfor %}
-   </div>
+    {% for error in form.pension_date.errors %}
+    <p class="text-danger">{{ error }}</p>    
+    {% endfor %}
+    </div>
     </div>
 
 
@@ -233,7 +241,9 @@
     {% endfor %}
     </div>
     </div>
+    </div>
 
+    <div class="row">
     <div class="form-group col-md-4">
     {{ form.languages|as_crispy_field }}
     <div class="{% if form.languages.errors %} invalid{% endif %}">
@@ -242,9 +252,7 @@
     {% endfor %}
     </div>
     </div>
-    </div>
 
-    <div class="row">
     <div class="form-group col-md-4">
     {{ form.professional_organizations|as_crispy_field }}
     <div class="{% if form.professional_organizations.errors %} invalid{% endif %}">
@@ -262,7 +270,9 @@
     {% endfor %}
     </div>
     </div>
+    </div>
 
+    <div class="row">
     <div class="form-group col-md-4">
     {{ form.special_interests|as_crispy_field }}
     <div class="{% if form.special_interests.errors %} invalid{% endif %}">
@@ -271,9 +281,7 @@
     {% endfor %}
     </div>
     </div>
-    </div>
 
-    <div class="row">
     <div class="form-group col-md-4">
     {{ form.hobbies|as_crispy_field }}
     <div class="{% if form.hobbies.errors %} invalid{% endif %}">
@@ -291,7 +299,9 @@
     {% endfor %}
     </div>
     </div>
+    </div>
 
+    <div class="row">
     <div class="form-group col-md-4">
     {{ form.drivers_license|as_crispy_field }}
     <div class="{% if form.drivers_license.errors %} invalid{% endif %}">
@@ -300,9 +310,7 @@
     {% endfor %}
     </div>
     </div>
-    </div>
-
-    <div class="row">
+    
     <div class="form-group col-md-4">
     {{ form.digital_passport|as_crispy_field }}
     <div class="{% if form.digital_passport.errors %} invalid{% endif %}">
@@ -312,8 +320,6 @@
     </div>
     </div>
     </div>
-
-
 
     </form>
     </div>

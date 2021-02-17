@@ -1,0 +1,134 @@
+{% extends 'base13.html'%}
+{% load static %}
+{% load humanize %}
+{% block title%}| 
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.8.2-web/css/allt.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
+<link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
+
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+{% include "_modal.html" %}
+<!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content">
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+    <!-- Page Heading -->
+    <br><br>
+
+        
+    {% include 'partials/_alerts.html' %}
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-2">
+    <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-success">Projects List</h6>
+    </div>
+    <div class="card-body">
+
+    <div class="table-responsive-lg">
+    <table class="table table-bordered table-hover" id="mydata">
+    <thead>
+    <tr style="background: #41963F;">
+
+    <td style="color: #fff;" class="small-text" width="05%">S/N</td>
+    <td style="color: #fff;" class="small-text" width="08%">Contract No</td>
+    <td style="color: #fff;" class="small-text" width="17%">Contract Name</td>
+    <td style="color: #fff;" class="small-text" width="11%">Category</td>
+    <td style="color: #fff;" class="small-text" width="18%">Vendor</td>
+    <td style="color: #fff;" class="small-text" width="10%">Start Date</td>
+    <td style="color: #fff;" class="small-text" width="10%">Completion Date</td>
+    <td style="color: #fff;" class="small-text" width="10%">Contract Status</td>
+     <td style="color: #fff;" class="small-text" width="10%">Actions</td>
+    </tr>
+    </thead>
+    <tbody>
+    {% if project_list_qs %}
+    {% for object in project_list_qs %}
+    <tr>
+    <td width="05%">{{forloop.counter}}</td>
+    <td width="08%">{{object.contract_no}}</td>
+    <td width="17%">{{object.contract_name}}</td>
+    <td width="11%">{{object.category}}</td>
+    <td width="18%">{{object.vendor}}</td> 
+    <td width="10%">{{object.start_date}}</td>
+    <td width="10%">{{object.completion_date}}</td>
+    <td width="10%">{{object.contract_status}}</td>
+     <td width="10%">
+
+    <a class="btn btn-primary p-1" href="{% url 'procurement:project_detail' object.id %}"><i class="fa fa-folder-open text-white"></i></a>  
+    <button type="button" id="update-project" class="bs-modal btn btn-small btn-warning mt-1 p-1" data-form-url="{% url 'procurement:project_update' object.pk %}"><i class="fas fa-redo"></i></button>
+    <button type="button" id="delete-project" class="bs-modal btn btn-small btn-danger mt-1 p-1" data-form-url="{% url 'procurement:project_delete' object.id %}"><i class="fas fa-trash-alt"></i></button> 
+    
+    </td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+    </tbody>
+    </table>
+    </div>
+             </div>
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+
+<!--Jquery plugin-->
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+
+
+<script type="text/javascript">
+    $(function() {
+    
+        $(".bs-modal").each(function () {
+          $(this).modalForm({
+              formURL: $(this).data('form-url')
+          });
+        });
+    
+    });
+
+</script>
+
+
+
+
+<script>
+  $('#mydata').dataTable();
+</script>
+
+
+
+
+
+
+
+{% endblock %}

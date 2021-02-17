@@ -13,15 +13,9 @@ User = get_user_model()
 class SignupForm(UserCreationForm):
     department = forms.ChoiceField(choices = DEPARTMENT, widget=forms.Select(), required=True)
 
-
-
-
-
     class Meta:
         model = User
         fields = ('email', 'first_name', 'last_name', 'phone_no', 'department', 'password1', 'password2',)
-
-
 
     def __init__(self, *args, **kwargs):
        super(SignupForm, self).__init__(*args, **kwargs)

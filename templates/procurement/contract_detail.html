@@ -1,0 +1,189 @@
+{% extends 'base13.html'%}
+{% load static %}
+{% load humanize %}
+{% block title%}| Contract Details {% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
+<link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+{% include "_modal.html" %}
+
+<!-- Page Wrapper -->
+  <div id="wrapper">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <!-- Main Content -->
+      <div id="content">
+
+
+      <!-- Begin Page Content -->
+        <div class="container-fluid">
+           <br>
+
+        <div class="row ml-4 mt-4 pt-4">
+        <h3 class="col-12 text-info">Contract Details</h3>
+        </div>
+
+      <div class="row mx-4 mt-2 pt-3 bg-white">
+      <div class="col-md-6 mt-0">
+      <div class="col-md-12">
+      <div class="row">
+      <br>
+      <p class="col-12 text-success lead">Contract Details</p>
+      </div>
+
+      <div class="row">
+      <span class="col-5"><strong>Contract No:</strong></span>
+      <span class="col-5 ">{{object.contract_no}}</span>
+      </div>
+                
+
+      <div class="row">
+      <span class="col-5"><strong> Contract Name:</strong></span>
+      <span class="col-5">{{object.contract_name}}</span>
+      </div>
+      <div class="row">
+      <span class="col-5"><strong> Contract Description:</strong></span>
+      <span class="col-5">{{object.contract_description}}</span>
+      </div>
+      <div class="row">
+      <span class="col-5"><strong> Contract Category:</strong></span>
+      <span class="col-5">{{object.category}}</span>
+      </div>
+
+      <div class="row">
+      <span class="col-5"><strong> Vendor:</strong></span>
+      <span class="col-5">{{object.vendor}}</span>
+      </div>
+
+      
+      <div class="row">
+      <span class="col-5"><strong> Contract Award Date:</strong></span>
+      <span class="col-5">{{object.contact_award_date}}</span>
+      </div>
+
+      <div class="row">
+      <span class="col-5"><strong> Contract Award Amount:</strong></span>
+      <span class="col-5">{{object.contact_award_amount| intcomma}}</span>
+      </div>
+
+      <div class="row">
+      <span class="col-5"><strong> Expected Start Date:</strong></span>
+      <span class="col-5">{{object.projected_start_date}}</span>
+      </div>
+
+      <div class="row">
+      <span class="col-5"><strong> Expected End Date:</strong></span>
+      <span class="col-5">{{object.projected_end_date}}</span>
+      </div>
+
+      <div class="row">
+      <span class="col-5"><strong> Contract Status:</strong></span>
+      <span class="col-5">{{object.contract_statu}}</span>
+      </div>
+
+      <br>
+
+      <p class="text-success lead">Control Details</p>
+      <div class="row">
+      <span class="col-5"><strong>Contract Documented By:</strong></span>
+      <span class="col-5">{{object.added_by.first_name}} {{object.added_by.last_name}}</span>
+      </div> 
+      <div class="row">
+      <span class="col-5"><strong>Documented On:</strong></span>
+      <span class="col-5">{{object.date_added}}</span>
+      </div> 
+
+                     
+      </div>
+      <br>
+      </div>   
+
+      
+
+      <div class="col-md-5 mt-0">
+      <p class="text-success lead">Profile Uploads</p>
+      <div class="row mr-2 ml-0 py-0">
+      <table class="table table-hover">
+      <thead style="background-color: #bfe3f8;">
+      <tr>
+      <th scope="col lead" style="color: #05567b;">Parameter</th>
+      <th scope="col lead" style="color: #05567b;">Value</th></tr>
+      </thead>
+      <tbody>
+      {% if object.contract_award_letter %}
+      <tr> <td width="40%" scope="col">Contract Award Letter:</td> 
+      <td width="60%" scope="col"><i class="fa fa-eye text-dark"></i>
+      <a class="text-danger" href="{{object.contract_award_letter.url}}" target="_blank"> Download Contract Award Letter</a></td> 
+      </tr>
+      {% endif %}
+
+      {% if object.vendor_proposal %}
+      <tr> <td width="40%" scope="col">Vendor Proposal:</td> 
+      <td width="60%" scope="col"><i class="fa fa-eye text-dark"></i>
+      <a class="text-danger" href="{{object.vendor_proposal.url}}" target="_blank"> Download Vendor Proposal</a></td> 
+      </tr>
+      {% endif %}     
+                       
+      </tbody>
+      </table>
+      </div>
+            
+      <div class="d-flex justify-content-end">
+      <button type="button" id="create-project" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'procurement:add_project' object.id %}"><i class="fa fa-check" aria-hidden="true"></i> Add Project</button><br>
+      <a href="{% url 'procurement:contract_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Contracts List</a>    
+        
+      </div>  
+      </div>
+
+      </div>            
+      </div>
+        <!-- /.container-fluid -->
+      </div>
+      </div>
+      <!-- End of Main Content -->
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<script type="text/javascript">
+    $(function() {
+    
+        $(".bs-modal").each(function () {
+          $(this).modalForm({
+              formURL: $(this).data('form-url')
+          });
+        });
+    
+    });
+
+</script>
+
+
+
+
+<script>
+  $('#mydata').dataTable();
+</script>
+
+
+
+
+
+
+
+{% endblock %}

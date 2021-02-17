@@ -1,4 +1,4 @@
-{% extends 'base11.html'%}
+{% extends 'base13.html'%}
 {% load static %}
 {% block title%}| Vendor Detail {% endblock %}
 
@@ -83,8 +83,8 @@
               <hr> 
               <div class="d-flex justify-content-end">  
               
-              <button type="button" id="update_vendor" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'hr:vendor_update' object.pk %}"><i class="fa fa-list text-white"></i> Update Vendor</button>
-              <a href="{% url 'hr:vendor_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Vendor List</a>  
+              <button type="button" id="update_vendor" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'procurement:vendor_update' object.pk %}"><i class="fa fa-list text-white"></i> Update Vendor</button>
+              <a href="{% url 'procurement:vendor_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Vendor List</a>  
             </div>  
             </div>
 

@@ -437,11 +437,6 @@ class CourseModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
       return instance
 
 
-
-
-
-
-
 class RecordModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
     training_start_date = forms.DateField(
       widget=DatePicker(
@@ -505,7 +500,6 @@ class RecordModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
        self.fields['projected_start_date'].widget.attrs['placeholder'] = "Enter Training Projected Start Date"
        self.fields['projected_end_date'].label = "Training Projected End Date"
        self.fields['projected_end_date'].widget.attrs['placeholder'] = "Enter Training Projected End Date"
-       self.fields['staff_name'].widget.attrs['placeholder'] = "Enter Staff Name"
        self.fields['training_start_date'].label = "Training Start Date"
        self.fields['training_start_date'].widget.attrs['placeholder'] = "Enter Training Start Date"
        self.fields['training_end_date'].label = "Training End Date"
@@ -540,7 +534,6 @@ class AppraisalModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm
             }
 
                 
-
     def __init__(self, *args, **kwargs):
        super(AppraisalModelForm, self).__init__(*args, **kwargs)
        for name in self.fields.keys():

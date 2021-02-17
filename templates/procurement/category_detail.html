@@ -1,6 +1,6 @@
-{% extends 'base11.html'%}
+{% extends 'base13.html'%}
 {% load static %}
-{% block title%}| Vendor Detail {% endblock %}
+{% block title%}| Category Detail {% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
@@ -27,7 +27,7 @@
            <br>
 
         <div class="row ml-4 mt-4 pt-4">
-        <h3 class="col-12 text-info">Vendor Details</h3>
+        <h3 class="col-12 text-info">Category Details</h3>
         </div>
 
       <div class="row mx-4 mt-2 pt-3 bg-white">
@@ -35,12 +35,12 @@
       <div class="col-md-12">
       <div class="row">
       <br>
-      <p class="col-12 text-success lead">Vendor Details</p>
+      <p class="col-12 text-success lead">Category Details</p>
       </div>
 
       <div class="row">
-      <span class="col-5"><strong>Vendor Name:</strong></span>
-      <span class="col-5 ">{{object.vendor_name}}</span>
+      <span class="col-5"><strong>Category Name:</strong></span>
+      <span class="col-5 ">{{object.category_name}}</span>
       </div>
                 
 
@@ -48,20 +48,7 @@
       <span class="col-5"><strong> Description:</strong></span>
       <span class="col-5">{{object.description}}</span>
       </div>
-      <div class="row">
-      <span class="col-5"><strong> Phone:</strong></span>
-      <span class="col-5">{{object.phone}}</span>
-      </div>
-      <div class="row">
-      <span class="col-5"><strong> Email:</strong></span>
-      <span class="col-5">{{object.email}}</span>
-      </div>
-
-      <div class="row">
-      <span class="col-5"><strong> Address:</strong></span>
-      <span class="col-5">{{object.address}}</span>
-      </div>
-                 
+                
       </div>
       <br>
       </div>   
@@ -77,16 +64,16 @@
 
       <div class="row">
       <span class="col-4"><strong>Date Added:</strong></span>
-      <span class="col-5">{{object.date_created_pretty}}</span>
+      <span class="col-5">{{object.added_on}}</span>
                    
       </div> 
-              <hr> 
-              <div class="d-flex justify-content-end">  
+      <hr> 
+      <div class="d-flex justify-content-end">  
               
-              <button type="button" id="update_vendor" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'hr:vendor_update' object.pk %}"><i class="fa fa-list text-white"></i> Update Vendor</button>
-              <a href="{% url 'hr:vendor_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Vendor List</a>  
-            </div>  
-            </div>
+      <button type="button" id="update_category" class="bs-modal btn btn-small btn-primary py-1 mr-4 mt-1 mb-3" data-form-url="{% url 'procurement:category_update' object.pk %}"><i class="fa fa-list text-white"></i> Update Category</button>
+      <a href="{% url 'procurement:category_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Category List</a>  
+      </div>  
+      </div>
 
 
       </div>            
@@ -120,16 +107,9 @@
 </script>
 
 
-
-
 <script>
   $('#mydata').dataTable();
 </script>
-
-
-
-
-
 
 
 {% endblock %}

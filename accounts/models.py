@@ -8,9 +8,6 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 
 
-
-
-
 class MyUserManager(BaseUserManager):
     """
     A custom user manager to deal with emails as unique identifiers for auth
@@ -39,9 +36,6 @@ class MyUserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
     
-
-
-
 class User(AbstractBaseUser, PermissionsMixin):
 
     DEPARTMENT = (
@@ -58,15 +52,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('Registrars Office', 'Registrars Office'),
         )
 
-    MODULE_NAME = (
-        ('Fleet Managment', 'Fleet Managment'),
-        ('Human Resources', 'Human Resources'),
-        ('Procurement', 'Procurement'),
-        ('Registrars', 'Registrars'),
-        ('Stores', 'Stores'),
-        ('RRBN Staff', 'RRBN Staff'),
-        )
-
+   
     ROLE = (
         ('Fleet Managment', 'Fleet Managment'),
         ('Human Resources', 'Human Resources'),
@@ -81,7 +67,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=30, blank=True)
     phone_no = models.CharField(max_length=100, blank=True)
     department = models.CharField (max_length=30, choices = DEPARTMENT,  null=True, blank=True)
-    module_name = models.CharField (max_length=20, choices = MODULE_NAME,  null=True, blank=True)
     role = models.CharField (max_length=20, choices = ROLE, blank=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
@@ -99,22 +84,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         ),
     )
     
-    
-    
-    
-    
     USERNAME_FIELD = 'email'
     objects = MyUserManager()
-
 
     #def get_absolute_url(self):
         #return reverse("accounts:profile_detail", kwargs={"id": self.id})
 
     def __str__(self):
         return self.email
-
-    
-    
+   
     def get_full_name(self):
         '''
         Returns the first_name plus the last_name, with a space in between.
@@ -124,7 +102,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.email
-
 
     def reg_date_pretty(self):
         return self.date_joined .strftime('%b %e %Y')

@@ -13,6 +13,27 @@ class LoginTemplateView(TemplateView):
     template_name = "accounts/login.html"
 
 
+#def register(request):
+
+    #form = SignupForm()
+    #if request.method == 'POST':
+        #form = SignupForm(request.POST)
+        #if form.is_valid():
+            #user = form.save()
+            #username = form.cleaned_data.get('username')
+
+            #group = Group.objects.get(name='customer')
+            #user.groups.add(group)
+
+            #messages.success(request, 'Account was created for ' + username)
+
+            #return redirect('login')
+        
+
+    #context = {'form':form}
+    #return render(request, 'accounts/register.html', context)
+
+
 class SignUpView(View):
     form_class = SignupForm
     template_name = 'accounts/register.html'
@@ -45,18 +66,21 @@ def login(request):
   if request.method == 'POST':
     email = request.POST['email']
     password = request.POST['password']
-
     user = auth.authenticate(email=email, password=password)
     if user is not None:
         auth_login(request, user)
-        
+        if user.department == 'Hr' and user.role == 'Human Resources':
+            return redirect('hr:hr_dashboard')
+        if user.department == 'Stores' and user.role == 'Stores':
+            return redirect('store:store_dashboard')
+        if user.department == 'Protocol' and user.role == 'Fleet Managment':
+            return redirect('fleet:fleet_dashboard')
+        if user.department == 'Procurement' and user.role == 'Procurement':
+            return redirect('procurement:procurement_dashboard')
         if user.department == 'Monitoring':
             return redirect('rrbnstaff:staff_dashboard')
         if user.department == 'Registrars Office':
             return redirect('rrbnstaff:staff_dashboard')
-
-        #if user.department == 'Monitoring':
-            #return redirect('store:store_dashboard')
         if user.department == 'Registrations':
             return redirect('rrbnstaff:staff_dashboard')
         if user.department == 'Hr':
@@ -73,18 +97,9 @@ def login(request):
             return redirect('rrbnstaff:staff_dashboard')
         if user.department == 'Protocol':
             return redirect('rrbnstaff:staff_dashboard')
-        if user.role == 'Fleet Managment':
-            return redirect('fleet:fleet_dashboard')
-        if user.role == 'Human Resources':
-            return redirect('hr:hr_dashboard')
-        if user.role == 'Procurement':
-            return redirect('store:store_dashboard')
-        if user.role == 'Registrars':
-            return redirect('store:store_dashboard')
-        if user.role == 'Stores':
-            return redirect('store:store_dashboard')
-        if user.role == 'RRBN Staff':
-            return redirect('rrbnstaff:staff_dashboard')
+        else:
+            messages.error(request, 'Please enter the correct email and password for your account. Note that both fields may be case-sensitive.')
+            return redirect('accounts:signin')
     else:
         messages.error(request, 'Please enter the correct email and password for your account. Note that both fields may be case-sensitive.')
         return redirect('accounts:signin')

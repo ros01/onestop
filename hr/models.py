@@ -108,7 +108,7 @@ class Employee(models.Model):
 
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    staff_name = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
+    staff_name = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     dob = models.DateField(default=date.today)
     gender = models.CharField(max_length=120, choices=GENDER,  null=True, blank=True)
     marital_status = models.CharField(max_length=120, choices=MARITAL_STATUS,  null=True, blank=True)
@@ -139,27 +139,9 @@ class Employee(models.Model):
     hobbies = models.TextField(blank = False, null = False)
     profile_creation_date = models.DateField(default=date.today)
 
-    def get_full_name(self):
-        '''
-        Returns the first_name plus the last_name, with a space in between.
-        '''
-        full_name = '%s %s' % (self.first_name, self.last_name)
-        return full_name.strip()
-
-    def dob_pretty(self):
-        return self.dob.strftime('%b %e %Y')
-
-    def date_joined_pretty(self):
-        return self.date_joined.strftime('%b %e %Y')
-
-    def pension_date_pretty(self):
-        return self.pension_date.strftime('%b %e %Y')
-
-    def profile_creation_date_pretty(self):
-        return self.profile_creation_date.strftime('%b %e %Y')
-    
+        
     def __str__(self):
-        return self.full_name
+        return str(self.staff_name)
 
 class Driver(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -201,6 +183,11 @@ class Leave(models.Model):
         ('Examination Leave', 'Examination Leave'),
         ('Maternity Leave', 'Maternity Leave'),
         ('Compassionate Leave', 'Compassionate Leave'),
+        ('Leave on Urgent Matter', 'Leave on Urgent Matter'),
+        ('Leave of Absence', 'Leave of Absence'),
+        ('Study Leave With Pay', 'Study Leave With Pay'),
+        ('Study Leave Without Pay', 'Study Leave Without Pay'),
+        ('Sabatical Leave', 'Sabatical Leave'),
         )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

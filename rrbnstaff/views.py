@@ -56,14 +56,14 @@ class DashboardTemplateView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super(DashboardTemplateView, self).get_context_data(*args, **kwargs)
         this_month = (datetime.datetime.now() + datetime.timedelta(days=30))
-        context['res'] = Requisition.objects.all()
-        context['resmnth'] = Requisition.objects.filter(requisition_date__lt=this_month)
-        context['res_pend'] = Requisition.objects.filter(requisition_status=1)
-        context['res_pend_mnth'] = Requisition.objects.filter(requisition_date__lt=this_month, requisition_status=1)
-        context['req'] = Request.objects.all()
-        context['reqmnth'] = Request.objects.filter(request_date__lt=this_month)
-        context['req_pend'] = Request.objects.filter(request_status=1)
-        context['req_pend_mnth'] = Request.objects.filter(request_date__lt=this_month, request_status=1)
+        context['res'] = Requisition.objects.filter(requesting_staff=self.request.user)
+        context['resmnth'] = Requisition.objects.filter(requesting_staff=self.request.user, requisition_date__lt=this_month)
+        context['res_pend'] = Requisition.objects.filter(requesting_staff=self.request.user, requisition_status=1)
+        context['res_pend_mnth'] = Requisition.objects.filter(requesting_staff=self.request.user, requisition_date__lt=this_month, requisition_status=1)
+        context['req'] = Request.objects.filter(requesting_staff=self.request.user)
+        context['reqmnth'] = Request.objects.filter(requesting_staff=self.request.user, request_date__lt=this_month)
+        context['req_pend'] = Request.objects.filter(requesting_staff=self.request.user, request_status=1)
+        context['req_pend_mnth'] = Request.objects.filter(requesting_staff=self.request.user, request_date__lt=this_month, request_status=1)
         
         return context
 

@@ -1,0 +1,255 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="apple-touch-icon" sizes="76x76" href="{% static 'assets/img/apple-icon.png' %}">
+  <link rel="icon" type="image/png" href="{% static 'assets/img/favicon.png' %}">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+  <!--     Fonts and icons     -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+
+<script src="{% static 'js/tempusdominus-bootstrap-4.js' %}"></script>
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
+
+<link href="{% static 'assets/css/material-dashboard3.css' %}" rel="stylesheet" />
+
+<title>RRBN One Stop Shop {% block title %}{% endblock %}</title>
+</head>
+
+<body>
+<header>
+
+</header>
+
+{% block styles %} {% endblock %}
+<div class="wrapper ">
+    <div class="sidebar" data-color="green" data-background-color="white" data-image="{% static 'assets/img/sidebar-1.jpg' %}">
+      <!--
+        Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
+
+        Tip 2: you can also add an image using data-image tag
+    -->
+      <div class="logo"><img class="rrbn-logo" src="{% static 'img/rrbn-logo.png' %}" alt="rrbn-logo">
+          </div>
+      <div class="sidebar-wrapper">
+        <ul class="nav">
+
+        {% if "dashboard" in request.path %}
+          <li class="nav-item active  ">
+            <a class="nav-link" href="{% url 'procurement:procurement_dashboard' %}">
+              <i class="material-icons">dashboard</i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'procurement:procurement_dashboard' %}">
+              <i class="material-icons">dashboard</i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "vendor" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'procurement:vendor_list' %}">
+              <i class="material-icons">work</i>
+              <p>
+              Vendors</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'procurement:vendor_list' %}">
+              <i class="material-icons">work</i>
+              <p>
+              Vendors</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "category" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'procurement:category_list' %}">
+              <i class="material-icons">content_paste</i>
+              <p>
+              Contract Categories</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'procurement:category_list' %}">
+              <i class="material-icons">content_paste</i>
+              <p>
+              Contract Categories</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+          {% if "contract" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'procurement:contract_list' %}">
+              <i class="material-icons">featured_play_list</i>
+              <p>
+              Manage Contracts</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'procurement:contract_list' %}">
+              <i class="material-icons">featured_play_list</i>
+              <p>
+              Manage Contracts</p>
+            </a>
+          </li>
+          {% endif %}
+
+
+
+
+          {% if "project" in request.path %}
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'procurement:projects_list' %}">
+              <i class="material-icons">supervisor_account</i>
+              <p>Manage Projects</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'procurement:projects_list' %}">
+              <i class="material-icons">supervisor_account</i>
+              <p>Manage Projects</p>
+            </a>
+          </li>
+
+          {% endif %}
+
+
+        </ul>
+      </div>
+    </div>
+    <div class="main-panel">
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+        <div class="container-fluid">
+          <div class="navbar-wrapper">
+
+           </div>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end">
+            
+            <ul class="navbar-nav">
+
+              <li class="nav-item dropdown">
+                <a class="nav-link" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {% if vreq_pend %}<i class="material-icons">notifications_active</i>
+                  <span class="notification">
+                  {{ vreq_pend.count }}
+                  </span>
+                  {% else %}  
+                  <i class="material-icons">notifications</i>
+                  <span class="notification_nill">
+                  0
+                  </span>
+                  {% endif %}
+                </a>
+                
+              </li>
+
+              
+
+
+             
+              <li class="nav-item dropdown">
+                <a class="nav-link" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{request.user.first_name}} {{request.user.last_name}}
+                  <i class="material-icons">person</i>
+                  <p class="d-lg-none d-md-block">
+                    Account
+                  </p>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
+                  <a class="dropdown-item" href="#">Profile</a>
+                  <a class="dropdown-item" href="#">Settings</a>
+                  <div class="dropdown-divider"></div>
+                  
+
+                  <a class="dropdown-item" href="javascript:{document.getElementById('logout').submit()}">Log out</a>
+
+
+                  <form id="logout" method="POST" action="{% url 'accounts:logout' %}">{% csrf_token %}<input type="hidden"/></form>
+
+
+
+
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+     
+  <!-- End Navbar -->
+  {% block content%}
+
+
+
+  {%endblock%}
+
+  <footer class="footer">
+        <div class="container-fluid">
+          <nav class="float-left">
+            <ul>
+              
+            </ul>
+          </nav>
+          <div class="copyright float-right">
+            &copy;
+            <script>
+              document.write(new Date().getFullYear())
+            </script>, Radiographers Registration Board of Nigeria.
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!--   Core JS Files   -->
+  
+  <script src="{% static 'assets/js/core/popper.min.js' %}"></script>
+  <script src="{% static 'assets/js/core/bootstrap-material-design.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'assets/js/material-dashboard.js' %}" type="text/javascript"></script>
+
+ 
+       
+   </body>
+
+   </html>

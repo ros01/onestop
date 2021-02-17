@@ -227,6 +227,10 @@ class StaffProfileModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelF
         fields = ('staff_name', 'dob', 'gender', 'marital_status', 'next_of_kin', 'nationality', 'email', 'phone', 'zone', 'department', 'designation', 'pay_grade', 'national_id', 'employee_id', 'national_id', 'contact_address', 'city', 'state', 'state_of_origin', 'local_government_area', 'state', 'date_joined', 'pension_date', 'qualification', 'languages', 'professional_organizations', 'blood_group', 'drivers_license', 'digital_passport', 'special_interests', 'hobbies')
         
         widgets = {
+            #'staff_name': forms.TextInput(attrs={'readonly': True}),
+            'department': forms.TextInput(attrs={'readonly': True}),
+            'email': forms.TextInput(attrs={'readonly': True}),
+            'phone': forms.TextInput(attrs={'readonly': True}),
             'contact_address': forms.Textarea(attrs={'rows':2, 'cols':3}), 
             'hobbies': forms.Textarea(attrs={'rows':2, 'cols':3}),
             'special_interests': forms.Textarea(attrs={'rows':2, 'cols':3}),  
@@ -238,6 +242,14 @@ class StaffProfileModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelF
             self.fields[name].widget.attrs.update({
                 'class': 'form-control',
             })
+
+       self.fields['staff_name'].initial = self.request.user.id
+       self.fields['staff_name'].label_from_instance = lambda obj: "%s %s" % (obj.first_name, obj.last_name)
+       self.fields['staff_name'].label = "Staff Name"
+       self.fields['staff_name'].widget.attrs['readonly'] = 'readonly'
+       self.fields['department'].initial = self.request.user.department
+       self.fields['email'].initial = self.request.user.email
+       self.fields['phone'].initial = self.request.user.phone_no
        self.fields['dob'].label = "Date of Birth"
        self.fields['dob'].widget.attrs['placeholder'] = "Enter Date of Birth"
        self.fields['next_of_kin'].label = "Next of Kin"
@@ -248,8 +260,8 @@ class StaffProfileModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelF
        self.fields['email'].widget.attrs['placeholder'] = "Enter Email"
        self.fields['phone'].label = "Phone"
        self.fields['phone'].widget.attrs['placeholder'] = "Enter Phone"
-       self.fields['zone'].label = "Zonal Office"
-       self.fields['zone'].widget.attrs['placeholder'] = "Enter Zonal Office"
+       self.fields['zone'].label = "Location"
+       self.fields['zone'].widget.attrs['placeholder'] = "Enter Location"
        self.fields['department'].label = "Department"
        self.fields['department'].widget.attrs['placeholder'] = "Enter Department"
        self.fields['designation'].label = "Designation"
