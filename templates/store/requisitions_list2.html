@@ -48,10 +48,10 @@
       <tr style="background: #41963F;">
       <td style="color: #fff;" class="small-text" width="05%">S/N</td>
       <td style="color: #fff;" class="small-text" width="10%">Requisition No</td>
-      <td style="color: #fff;" class="small-text" width="23%">Item Name</td>
-      <td style="color: #fff;" class="small-text" width="13%">Quantity Requested</td>
-      <td style="color: #fff;" class="small-text" width="13%">Requested by</td>
+      <td style="color: #fff;" class="small-text" width="23%">Requesting Staff</td>
       <td style="color: #fff;" class="small-text" width="13%">Department</td>
+      <td style="color: #fff;" class="small-text" width="13%">Authorized by</td>
+      <td style="color: #fff;" class="small-text" width="13%">Reason</td>
       <td style="color: #fff;" class="small-text" width="13%">Date</td>
       <td style="color: #fff;" class="small-text" width="10%">Actions</td>
       </tr>
@@ -63,11 +63,11 @@
       <tr>
       <td width="05%">{{forloop.counter}}</td>
       <td width="10%">{{object.requisition_no}}</td>
-      <td width="23%">{{object.item_name}}</td>
-      <td width="13%">{{object.quantity_requested}}</td>
-      <td width="13%">{{object.requesting_staff.first_name}} {{object.requesting_staff.last_name}}</td>
+      <td width="23%">{{object.requesting_staff.first_name}} {{object.requesting_staff.last_name}}</td>
       <td width="13%">{{object.department}}</td>
-      <td width="13%">{{object.requisition_date_pretty}}</td>
+      <td width="23%">{{object.authorized_by.first_name}} {{object.authorized_by.last_name}}</td>
+      <td width="13%">{{object.requisition_reason}}</td>
+      <td width="13%">{{object.requisition_date}}</td>
       <td width="10%">
 
       <a href="{% url 'store:requisition_details' object.id %}" class="btn btn-outline-warning btn-sm">View Requisition</a></td>

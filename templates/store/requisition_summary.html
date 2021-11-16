@@ -1,0 +1,31 @@
+<p class='lead'>Requisition # {{ requisition.requisition_no }} </p>
+
+<div class="table-responsive-lg">
+ <table class="table table-bordered table-hover" id="mydata">
+ <thead>
+ <tr style="background: #41963F;">
+ <td style="color: #fff;" class="small-text">S/N</td>
+ <td style="color: #fff;" class="small-text">Item Name</td>
+ <td style="color: #fff;" class="small-text">Item Category</td>
+ <td style="color: #fff;" class="small-text">U.O.M</td>
+ <td style="color: #fff;" class="small-text">Quantity Requested</td>
+ </tr>
+ </thead>
+                      
+                    
+  <tbody>
+  {% for i in requisition.requisitionitem_set.all %}
+  
+  <tr>
+  <td>{{forloop.counter}}</td>
+  <td>{{i.item}}</td>
+  <td>{{i.item.category}}</td>
+  <td>{{i.item.unit}}</td>
+  <td>{{i.quantity}}</td>                                           
+
+   </tr>
+
+   {% endfor %}
+   </tbody>
+   </table>
+   </div>

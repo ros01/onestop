@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'accounts',
+    'administration',
     'fleet',
     'hr',
     'store',
@@ -106,7 +107,7 @@ WSGI_APPLICATION = 'rrbnisp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'rrbnonestopdb1',
+        'NAME': 'rrbnonestopdb',
         'USER': 'postgres',
         'PASSWORD': 'blackstone1',
         'HOST': 'localhost',

@@ -18,7 +18,10 @@
 
 {% include "_modal.html" %}
 
-      <div class="content">
+
+    <div class="content">
+
+
         <div class="container-fluid ">
           <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6">
@@ -159,10 +162,10 @@
 
           
 
-            <div class="col-md-4" onclick="window.location='{% url 'store:items_list' %}';" style="cursor: pointer;">
+            <div class="col-md-4" onclick="window.location='{% url 'store:retrieve_item' %}';" style="cursor: pointer;">
               <div class="card remove-borer">
                 <div class="card-body">
-                <button type="button" class="btn warning text-warning pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/reports.png' %}" alt="shop"> Reports</button>
+                <button type="button" class="btn warning text-warning pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/reports.png' %}" alt="shop"> Create Requsition</button>
                 </div>
                 </div>
               </div> 

@@ -46,6 +46,13 @@ def increment_training_no():
     new_training_no = training_no[0:-(len(new_training_no))] + new_training_no
     return new_training_no
 
+class Department(models.Model):
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
 
 class Employee(models.Model):
     GENDER = (
@@ -107,8 +114,8 @@ class Employee(models.Model):
         )
 
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    staff_name = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    employee = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     dob = models.DateField(default=date.today)
     gender = models.CharField(max_length=120, choices=GENDER,  null=True, blank=True)
     marital_status = models.CharField(max_length=120, choices=MARITAL_STATUS,  null=True, blank=True)
@@ -117,11 +124,12 @@ class Employee(models.Model):
     email = models.EmailField(max_length=100)
     phone = models.CharField(max_length=100)
     zone = models.CharField(max_length=120, choices=ZONE,  null=True, blank=True)
-    department = models.CharField(max_length=120, choices=DEPARTMENT,  null=True, blank=True)
+    #department = models.CharField(max_length=120, choices=DEPARTMENT,  null=True, blank=True)
+    department = models.ForeignKey(Department, null=True, related_name='department_em', on_delete=models.CASCADE)
     designation = models.ForeignKey('Title', null=True, blank=True, on_delete=models.DO_NOTHING)
     pay_grade = models.ForeignKey('Grade', null=True, blank=True, on_delete=models.DO_NOTHING)
     national_id = models.CharField(max_length=100)
-    employee_id = models.CharField(max_length=100)
+    staff_id = models.CharField(max_length=100)
     contact_address = models.TextField(blank = False, null = False)
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
@@ -141,16 +149,16 @@ class Employee(models.Model):
 
         
     def __str__(self):
-        return str(self.staff_name)
+        return str(self.employee)
 
 class Driver(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200) 
     designation = models.CharField(max_length=200)  
 
 class Title(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     job_title = models.CharField(max_length=200)
     description = models.TextField(blank = False, null = False) 
     date_added = models.DateTimeField(auto_now_add=True, auto_now=False)
@@ -160,7 +168,7 @@ class Title(models.Model):
 
 
 class Grade(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     pay_grade_name = models.CharField(max_length=200)
     paygrade_description = models.TextField(blank = False, null = False)
     pay_grade_code = models.CharField(max_length=200, unique=True)
@@ -190,7 +198,7 @@ class Leave(models.Model):
         ('Sabatical Leave', 'Sabatical Leave'),
         )
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     request_no = models.CharField(max_length=500, null=True, blank=True, unique=True,
         default=increment_request_no)
     requested_start_date = models.DateField(default=date.today)
@@ -221,7 +229,7 @@ class Leave(models.Model):
     
 class Specify(models.Model):
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     request_no = models.CharField(max_length=200)
     staff_name = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='staff', on_delete=models.DO_NOTHING)
     leave_type = models.CharField(max_length=200)
@@ -282,7 +290,7 @@ class Specify(models.Model):
 
 class Document(models.Model):
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     request_no = models.CharField(max_length=200)
     staff_name = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     leave_type = models.CharField(max_length=200)
@@ -330,13 +338,13 @@ class Document(models.Model):
 
 
 class Location(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200)
     address = models.TextField(blank = False, null = False)
     
 
 class Category(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     category_name = models.CharField(max_length=120, unique=True)
     description = models.TextField(blank = False, null = False)
     added_on = models.DateField(default=date.today)
@@ -347,7 +355,7 @@ class Category(models.Model):
         return self.category_name
 
 class Vendor(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     vendor_name = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
     phone = models.CharField(max_length=100)
@@ -367,7 +375,7 @@ class Vendor(models.Model):
 
 
 class Course(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     training_name = models.CharField(max_length=200)
     training_description = models.CharField(max_length=200)
     category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.DO_NOTHING)
@@ -383,14 +391,18 @@ class Course(models.Model):
 
 
 class Training(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     training_no = models.CharField(max_length=500, null=True, blank=True, unique=True,
         default=increment_training_no)
     training_name = models.CharField(max_length=200)
     training_description = models.CharField(max_length=200)
     category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.DO_NOTHING)
     vendor = models.ForeignKey('Vendor', null=True, blank=True, on_delete=models.DO_NOTHING)
-    staff_name = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='scheduled_staff')
+    #staff_name = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='scheduled_staff')
+    employee = models.ManyToManyField(Employee, related_name='employee_tr')
+    #department = models.ManyToManyField(Department, related_name='department_tr')
+    department = models.ForeignKey(Department, null=True, related_name='department_tr', on_delete=models.CASCADE)
+    
     projected_start_date = models.DateField(default=date.today)
     projected_end_date = models.DateField(default=date.today)
     training_venue = models.CharField(max_length=200)
@@ -408,7 +420,7 @@ class Training(models.Model):
 
  
 class Record(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     training_no = models.CharField(max_length=200)
     training_name = models.CharField(max_length=200)
     training_description = models.CharField(max_length=200)
@@ -450,7 +462,7 @@ class Record(models.Model):
 
 
 class Appraisal(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     appraisal_name = models.CharField(max_length=120, unique=True)
     description = models.TextField(blank = False, null = False)
     added_on = models.DateField(default=date.today)
@@ -461,7 +473,7 @@ class Appraisal(models.Model):
         return self.appraisal_name
 
 class Schedule(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     schedule_no = models.CharField(max_length=500, null=True, blank=True, unique=True, 
         default=increment_schedule_no)
     staff_name = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
@@ -482,7 +494,7 @@ class Schedule(models.Model):
 
       
 class Performance(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     schedule_no = models.CharField(max_length=200)
     staff_name = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     appraisal = models.ForeignKey('Appraisal', related_name="appraisal", null=False, blank=False, on_delete=models.DO_NOTHING)
@@ -526,7 +538,7 @@ class Performance(models.Model):
     
 
 class Discipline(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     case_no = models.CharField(max_length=500, null=True, blank=True, unique=True, 
         default=increment_case_no)
     staff_name = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
@@ -554,7 +566,7 @@ class Compliance(models.Model):
         )
 
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     case_no = models.CharField(max_length=200)
     staff_name = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     case_name = models.CharField(max_length=200)

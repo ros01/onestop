@@ -1,0 +1,17 @@
+.container-alert-flash {
+	position: absolute;
+    top: 110px;
+    z-index: 50000;
+    width: 100%;
+    right: -52%;
+    margin: 0px;
+    display:none;
+}
+
+
+
+.fa-navbar-cart {
+    font-size: 18px;
+    vertical-align: middle;
+    color: grey;
+}

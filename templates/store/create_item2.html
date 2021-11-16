@@ -11,6 +11,10 @@
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
+    <form method="POST" action="." enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="entered_by" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_entered_by">
+
     <div class="modal-header">
     <h5 class="modal-title text-success">Create Item</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -18,23 +22,43 @@
     </button>
     </div>
 
+
     <div class="modal-body">
+    <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+      {% for error in form.non_field_errors %}
+        {{ error }}
+      {% endfor %}
+   </div>
     
     
-    <form method="POST" action="." enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="hidden" name="entered_by" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_entered_by">
+    
     <div class="row">
     <div class="form-group col-md-4">
     {{ form.item_name|as_crispy_field }}
+    <div class="{% if form.item_name.errors %} invalid{% endif %}">
+          {% for error in field.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+    </div>
     </div>
 
     <div class="form-group col-md-4">
-   {{ form.item_description|as_crispy_field }}
+    {{ form.item_description|as_crispy_field }}
+    <div class="{% if form.item_description.errors %} invalid{% endif %}">
+    {% for error in field.errors %}
+    <p class="help-block">{{ error }}</p>
+    {% endfor %}
+    </div>
     </div>
 
     <div class="form-group col-md-4">
     {{ form.category|as_crispy_field }}
+     <div class="{% if form.category.errors %} invalid{% endif %}">
+          {% for error in field.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+    </div>
+
     </div>
     </div>
     
@@ -43,14 +67,29 @@
 
     <div class="form-group col-md-4">
    {{ form.stock_code|as_crispy_field }}
+    <div class="{% if form.stock_code.errors %} invalid{% endif %}">
+    {% for error in field.errors %}
+    <p class="help-block">{{ error }}</p>
+    {% endfor %}
+    </div>
     </div>
     
     <div class="form-group col-md-4">
      {{ form.vendor|as_crispy_field }}
+     <div class="{% if form.vendor.errors %} invalid{% endif %}">
+    {% for error in field.errors %}
+    <p class="help-block">{{ error }}</p>
+    {% endfor %}
+    </div>
     </div>
 
     <div class="form-group col-md-4">
     {{ form.unit|as_crispy_field }}
+    <div class="{% if form.unit.errors %} invalid{% endif %}">
+    {% for error in field.errors %}
+    <p class="help-block">{{ error }}</p>
+    {% endfor %}
+    </div>
     </div>
 
     </div>
@@ -58,24 +97,44 @@
     <div class="row">
     <div class="form-group col-md-4">
     {{ form.quantity|as_crispy_field }}
+    <div class="{% if form.quantity.errors %} invalid{% endif %}">
+    {% for error in field.errors %}
+    <p class="help-block">{{ error }}</p>
+    {% endfor %}
+    </div>
     </div>
 
     <div class="form-group col-md-4">
    {{ form.unit_price|as_crispy_field }}
+   <div class="{% if form.unit_price.errors %} invalid{% endif %}">
+    {% for error in field.errors %}
+    <p class="help-block">{{ error }}</p>
+    {% endfor %}
+    </div>
     </div>
 
     <div class="form-group col-md-4">
      {{ form.re_order_no|as_crispy_field }}
+     <div class="{% if form.re_order_no.errors %} invalid{% endif %}">
+    {% for error in field.errors %}
+    <p class="help-block">{{ error }}</p>
+    {% endfor %}
+    </div>
     </div>
     </div>
 
     <div class="row">
     <div class="form-group col-md-4">
     {{ form.item_image|as_crispy_field }}
+    <div class="{% if form.item_image.errors %} invalid{% endif %}">
+    {% for error in field.errors %}
+    <p class="help-block">{{ error }}</p>
+    {% endfor %}
+    </div>
+    </div>
     </div>
     </div>
     </form>
-    </div>
 
     
 

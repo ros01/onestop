@@ -585,6 +585,16 @@ class CourseObjectMixin(object):
         return obj 
 
 
+class EmployeeObjectMixin(object):
+    model = Employee
+    def get_object(self):
+        id = self.kwargs.get('id')
+        obj = None
+        if id is not None:
+            obj = get_object_or_404(self.model, id=id)
+        return obj 
+
+
 class CourseDeleteView(LoginRequiredMixin, CourseObjectMixin, View):
     template_name = "hr/course_delete.html" # DetailView
     def get(self, request, id=None, *args, **kwargs):
@@ -636,17 +646,47 @@ class TrainingCreateView(LoginRequiredMixin, CourseObjectMixin, PassRequestMixin
         return context   
    
     def form_invalid(self, form):
-        form = self.get_form()
+        return self.render_to_response(self.get_context_data())
 
-        context = {}
-        obj = self.get_object()
-        if obj is not None:
-          
-           context['object'] = obj
-           context['form'] = form 
-          
-        return self.render_to_response(context)
 
+
+class ScheduleTraining(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
+    model = Training
+    template_name = 'hr/add_training.html'
+    form_class = TrainingModelForm
+    success_url = reverse_lazy('hr:training_list')
+
+    #def get_context_data(self, **kwargs):
+        #context = super().get_context_data(**kwargs)
+        #context['department_qs'] = Employee.objects.select_related("department").filter(application_status=4, hospital_name=self.schedule.hospital_name, hospital__license_type = 'Radiography Practice Permit')
+        #context['department_qs'] = Employee.objects.all()
+        #return context
+
+    #def get_initial(self):
+        #return {
+            #'employee': self.kwargs["pk"],
+        #}
+
+    #def get_queryset(self):
+        #hospital = Hospital.objects.filter(hospital_admin=self.request.user)
+        #return Employee.objects.filter(department_id=department_id).order_by('name')
+    
+    #def get_form_kwargs(self):
+        #self.employee = Employee.objects.get(pk=self.kwargs['pk'])
+        #kwargs = super().get_form_kwargs()
+        #kwargs['initial']['department'] = self.employee.department
+       
+        #return kwargs
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data())
+
+
+
+def load_employees(request):
+    department_id = request.GET.get('department')
+    employees = Employee.objects.filter(department_id=department_id).order_by('employee')
+    return render(request, 'hr/staff_dropdown_list_options.html', {'employees': employees})
 
 class TrainingDetailView(LoginRequiredMixin, DetailView):
     template_name = "hr/training_detail.html"

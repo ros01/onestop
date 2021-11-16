@@ -9,7 +9,7 @@
 <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous" /> -->
 <script src="{% static 'js/tempusdominus-bootstrap-4.js' %}"></script>
 
-<form method="POST" action=".">
+<form method="POST" >
   {% csrf_token %}
   <input type="hidden" name="added_by" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_added_by"  id="div_id_added_by">
   
@@ -69,14 +69,25 @@
    </div>
 
    <div class="form-group col-md-4">
-   {{ form.staff_name|as_crispy_field }}
-   <div class="{% if form.staff_name.errors %} invalid{% endif %}">
+   {{ form.department|as_crispy_field }}
+   <div class="{% if form.department.errors %} invalid{% endif %}">
    {% for error in field.errors %}
    <p class="help-block">{{ error }}</p>
    {% endfor %}
    </div>
    </div>
 
+   <div class="form-group col-md-4">
+   {{ form.employee|as_crispy_field }}
+   <div class="{% if form.employee.errors %} invalid{% endif %}">
+   {% for error in field.errors %}
+   <p class="help-block">{{ error }}</p>
+   {% endfor %}
+   </div>
+   </div>
+   </div>
+
+   <div class="row">
    <div class="form-group col-md-4">
    {{ form.training_venue|as_crispy_field }}
    <div class="{% if form.training_venue.errors %} invalid{% endif %}">
@@ -85,9 +96,7 @@
    {% endfor %}
    </div>
    </div> 
-   </div>
 
-   <div class="row">
    <div class="form-group col-md-4">
    {{ form.projected_start_date|as_crispy_field }}
    <div class="{% if form.projected_start_date.errors %} invalid{% endif %}">
@@ -105,6 +114,9 @@
    {% endfor %}
    </div>
    </div>
+   </div>
+
+   <div class="row">
 
    <div class="form-group col-md-4">
    {{ form.training_budget|as_crispy_field }}
@@ -124,6 +136,30 @@
    <button type="button" class="submit-btn btn btn-success ml-4 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i>&nbsp;Add Training</button>
 
    </div>
+
+
+    <form method="post" id="trainingModelForm" data-employees-url="{% url 'hr:ajax_load_employees' %}" novalidate>
+    {% csrf_token %}
+    </form>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+    $("#id_department").change(function () {
+      var url = $("#trainingModelForm").attr("data-employees-url");  // get the url of the `load_cities` view
+      var departmentId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'department': departmentId       // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_employee").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+    });
+  </script>
 
 
 

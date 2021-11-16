@@ -21,7 +21,6 @@ class TrainingModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm)
     projected_start_date = forms.DateField(
       widget=DatePicker(
         options={
-
                 'format': 'YYYY-MM-DD',
                 'useCurrent': True,
                 'collapse': False,
@@ -37,7 +36,6 @@ class TrainingModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm)
     projected_end_date = forms.DateField(
       widget=DatePicker(
         options={
-
                 'format': 'YYYY-MM-DD',
                 'useCurrent': True,
                 'collapse': False,
@@ -53,51 +51,65 @@ class TrainingModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm)
     
     class Meta:
         model = Training
-        fields = ('training_name', 'training_description', 'category', 'vendor', 'staff_name', 'projected_start_date', 'projected_end_date', 'training_venue', 'training_budget', 'added_by')
+        fields = ('training_name', 'training_description', 'category', 'vendor', 'department', 'employee', 'projected_start_date', 'projected_end_date', 'training_venue', 'training_budget', 'added_by')
 
         widgets = {
-            'training_description': forms.Textarea(attrs={'readonly': True,'rows':3, 'cols':5}), 
-            'training_name': forms.TextInput(attrs={'readonly': True}), 
-                    
+            #'training_description': forms.Textarea(attrs={'readonly': True,'rows':3, 'cols':5}), 
+            #'training_name': forms.TextInput(attrs={'readonly': True}), 
+            #'department': forms.HiddenInput(),
+            #'employee': CheckboxSelectMultiple(),                    
             }
 
     def __init__(self, *args, **kwargs):
-       super(TrainingModelForm, self).__init__(*args, **kwargs)
-       for name in self.fields.keys():
+        super(TrainingModelForm, self).__init__(*args, **kwargs)
+        #self.fields['employee'].queryset = Employee.objects.none() 
+        #if 'department' in self.data:
+            #try:
+                #department_id = int(self.data.get('department'))
+                #self.fields['employee'].queryset = Employee.objects.filter(department_id=department_id).order_by('employee')
+            #except (ValueError, TypeError):
+                #pass  # invalid input from the client; ignore and fallback to empty Employee queryset
+  
+        ##elif self.instance.department:
+        #elif self.instance.pk and self.instance.department is not None:
+            #self.fields['employee'].queryset = self.instance.department.employee_set.order_by('employee')
+        
+
+        for name in self.fields.keys():
             self.fields[name].widget.attrs.update({
                 'class': 'form-control',
             })
-       self.fields['training_name'].label = "Training Name"
-       self.fields['training_name'].widget.attrs['placeholder'] = "Enter Training Name"
-       self.fields['training_description'].label = "Training Description"
-       self.fields['training_description'].widget.attrs['placeholder'] = "Enter Training Description"
-       self.fields['category'].label_from_instance = lambda obj: "{}".format(obj.category_name)
-       self.fields['category'].widget.attrs['readonly'] = 'readonly'
-       self.fields['category'].label = "Training Category"
-       self.fields['vendor'].label_from_instance = lambda obj: "{}".format(obj.vendor_name)
-       self.fields['vendor'].widget.attrs['readonly'] = 'readonly'
-       self.fields['vendor'].label = "Vendor"
-       self.fields['staff_name'].label_from_instance = lambda obj: "%s %s" % (obj.first_name, obj.last_name)
-       self.fields['staff_name'].label = "Staff Name"
-       self.fields['staff_name'].widget = CheckboxSelectMultiple()
-       self.fields['staff_name'].queryset = User.objects.all()
-       self.fields['projected_start_date'].label = "Training Projected Start Date"
-       self.fields['projected_start_date'].widget.attrs['placeholder'] = "Enter Training Projected Start Date"
-       self.fields['projected_end_date'].label = "Training Projected End Date"
-       self.fields['projected_end_date'].widget.attrs['placeholder'] = "Enter Training Projected End Date"
-       self.fields['training_venue'].label = "Training Venue"
-       self.fields['training_venue'].widget.attrs['placeholder'] = "Enter Training Venue"
-       self.fields['training_budget'].label = "Training Budget"
-       self.fields['training_budget'].widget.attrs['placeholder'] = "Enter Training Budget"
-     
-    def save(self):
+        self.fields['training_name'].label = "Training Name"
+        self.fields['training_name'].widget.attrs['placeholder'] = "Enter Training Name"
+        self.fields['training_description'].label = "Training Description"
+        self.fields['training_description'].widget.attrs['placeholder'] = "Enter Training Description"
+        self.fields['category'].label_from_instance = lambda obj: "{}".format(obj.category_name)
+        self.fields['category'].widget.attrs['readonly'] = 'readonly'
+        self.fields['category'].label = "Training Category"
+        self.fields['vendor'].label_from_instance = lambda obj: "{}".format(obj.vendor_name)
+        self.fields['vendor'].widget.attrs['readonly'] = 'readonly'
+        self.fields['vendor'].label = "Vendor"
+        self.fields['employee'].label_from_instance = lambda obj: "%s %s" % (obj.first_name, obj.last_name)
+        self.fields['employee'].label = "Staff Name"
+        self.fields['employee'].widget = CheckboxSelectMultiple()
+        self.fields['employee'].queryset = User.objects.all()
+        self.fields['projected_start_date'].label = "Training Projected Start Date"
+        self.fields['projected_start_date'].widget.attrs['placeholder'] = "Enter Training Projected Start Date"
+        self.fields['projected_end_date'].label = "Training Projected End Date"
+        self.fields['projected_end_date'].widget.attrs['placeholder'] = "Enter Training Projected End Date"
+        self.fields['training_venue'].label = "Training Venue"
+        self.fields['training_venue'].widget.attrs['placeholder'] = "Enter Training Venue"
+        self.fields['training_budget'].label = "Training Budget"
+        self.fields['training_budget'].widget.attrs['placeholder'] = "Enter Training Budget"
 
+
+
+    def save(self):
       if not self.request.is_ajax():
           instance = super(CreateUpdateAjaxMixin, self).save(commit=True)
           instance.save()
       else:
           instance = super(CreateUpdateAjaxMixin, self).save(commit=False)
-
       return instance
 
 
@@ -110,8 +122,7 @@ class JobTitleModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm)
         widgets = {
             'description': forms.Textarea(attrs={'rows':2, 'cols':3}),   
             }
-
-                
+              
 
     def __init__(self, *args, **kwargs):
        super(JobTitleModelForm, self).__init__(*args, **kwargs)
@@ -315,8 +326,7 @@ class EndLeaveModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm)
        self.fields['actual_start_date'].label = "Actual Start Date"
        self.fields['actual_end_date'].label = "Actual End Date"
        self.fields['comments'].label = "Comments"
-       
-
+  
     def save(self):
       if not self.request.is_ajax():
           instance = super(CreateUpdateAjaxMixin, self).save(commit=True)

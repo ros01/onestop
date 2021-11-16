@@ -38,14 +38,10 @@ class SignUpView(View):
     form_class = SignupForm
     template_name = 'accounts/register.html'
     template_name1 = 'accounts/account_creation_confirmation.html'
-    
-    
-
+        
     def get(self, request, *args, **kwargs):
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
-
-   
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -53,13 +49,13 @@ class SignUpView(View):
             
             user = form.save(commit=False)
             #user.is_active = False  # Deactivate account till it is confirmed
-            user.save()
-
-            
-
+            user.save() 
             return render(request, self.template_name1)
-
         return render(request, self.template_name, {'form': form})
+
+
+class LoginTemplateView(TemplateView):
+    template_name = "accounts/login.html"
 
 
 def login(request):
@@ -71,6 +67,8 @@ def login(request):
         auth_login(request, user)
         if user.department == 'Hr' and user.role == 'Human Resources':
             return redirect('hr:hr_dashboard')
+        if user.department == 'Admin':
+            return redirect('administration:filemanager_dashboard')
         if user.department == 'Stores' and user.role == 'Stores':
             return redirect('store:store_dashboard')
         if user.department == 'Protocol' and user.role == 'Fleet Managment':

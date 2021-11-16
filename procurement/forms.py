@@ -227,8 +227,8 @@ class ProjectModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
         widgets = {
         	#'documented_by': forms.HiddenInput(), 
             #'contract_description': forms.Textarea(attrs={'rows':2, 'cols':3}),
-            'contract_description': forms.Textarea(attrs={'readonly': True,'rows':2, 'cols':12}),
-            'contract_no': forms.TextInput(attrs={'readonly': True}), 
+          'contract_description': forms.Textarea(attrs={'readonly': True,'rows':2, 'cols':12}),
+          'contract_no': forms.TextInput(attrs={'readonly': True}), 
         	'contract_name': forms.TextInput(attrs={'readonly': True}),
         	'contact_award_date': forms.TextInput(attrs={'readonly': True}), 
         	'contact_award_amount': forms.TextInput(attrs={'readonly': True}),  

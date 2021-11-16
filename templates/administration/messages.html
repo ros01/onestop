@@ -1,0 +1,961 @@
+{% extends 'base_admin.html'%}
+{% load static %}
+{% block title%}Messages - Support Tickets | RRBN ECMS {% endblock %}
+
+
+
+{% block content %} 
+
+
+<!-- main header @s -->
+                <div class="nk-header nk-header-fixed is-light">
+                    <div class="container-fluid">
+                        <div class="nk-header-wrap">
+                            <div class="nk-menu-trigger d-xl-none ml-n1">
+                                <a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
+                            </div>
+                            <div class="nk-header-app-name">
+                                <div class="nk-header-app-logo">
+                                    <em class="icon ni ni-chat bg-success-dim"></em>
+                                </div>
+                                <div class="nk-header-app-info">
+                                    <span class="sub-text">Messages</span>
+                                    <span class="lead-text">Admin Department</span>
+                                </div>
+                            </div>
+                            <div class="nk-header-tools">
+                                <ul class="nk-quick-nav">
+                                    <li class="dropdown chats-dropdown hide-mb-xs">
+                                        <a href="#" class="dropdown-toggle nk-quick-nav-icon" data-toggle="dropdown">
+                                            <div class="icon-status icon-status-na"><em class="icon ni ni-comments"></em></div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right">
+                                            <div class="dropdown-head">
+                                                <span class="sub-title nk-dropdown-title">Recent Chats</span>
+                                                <a href="#">Setting</a>
+                                            </div>
+                                            <div class="dropdown-body">
+                                                <ul class="chat-list">
+                                                    <li class="chat-item">
+                                                        <a class="chat-link" href="{% url 'administration:chats' %}">
+                                                            <div class="chat-media user-avatar">
+                                                                <span>IH</span>
+                                                                <span class="status dot dot-lg dot-gray"></span>
+                                                            </div>
+                                                            <div class="chat-info">
+                                                                <div class="chat-from">
+                                                                    <div class="name">Lere Opaleye</div>
+                                                                    <span class="time">Now</span>
+                                                                </div>
+                                                                <div class="chat-context">
+                                                                    <div class="text">You: Please confrim if you got my last messages.</div>
+                                                                    <div class="status delivered">
+                                                                        <em class="icon ni ni-check-circle-fill"></em>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </li><!-- .chat-item -->
+                                                    <li class="chat-item is-unread">
+                                                        <a class="chat-link" href="html/apps/chats.html">
+                                                            <div class="chat-media user-avatar bg-pink">
+                                                                <span>LO</span>
+                                                                <span class="status dot dot-lg dot-success"></span>
+                                                            </div>
+                                                            <div class="chat-info">
+                                                                <div class="chat-from">
+                                                                    <div class="name">Lere Opaleye</div>
+                                                                    <span class="time">4:49 AM</span>
+                                                                </div>
+                                                                <div class="chat-context">
+                                                                    <div class="text">Hi, please check your email</div>
+                                                                    <div class="status unread">
+                                                                        <em class="icon ni ni-bullet-fill"></em>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </li><!-- .chat-item -->
+                                                    <li class="chat-item">
+                                                        <a class="chat-link" href="{% url 'administration:chats' %}">
+                                                            <div class="chat-media user-avatar">
+                                                                <img src="{% static 'dlite/images/avatar/b-sm.jpg' %}" alt="">
+                                                            </div>
+                                                            <div class="chat-info">
+                                                                <div class="chat-from">
+                                                                    <div class="name">Dayo Odele</div>
+                                                                    <span class="time">6 Apr</span>
+                                                                </div>
+                                                                <div class="chat-context">
+                                                                    <div class="text">Have you seen the request from Danilla Usman?</div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </li><!-- .chat-item -->
+                                                    <li class="chat-item">
+                                                        <a class="chat-link" href="{% url 'administration:chats' %}">
+                                                            <div class="chat-media user-avatar user-avatar-multiple">
+                                                                <div class="user-avatar">
+                                                                    <img src="{% static 'dlite/images/avatar/c-sm.jpg' %}" alt="">
+                                                                </div>
+                                                                <div class="user-avatar">
+                                                                    <span>LO</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="chat-info">
+                                                                <div class="chat-from">
+                                                                    <div class="name">Lere Opaleye</div>
+                                                                    <span class="time">27 Mar</span>
+                                                                </div>
+                                                                <div class="chat-context">
+                                                                    <div class="text">You: Please check your email</div>
+                                                                    <div class="status sent">
+                                                                        <em class="icon ni ni-check-circle"></em>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </li><!-- .chat-item -->
+                                                    <li class="chat-item">
+                                                        <a class="chat-link" href="{% url 'administration:chats' %}">
+                                                            <div class="chat-media user-avatar">
+                                                                <img src="{% static 'dlite/images/avatar/a-sm.jpg' %}" alt="">
+                                                                <span class="status dot dot-lg dot-success"></span>
+                                                            </div>
+                                                            <div class="chat-info">
+                                                                <div class="chat-from">
+                                                                    <div class="name">Samuel Agba</div>
+                                                                    <span class="time">3 Apr</span>
+                                                                </div>
+                                                                <div class="chat-context">
+                                                                    <div class="text">Hi Dan! What time is the Zoom Meeting?</div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </li><!-- .chat-item -->
+                                                    <li class="chat-item">
+                                                        <a class="chat-link" href="{% url 'administration:chats' %}">
+                                                            <div class="chat-media user-avatar bg-purple">
+                                                                <span>BC</span>
+                                                            </div>
+                                                            <div class="chat-info">
+                                                                <div class="chat-from">
+                                                                    <div class="name">Barr Chika</div>
+                                                                    <span class="time">27 Mar</span>
+                                                                </div>
+                                                                <div class="chat-context">
+                                                                    <div class="text">You: Please treat as urgent</div>
+                                                                    <div class="status sent">
+                                                                        <em class="icon ni ni-check-circle"></em>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </li><!-- .chat-item -->
+                                                </ul><!-- .chat-list -->
+                                            </div><!-- .nk-dropdown-body -->
+                                            <div class="dropdown-foot center">
+                                                <a href="{% url 'administration:chats' %}">View All</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="dropdown notification-dropdown">
+                                        <a href="#" class="dropdown-toggle nk-quick-nav-icon" data-toggle="dropdown">
+                                            <div class="icon-status icon-status-info"><em class="icon ni ni-bell"></em></div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right">
+                                            <div class="dropdown-head">
+                                                <span class="sub-title nk-dropdown-title">Notifications</span>
+                                                <a href="#">Mark All as Read</a>
+                                            </div>
+                                            <div class="dropdown-body">
+                                                <div class="nk-notification">
+                                                    <div class="nk-notification-item dropdown-inner">
+                                                        <div class="nk-notification-icon">
+                                                            <em class="icon icon-circle bg-primary-dim ni ni-share"></em>
+                                                        </div>
+                                                        <div class="nk-notification-content">
+                                                            <div class="nk-notification-text">Lere shared <span>Management Report-v2</span> with you.</div>
+                                                            <div class="nk-notification-time">Just now</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="nk-notification-item dropdown-inner">
+                                                        <div class="nk-notification-icon">
+                                                            <em class="icon icon-circle bg-info-dim ni ni-edit"></em>
+                                                        </div>
+                                                        <div class="nk-notification-content">
+                                                            <div class="nk-notification-text">Lere <span>invited</span> you to edit <span>Management Report</span> folder</div>
+                                                            <div class="nk-notification-time">2 hrs ago</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="nk-notification-item dropdown-inner">
+                                                        <div class="nk-notification-icon">
+                                                            <em class="icon icon-circle bg-primary-dim ni ni-share"></em>
+                                                        </div>
+                                                        <div class="nk-notification-content">
+                                                            <div class="nk-notification-text">You have shared <span>procurement request v2</span> with Sunday.</div>
+                                                            <div class="nk-notification-time">7 days ago</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="nk-notification-item dropdown-inner">
+                                                        <div class="nk-notification-icon">
+                                                            <em class="icon icon-circle bg-success-dim ni ni-spark"></em>
+                                                        </div>
+                                                        <div class="nk-notification-content">
+                                                            <div class="nk-notification-text">Your <span>Subscription</span> renew successfully.</div>
+                                                            <div class="nk-notification-time">2 month ago</div>
+                                                        </div>
+                                                    </div>
+                                                </div><!-- .nk-notification -->
+                                            </div><!-- .nk-dropdown-body -->
+                                            <div class="dropdown-foot center">
+                                                <a href="#">View All</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="dropdown list-apps-dropdown d-lg-none">
+                                        <a href="#" class="dropdown-toggle nk-quick-nav-icon" data-toggle="dropdown">
+                                            <div class="icon-status icon-status-na"><em class="icon ni ni-menu-circled"></em></div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                                            <div class="dropdown-body">
+                                                <ul class="list-apps">
+                                                    <li>
+                                                        <a href="{% url 'administration:filemanager_dashboard' %}">
+                                                            <span class="list-apps-media"><em class="icon ni ni-dashlite bg-primary text-white"></em></span>
+                                                            <span class="list-apps-title">Dashboard</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{% url 'administration:chats' %}">
+                                                            <span class="list-apps-media"><em class="icon ni ni-chat-circle bg-info-dim"></em></span>
+                                                            <span class="list-apps-title">Chats</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{% url 'administration:mailbox' %}">
+                                                            <span class="list-apps-media"><em class="icon ni ni-inbox bg-purple-dim"></em></span>
+                                                            <span class="list-apps-title">Mailbox</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{% url 'administration:messages' %}">
+                                                            <span class="list-apps-media"><em class="icon ni ni-chat bg-success-dim"></em></span>
+                                                            <span class="list-apps-title">Messages</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{% url 'administration:filemanager_dashboard' %}">
+                                                            <span class="list-apps-media"><em class="icon ni ni-folder bg-purple-dim"></em></span>
+                                                            <span class="list-apps-title">File Manager</span>
+                                                        </a>
+                                                    </li>
+                                                    <!-- <li>
+                                                        <a href="html/components.html">
+                                                            <span class="list-apps-media"><em class="icon ni ni-layers bg-secondary-dim"></em></span>
+                                                            <span class="list-apps-title">Components</span>
+                                                        </a>
+                                                    </li> -->
+                                                </ul>
+                                                <!-- <ul class="list-apps"> -->
+                                                    <!-- <li>
+                                                        <a href="/demo2/ecommerce/index.html">
+                                                            <span class="list-apps-media"><em class="icon ni ni-cart bg-danger-dim"></em></span>
+                                                            <span class="list-apps-title">Ecommerce Panel</span>
+                                                        </a>
+                                                    </li> -->
+                                                    <!-- <li>
+                                                        <a href="/demo4/subscription/index.html">
+                                                            <span class="list-apps-media"><em class="icon ni ni-calendar-booking bg-primary-dim"></em></span>
+                                                            <span class="list-apps-title">Subscription Panel</span>
+                                                        </a>
+                                                    </li> -->
+                                                    <!-- <li>
+                                                        <a href="/demo5/crypto/index.html">
+                                                            <span class="list-apps-media"><em class="icon ni ni-bitcoin-cash bg-warning-dim"></em></span>
+                                                            <span class="list-apps-title">Crypto Wallet Panel</span>
+                                                        </a>
+                                                    </li> -->
+                                                    <!-- <li>
+                                                        <a href="/demo6/invest/index.html">
+                                                            <span class="list-apps-media"><em class="icon ni ni-invest bg-blue-dim"></em></span>
+                                                            <span class="list-apps-title">HYIP Invest Panel</span>
+                                                        </a>
+                                                    </li> -->
+                                               <!--  </ul> -->
+                                            </div><!-- .nk-dropdown-body -->
+                                        </div>
+                                    </li>
+                                    <li class="dropdown user-dropdown">
+                                        <a href="#" class="dropdown-toggle mr-n1" data-toggle="dropdown">
+                                            <div class="user-toggle">
+                                                <div class="user-avatar sm">
+                                                    <em class="icon ni ni-user-alt"></em>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                                            <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
+                                                <div class="user-card">
+                                                    <div class="user-avatar">
+                                                        <span>LO</span>
+                                                    </div>
+                                                    <div class="user-info">
+                                                        <span class="lead-text">Lere Opaleye</span>
+                                                        <span class="sub-text">admin@srrbn.gov.ng</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a href="html/user-profile-regular.html"><em class="icon ni ni-user-alt"></em><span>View Profile</span></a></li>
+                                                    <li><a href="html/user-profile-setting.html"><em class="icon ni ni-setting-alt"></em><span>Account Setting</span></a></li>
+                                                    <li><a href="html/user-profile-activity.html"><em class="icon ni ni-activity-alt"></em><span>Login Activity</span></a></li>
+                                                    <li><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>Dark Mode</span></a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a href="javascript:{document.getElementById('logout').submit()}"><em class="icon ni ni-signout"></em><span>Sign out</span></a></li>
+                                                </ul>
+                                                <form id="logout" method="POST" action="{% url 'accounts:logout' %}">{% csrf_token %}<input type="hidden"/></form>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- main header @e -->
+
+
+ <!-- content @s -->
+                <!-- <div class="nk-content p-0"> -->
+                    <div class="nk-content-inner">
+                        <div class="nk-content-body">
+                            <div class="nk-msg">
+                                <div class="nk-msg-aside">
+                                    <div class="nk-msg-nav">
+                                        <ul class="nk-msg-menu">
+                                            <li class="nk-msg-menu-item active"><a href="">Active</a></li>
+                                            <li class="nk-msg-menu-item"><a href="">Closed</a></li>
+                                            <li class="nk-msg-menu-item"><a href="">Stared</a></li>
+                                            <li class="nk-msg-menu-item"><a href="">All</a></li>
+                                            <li class="nk-msg-menu-item ml-auto"><a href="" class="search-toggle toggle-search" data-target="search"><em class="icon ni ni-search"></em></a></li>
+                                        </ul><!-- .nk-msg-menu -->
+                                        <div class="search-wrap" data-search="search">
+                                            <div class="search-content">
+                                                <a href="#" class="search-back btn btn-icon toggle-search" data-target="search"><em class="icon ni ni-arrow-left"></em></a>
+                                                <input type="text" class="form-control border-transparent form-focus-none" placeholder="Search by user or message">
+                                                <button class="search-submit btn btn-icon"><em class="icon ni ni-search"></em></button>
+                                            </div>
+                                        </div><!-- .search-wrap -->
+                                    </div><!-- .nk-msg-nav -->
+                                    <div class="nk-msg-list" data-simplebar>
+                                        <div class="nk-msg-item current" data-msg-id="1">
+                                            <div class="nk-msg-media user-avatar">
+                                                <span>LO</span>
+                                            </div>
+                                            <div class="nk-msg-info">
+                                                <div class="nk-msg-from">
+                                                    <div class="nk-msg-sender">
+                                                        <div class="name">Lere Opaleye</div>
+                                                        <div class="lable-tag dot bg-pink"></div>
+                                                    </div>
+                                                    <div class="nk-msg-meta">
+                                                        <div class="attchment"><em class="icon ni ni-clip-h"></em></div>
+                                                        <div class="date">12 Jan</div>
+                                                    </div>
+                                                </div>
+                                                <div class="nk-msg-context">
+                                                    <div class="nk-msg-text">
+                                                        <h6 class="title">Unable to register online.</h6>
+                                                        <p>Hello team, I am facing problems with my registration. Kindly assit.</p>
+                                                    </div>
+                                                    <div class="nk-msg-lables">
+                                                        <div class="asterisk"><a href="#"><em class="asterisk-off icon ni ni-star"></em><em class="asterisk-on icon ni ni-star-fill"></em></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- .nk-msg-item -->
+                                        <div class="nk-msg-item" data-msg-id="2">
+                                            <div class="nk-msg-media user-avatar">
+                                                <img src="./images/avatar/b-sm.jpg" alt="">
+                                            </div>
+                                            <div class="nk-msg-info">
+                                                <div class="nk-msg-from">
+                                                    <div class="nk-msg-sender">
+                                                        <div class="name">Onah Emmanuel</div>
+                                                    </div>
+                                                    <div class="nk-msg-meta">
+                                                        <div class="date">15 Jan</div>
+                                                    </div>
+                                                </div>
+                                                <div class="nk-msg-context">
+                                                    <div class="nk-msg-text">
+                                                        <h6 class="title">Have not received my payment confirmation.</h6>
+                                                        <p>Hey! I recently paid online for my practice license. But still have not received my payment confirmation.</p>
+                                                    </div>
+                                                    <div class="nk-msg-lables">
+                                                        <div class="asterisk"><a class="active" href="#"><em class="asterisk-off icon ni ni-star"></em><em class="asterisk-on icon ni ni-star-fill"></em></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- .nk-msg-item -->
+                                        <div class="nk-msg-item is-unread" data-msg-id="3">
+                                            <div class="nk-msg-media user-avatar bg-purple">
+                                                <span>EU</span>
+                                            </div>
+                                            <div class="nk-msg-info">
+                                                <div class="nk-msg-from">
+                                                    <div class="nk-msg-sender">
+                                                        <div class="name">Emeka Ujam</div>
+                                                    </div>
+                                                    <div class="nk-msg-meta">
+                                                        <div class="date">11 Jan</div>
+                                                    </div>
+                                                </div>
+                                                <div class="nk-msg-context">
+                                                    <div class="nk-msg-text">
+                                                        <h6 class="title">I can not submit license application</h6>
+                                                        <p>Hello support! I can not upload my documents for my practice license application.</p>
+                                                    </div>
+                                                    <div class="nk-msg-lables">
+                                                        <div class="unread"><span class="badge badge-primary">2</span></div>
+                                                        <div class="asterisk"><a href="#"><em class="asterisk-off icon ni ni-star"></em><em class="asterisk-on icon ni ni-star-fill"></em></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- .nk-msg-item -->
+                                        <div class="nk-msg-item" data-msg-id="133">
+                                            <div class="nk-msg-media user-avatar">
+                                                <img src="{% static 'dlite/images/avatar/c-sm.jpg' %}" alt="">
+                                            </div>
+                                            <div class="nk-msg-info">
+                                                <div class="nk-msg-from">
+                                                    <div class="nk-msg-sender">
+                                                        <div class="name">Danladi Nuhu</div>
+                                                        <div class="lable-tag dot bg-pink"></div>
+                                                    </div>
+                                                    <div class="nk-msg-meta">
+                                                        <div class="date">30 Dec, 2020</div>
+                                                    </div>
+                                                </div>
+                                                <div class="nk-msg-context">
+                                                    <div class="nk-msg-text">
+                                                        <h6 class="title">Have not received my practice license.</h6>
+                                                        <p>Hey! I recently applied online for practice licens. But still have not received any response.</p>
+                                                    </div>
+                                                    <div class="nk-msg-lables">
+                                                        <div class="asterisk"><a href="#"><em class="asterisk-off icon ni ni-star"></em><em class="asterisk-on icon ni ni-star-fill"></em></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- .nk-msg-item -->
+                                        <div class="nk-msg-item" data-msg-id="12">
+                                            <div class="nk-msg-media user-avatar">
+                                                <img src="./images/avatar/d-sm.jpg" alt="">
+                                            </div>
+                                            <div class="nk-msg-info">
+                                                <div class="nk-msg-from">
+                                                    <div class="nk-msg-sender">
+                                                        <div class="name">Amanda Jefe</div>
+                                                    </div>
+                                                    <div class="nk-msg-meta">
+                                                        <div class="date">28 Dec, 2020</div>
+                                                    </div>
+                                                </div>
+                                                <div class="nk-msg-context">
+                                                    <div class="nk-msg-text">
+                                                        <h6 class="title">Please verify you email.</h6>
+                                                        <p>Hello, I already varified my email but its still showing "needs to verify email" alert.</p>
+                                                    </div>
+                                                    <div class="nk-msg-lables">
+                                                        <div class="asterisk"><a href="#"><em class="asterisk-off icon ni ni-star"></em><em class="asterisk-on icon ni ni-star-fill"></em></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- .nk-msg-item -->
+                                        <div class="nk-msg-item" data-msg-id="1">
+                                            <div class="nk-msg-media user-avatar bg-blue">
+                                                <span>RI</span>
+                                            </div>
+                                            <div class="nk-msg-info">
+                                                <div class="nk-msg-from">
+                                                    <div class="nk-msg-sender">
+                                                        <div class="name">Rebecca Ibrahim</div>
+                                                    </div>
+                                                    <div class="nk-msg-meta">
+                                                        <div class="date">26 Dec, 2019</div>
+                                                    </div>
+                                                </div>
+                                                <div class="nk-msg-context">
+                                                    <div class="nk-msg-text">
+                                                        <h6 class="title">I want my license please.</h6>
+                                                        <p>Good day. Its been two weeks and I still have received my license. Please treat as urgent</p>
+                                                    </div>
+                                                    <div class="nk-msg-lables">
+                                                        <div class="asterisk"><a href="#"><em class="asterisk-off icon ni ni-star"></em><em class="asterisk-on icon ni ni-star-fill"></em></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- .nk-msg-item -->
+                                        <div class="nk-msg-item" data-msg-id="1">
+                                            <div class="nk-msg-media user-avatar bg-orange">
+                                                <span>CO</span>
+                                            </div>
+                                            <div class="nk-msg-info">
+                                                <div class="nk-msg-from">
+                                                    <div class="nk-msg-sender">
+                                                        <div class="name">Chika Ogunor</div>
+                                                    </div>
+                                                    <div class="nk-msg-meta">
+                                                        <div class="date">21 Dec, 2020</div>
+                                                    </div>
+                                                </div>
+                                                <div class="nk-msg-context">
+                                                    <div class="nk-msg-text">
+                                                        <h6 class="title">My CPD results have not bee sent.</h6>
+                                                        <p>Hi. I still haven't received the results of the Ultra Sound Programme I did with the Institute.</p>
+                                                    </div>
+                                                    <div class="nk-msg-lables">
+                                                        <div class="asterisk"><a href="#"><em class="asterisk-off icon ni ni-star"></em><em class="asterisk-on icon ni ni-star-fill"></em></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- .nk-msg-item -->
+                                        <div class="nk-msg-item" data-msg-id="1">
+                                            <div class="nk-msg-media user-avatar bg-success">
+                                                <span>EA</span>
+                                            </div>
+                                            <div class="nk-msg-info">
+                                                <div class="nk-msg-from">
+                                                    <div class="nk-msg-sender">
+                                                        <div class="name">Ethan Amos</div>
+                                                    </div>
+                                                    <div class="nk-msg-meta">
+                                                        <div class="date">16 Dec, 2021</div>
+                                                    </div>
+                                                </div>
+                                                <div class="nk-msg-context">
+                                                    <div class="nk-msg-text">
+                                                        <h6 class="title">Unable to upload documents for my application.</h6>
+                                                        <p>Hello team, I am facing challenges as I cannot upload documents on my hospital profile creation page.</p>
+                                                    </div>
+                                                    <div class="nk-msg-lables">
+                                                        <div class="asterisk"><a href="#"><em class="asterisk-off icon ni ni-star"></em><em class="asterisk-on icon ni ni-star-fill"></em></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- .nk-msg-item -->
+                                        <div class="nk-msg-item" data-msg-id="1">
+                                            <div class="nk-msg-media user-avatar">
+                                                <img src="{% static 'dlite/images/avatar/c-sm.jpg' %}" alt="">
+                                            </div>
+                                            <div class="nk-msg-info">
+                                                <div class="nk-msg-from">
+                                                    <div class="nk-msg-sender">
+                                                        <div class="name">Henry Odoemena</div>
+                                                        <div class="lable-tag dot bg-pink"></div>
+                                                    </div>
+                                                    <div class="nk-msg-meta">
+                                                        <div class="date">14 Dec, 2020</div>
+                                                    </div>
+                                                </div>
+                                                <div class="nk-msg-context">
+                                                    <div class="nk-msg-text">
+                                                        <h6 class="title">Please where can I register for Internship?</h6>
+                                                        <p>Kindly assist with a list of hospitals approved for internship.</p>
+                                                    </div>
+                                                    <div class="nk-msg-lables">
+                                                        <div class="asterisk"><a href="#"><em class="asterisk-off icon ni ni-star"></em><em class="asterisk-on icon ni ni-star-fill"></em></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- .nk-msg-item -->
+                                        <div class="nk-msg-item" data-msg-id="12">
+                                            <div class="nk-msg-media user-avatar">
+                                                <img src="{% static 'dlite/images/avatar/d-sm.jpg' %}" alt="">
+                                            </div>
+                                            <div class="nk-msg-info">
+                                                <div class="nk-msg-from">
+                                                    <div class="nk-msg-sender">
+                                                        <div class="name">Amanda Tokki</div>
+                                                    </div>
+                                                    <div class="nk-msg-meta">
+                                                        <div class="date">12 Dec, 2020</div>
+                                                    </div>
+                                                </div>
+                                                <div class="nk-msg-context">
+                                                    <div class="nk-msg-text">
+                                                        <h6 class="title">Please verify email.</h6>
+                                                        <p>Hello, I already verified my email but it still showing "needs to verify email" alert.</p>
+                                                    </div>
+                                                    <div class="nk-msg-lables">
+                                                        <div class="asterisk"><a href="#"><em class="asterisk-off icon ni ni-star"></em><em class="asterisk-on icon ni ni-star-fill"></em></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- .nk-msg-item -->
+                                        <div class="nk-msg-item" data-msg-id="3">
+                                            <div class="nk-msg-media user-avatar bg-purple">
+                                                <span>AF</span>
+                                            </div>
+                                            <div class="nk-msg-info">
+                                                <div class="nk-msg-from">
+                                                    <div class="nk-msg-sender">
+                                                        <div class="name">Agbola Fagbuji</div>
+                                                    </div>
+                                                    <div class="nk-msg-meta">
+                                                        <div class="date">09 Dec, 2021</div>
+                                                    </div>
+                                                </div>
+                                                <div class="nk-msg-context">
+                                                    <div class="nk-msg-text">
+                                                        <h6 class="title">I can not submit license application</h6>
+                                                        <p>Hello support! I can not upload my documents on my practice license application.</p>
+                                                    </div>
+                                                    <div class="nk-msg-lables">
+                                                        <div class="asterisk"><a href="#"><em class="asterisk-off icon ni ni-star"></em><em class="asterisk-on icon ni ni-star-fill"></em></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- .nk-msg-item -->
+                                    </div><!-- .nk-msg-list -->
+                                </div><!-- .nk-msg-aside -->
+                                <div class="nk-msg-body bg-white profile-shown">
+                                    <div class="nk-msg-head">
+                                        <h4 class="title d-none d-lg-block">Unable to upload documents for my licence application</h4>
+                                        <div class="nk-msg-head-meta">
+                                            <div class="d-none d-lg-block">
+                                                <ul class="nk-msg-tags">
+                                                    <li><span class="label-tag"><em class="icon ni ni-flag-fill"></em> <span>Technical Problem</span></span></li>
+                                                </ul>
+                                            </div>
+                                            <div class="d-lg-none"><a href="#" class="btn btn-icon btn-trigger nk-msg-hide ml-n1"><em class="icon ni ni-arrow-left"></em></a></div>
+                                            <ul class="nk-msg-actions">
+                                                <li><a href="#" class="btn btn-dim btn-sm btn-outline-light"><em class="icon ni ni-check"></em><span>Mark as Closed</span></a></li>
+                                                <!-- <li><span class="badge badge-dim badge-success badge-sm"><em class="icon ni ni-check"></em><span>Closed</span></span></li> -->
+                                                <li class="d-lg-none"><a href="#" class="btn btn-icon btn-sm btn-white btn-light profile-toggle"><em class="icon ni ni-info-i"></em></a></li>
+                                                <li class="dropdown">
+                                                    <a href="#" class="btn btn-icon btn-sm btn-white btn-light dropdown-toggle" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <ul class="link-list-opt no-bdr">
+                                                            <li><a href="#"><em class="icon ni ni-user-add"></em><span>Assign To Member</span></a></li>
+                                                            <li><a href="#"><em class="icon ni ni-archive"></em><span>Move to Archive</span></a></li>
+                                                            <li><a href="#"><em class="icon ni ni-done"></em><span>Mark as Close</span></a></li>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <a href="#" class="nk-msg-profile-toggle profile-toggle active"><em class="icon ni ni-arrow-left"></em></a>
+                                    </div><!-- .nk-msg-head -->
+                                    <div class="nk-msg-reply nk-reply" data-simplebar>
+                                        <div class="nk-msg-head py-4 d-lg-none">
+                                            <h4 class="title">Unable to upload documents for my licence application</h4>
+                                            <ul class="nk-msg-tags">
+                                                <li><span class="label-tag"><em class="icon ni ni-flag-fill"></em> <span>Technical Problem</span></span></li>
+                                            </ul>
+                                        </div>
+                                        <div class="nk-reply-item">
+                                            <div class="nk-reply-header">
+                                                <div class="user-card">
+                                                    <div class="user-avatar sm bg-blue">
+                                                        <span>LO</span>
+                                                    </div>
+                                                    <div class="user-name">Lere Opaleye</div>
+                                                </div>
+                                                <div class="date-time">14 Nov, 2021</div>
+                                            </div>
+                                            <div class="nk-reply-body">
+                                                <div class="nk-reply-entry entry">
+                                                    <p>Hello team,</p>
+                                                    <p>Please kindly confirm your availability for the earlier scheduled Zoom meeting with the consultant.</p>
+                                                    <p>Thank you <br> Lere</p>
+                                                </div>
+                                                <div class="attach-files">
+                                                    <ul class="attach-list">
+                                                        <li class="attach-item">
+                                                            <a class="download" href="#"><em class="icon ni ni-img"></em><span>error-show-On-order.jpg</span></a>
+                                                        </li>
+                                                        <li class="attach-item">
+                                                            <a class="download" href="#"><em class="icon ni ni-img"></em><span>full-page-error.jpg</span></a>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="attach-foot">
+                                                        <span class="attach-info">2 files attached</span>
+                                                        <a class="attach-download link" href="#"><em class="icon ni ni-download"></em><span>Download All</span></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- .nk-reply-item -->
+                                        <div class="nk-reply-item">
+                                            <div class="nk-reply-header">
+                                                <div class="user-card">
+                                                    <div class="user-avatar sm bg-pink">
+                                                        <span>ST</span>
+                                                    </div>
+                                                    <div class="user-name">Support Team <span>(You)</span></div>
+                                                </div>
+                                                <div class="date-time">14 Jan, 2020</div>
+                                            </div>
+                                            <div class="nk-reply-body">
+                                                <div class="nk-reply-entry entry">
+                                                    <p>Hello Lere,</p>
+                                                    <p>We are humbly wish to inform you that we will be unable to attend the Zoom meeting with the consultant as we will be out on field assignment the whole day. </p>
+                                                    <p>Kindly reschedule for another day. </p>
+                                                </div>
+                                                <div class="nk-reply-from"> Replied by <span>Support Team</span> at 11:32 AM </div>
+                                            </div>
+                                        </div><!-- .nk-reply-item -->
+                                        <div class="nk-reply-meta">
+                                            <div class="nk-reply-meta-info"><span class="who">Lere Opaley</span> assigned user: <span class="whom">Saiful Odele</span> at 14 Jan, 2020 at 11:34 AM</div>
+                                        </div><!-- .nk-reply-meta -->
+                                        <div class="nk-reply-item">
+                                            <div class="nk-reply-header">
+                                                <div class="user-card">
+                                                    <div class="user-avatar sm bg-purple">
+                                                        <span>LO</span>
+                                                    </div>
+                                                    <div class="user-name">Lere Opaleye <span>added a note</span></div>
+                                                </div>
+                                                <div class="date-time">14 Jan, 2020</div>
+                                            </div>
+                                            <div class="nk-reply-body">
+                                                <div class="nk-reply-entry entry note">
+                                                    <p>Tech Team need to check out and resolve the issues.</p>
+                                                </div>
+                                            </div>
+                                        </div><!-- .nk-reply-item -->
+                                        <div class="nk-reply-meta">
+                                            <div class="nk-reply-meta-info"><strong>15 January 2020</strong></div>
+                                        </div><!-- .nk-reply-meta -->
+                                        <div class="nk-reply-item">
+                                            <div class="nk-reply-header">
+                                                <div class="user-card">
+                                                    <div class="user-avatar sm bg-pink">
+                                                        <span>ST</span>
+                                                    </div>
+                                                    <div class="user-name">Support Team <span>(You)</span></div>
+                                                </div>
+                                                <div class="date-time">15 Jan, 2020</div>
+                                            </div>
+                                            <div class="nk-reply-body">
+                                                <div class="nk-reply-entry entry">
+                                                    <p>Hello Lere,</p>
+                                                    <p>Thanks for waiting for us. Our team solved the issues.</p>
+                                                    <p>Thank you for your patience.</p>
+                                                </div>
+                                                <div class="nk-reply-from"> Replied by <span>Sunday Adekoloye</span> at 11:32 AM </div>
+                                            </div>
+                                        </div><!-- .nk-reply-item -->
+                                        <div class="nk-reply-form">
+                                            <div class="nk-reply-form-header">
+                                                <ul class="nav nav-tabs-s2 nav-tabs nav-tabs-sm">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link active" data-toggle="tab" href="#reply-form">Reply</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" data-toggle="tab" href="#note-form">Private Note</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="nk-reply-form-title">
+                                                    <div class="title">Reply as:</div>
+                                                    <div class="user-avatar xs bg-purple">
+                                                        <span>IH</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-content">
+                                                <div class="tab-pane active" id="reply-form">
+                                                    <div class="nk-reply-form-editor">
+                                                        <div class="nk-reply-form-field">
+                                                            <textarea class="form-control form-control-simple no-resize" placeholder="Hello"></textarea>
+                                                        </div>
+                                                        <div class="nk-reply-form-tools">
+                                                            <ul class="nk-reply-form-actions g-1">
+                                                                <li class="mr-2"><button class="btn btn-primary" type="submit">Reply</button></li>
+                                                                <li>
+                                                                    <div class="dropdown">
+                                                                        <a class="btn btn-icon btn-sm btn-tooltip" data-toggle="dropdown" title="Templates" href="#"><em class="icon ni ni-hash"></em></a>
+                                                                        <div class="dropdown-menu">
+                                                                            <ul class="link-list-opt no-bdr link-list-template">
+                                                                                <li class="opt-head"><span>Quick Insert</span></li>
+                                                                                <li><a href="#"><span>Thank you message</span></a></li>
+                                                                                <li><a href="#"><span>Your issues solved</span></a></li>
+                                                                                <li><a href="#"><span>Thank you message</span></a></li>
+                                                                                <li class="divider">
+                                                                                <li><a href="#"><em class="icon ni ni-file-plus"></em><span>Save as Template</span></a></li>
+                                                                                <li><a href="#"><em class="icon ni ni-notes-alt"></em><span>Manage Template</span></a></li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="btn btn-icon btn-sm" data-toggle="tooltip" data-placement="top" title="Upload Attachment" href="#"><em class="icon ni ni-clip-v"></em></a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="btn btn-icon btn-sm" data-toggle="tooltip" data-placement="top" title="Insert Emoji" href="#"><em class="icon ni ni-happy"></em></a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="btn btn-icon btn-sm" data-toggle="tooltip" data-placement="top" title="Upload Images" href="#"><em class="icon ni ni-img"></em></a>
+                                                                </li>
+                                                            </ul>
+                                                            <div class="dropdown">
+                                                                <a href="#" class="dropdown-toggle btn-trigger btn btn-icon mr-n2" data-toggle="dropdown"><em class="icon ni ni-more-v"></em></a>
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                    <ul class="link-list-opt no-bdr">
+                                                                        <li><a href="#"><span>Another Option</span></a></li>
+                                                                        <li><a href="#"><span>More Option</span></a></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div><!-- .nk-reply-form-tools -->
+                                                    </div><!-- .nk-reply-form-editor -->
+                                                </div>
+                                                <div class="tab-pane" id="note-form">
+                                                    <div class="nk-reply-form-editor">
+                                                        <div class="nk-reply-form-field">
+                                                            <textarea class="form-control form-control-simple no-resize" placeholder="Type your private note, that only visible to internal team."></textarea>
+                                                        </div>
+                                                        <div class="nk-reply-form-tools">
+                                                            <ul class="nk-reply-form-actions g-1">
+                                                                <li class="mr-2"><button class="btn btn-primary" type="submit">Add Note</button></li>
+                                                                <li>
+                                                                    <a class="btn btn-icon btn-sm" data-toggle="tooltip" data-placement="top" title="Upload Attachment" href="#"><em class="icon ni ni-clip-v"></em></a>
+                                                                </li>
+                                                            </ul>
+                                                            <div class="dropdown">
+                                                                <a href="#" class="dropdown-toggle btn-trigger btn btn-icon mr-n2" data-toggle="dropdown"><em class="icon ni ni-more-v"></em></a>
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                    <ul class="link-list-opt no-bdr">
+                                                                        <li><a href="#"><span>Another Option</span></a></li>
+                                                                        <li><a href="#"><span>More Option</span></a></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div><!-- .nk-reply-form-tools -->
+                                                    </div><!-- .nk-reply-form-editor -->
+                                                </div>
+                                            </div>
+                                        </div><!-- .nk-reply-form -->
+                                    </div><!-- .nk-reply -->
+                                    <div class="nk-msg-profile visible" data-simplebar>
+                                        <div class="card">
+                                            <div class="card-inner-group">
+                                                <div class="card-inner">
+                                                    <div class="user-card user-card-s2 mb-2">
+                                                        <div class="user-avatar md bg-primary">
+                                                            <span>LO</span>
+                                                        </div>
+                                                        <div class="user-info">
+                                                            <h5>Lere Opaleye</h5>
+                                                            <span class="sub-text">HOD</span>
+                                                        </div>
+                                                        <div class="user-card-menu dropdown">
+                                                            <a href="#" class="btn btn-icon btn-sm btn-trigger dropdown-toggle" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <ul class="link-list-opt no-bdr">
+                                                                    <li><a href="#"><em class="icon ni ni-eye"></em><span>View Profile</span></a></li>
+                                                                    <li><a href="#"><em class="icon ni ni-na"></em><span>System Settings</span></a></li>
+                                                                    <li><a href="#"><em class="icon ni ni-repeat"></em><span>View Permissions</span></a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row text-center g-1">
+                                                        <div class="col-4">
+                                                            <div class="profile-stats">
+                                                                <span class="amount">23</span>
+                                                                <span class="sub-text">Total Requests</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="profile-stats">
+                                                                <span class="amount">20</span>
+                                                                <span class="sub-text">Complete</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="profile-stats">
+                                                                <span class="amount">3</span>
+                                                                <span class="sub-text">Progress</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div><!-- .card-inner -->
+                                                <div class="card-inner">
+                                                    <div class="aside-wg">
+                                                        <h6 class="overline-title-alt mb-2">User Information</h6>
+                                                        <ul class="user-contacts">
+                                                            <li>
+                                                                <em class="icon ni ni-mail"></em><span>admin@rrbn.gov.ng</span>
+                                                            </li>
+                                                            <li>
+                                                                <em class="icon ni ni-call"></em><span>+234 812 320 1263</span>
+                                                            </li>
+                                                            <li>
+                                                                <em class="icon ni ni-map-pin"></em><span>4th Floor Federal Secretariat <br>CBN, Abuja</span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="aside-wg">
+                                                        <h6 class="overline-title-alt mb-2">Additional</h6>
+                                                        <div class="row gx-1 gy-3">
+                                                            <div class="col-6">
+                                                                <span class="sub-text">Ref ID: </span>
+                                                                <span>TID-049583</span>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <span class="sub-text">Requested:</span>
+                                                                <span>Lere Opaleye</span>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <span class="sub-text">Status:</span>
+                                                                <span class="lead-text text-success">Open</span>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <span class="sub-text">Last Reply:</span>
+                                                                <span>Lere Opaleye</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="aside-wg">
+                                                        <h6 class="overline-title-alt mb-2">Assigned Account</h6>
+                                                        <ul class="align-center g-2">
+                                                            <li>
+                                                                <div class="user-avatar bg-purple">
+                                                                    <span>IH</span>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="user-avatar bg-pink">
+                                                                    <span>ST</span>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="user-avatar bg-gray">
+                                                                    <span>SI</span>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div><!-- .card-inner -->
+                                            </div>
+                                        </div>
+                                    </div><!-- .nk-msg-profile -->
+                                </div><!-- .nk-msg-body -->
+                            </div><!-- .nk-msg -->
+                        </div>
+                    </div>
+                <!-- </div> -->
+                <!-- content @e -->
+
+
+
+
+
+
+{% endblock %}

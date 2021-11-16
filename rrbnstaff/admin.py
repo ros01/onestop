@@ -1,17 +1,42 @@
 from django.contrib import admin
 
-from .models import Requisition, Request
+from .models import RequisitionItem, Requisition, Request
+from store.models import Item
 
+
+class RequisitionItemInline(admin.TabularInline):
+  model = RequisitionItem
 
 class RequisitionAdmin(admin.ModelAdmin):
-  list_display = ('requisition_no', 'item_name', 'quantity_requested', 'requesting_staff', 'department', 'requisition_status')
-  list_display_links = ('requisition_no', 'item_name', 'department')
-  list_filter = ('requisition_no', 'department')
-  search_fields = ('requisition_no', 'item_name', 'quantity_requested', 'requesting_staff', 'department')
-  list_per_page = 25
+  inlines = [
+    RequisitionItemInline
+  ]
+  list_display = ('id', 'requisition_no', 'requesting_staff', 'department', 'requisition_status')
+  class Meta:
+    model = Requisition
 
 
 admin.site.register(Requisition, RequisitionAdmin)
+
+class RequisitionItemAdmin(admin.ModelAdmin):
+  list_display = ('requisition', 'item', 'quantity')
+  list_display_links = ('requisition', 'item')
+  list_filter = ('requisition', 'item')
+  search_fields = ('requisition', 'item', 'quantity')
+  list_per_page = 25
+
+
+#admin.site.register(RequisitionItem, RequisitionItemAdmin)
+
+class RequisitionAdmin(admin.ModelAdmin):
+  list_display = ('id', 'requisition_no', 'requesting_staff', 'department', 'requisition_status')
+  list_display_links = ('id', 'requisition_no', 'department')
+  list_filter = ('id', 'requisition_no', 'department')
+  search_fields = ('id', 'requisition_no', 'requesting_staff', 'department')
+  list_per_page = 25
+
+
+#admin.site.register(Requisition, RequisitionAdmin)
 
 
 class RequestAdmin(admin.ModelAdmin):

@@ -1,0 +1,188 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="js">
+
+<head>
+<base href="../">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<link rel="shortcut icon" href="{% static 'dlite/images/favicon.png' %}">
+
+<title>RRBN ECMS | </title>
+    <!-- StyleSheets  -->
+<link rel="stylesheet" href="{% static 'dlite/assets/css/dashlite.css' %}">
+<link id="skin-default" rel="stylesheet" href="{% static 'dlite/assets/css/theme.css' %}">
+
+
+</head>
+
+<body class="nk-body npc-apps apps-only has-apps-sidebar npc-apps-calendar bg-white">
+<div class="nk-app-root">
+<div class="nk-apps-sidebar is-dark">
+<div class="nk-apps-brand">
+
+
+<a href="{% url 'administration:filemanager_dashboard' %}" class="logo-link">
+<img class="logo-light logo-img" src="{% static 'dlite/images/logo-small.png' %}" srcset="{% static 'dlite/images/logo-small2x.png' %}"  alt="logo">
+<img class="logo-dark logo-img" src="{% static 'dlite/images/logo-dark-small.png' %}" srcset="{% static 'dlite/images/logo-dark-small2x.png' %}" alt="logo-dark">
+</a>
+</div>
+
+
+<div class="nk-sidebar-element">
+<div class="nk-sidebar-body">
+<div class="nk-sidebar-content" data-simplebar>
+<div class="nk-sidebar-menu">
+
+
+<!-- Menu -->
+<ul class="nk-menu apps-menu">
+<!-- <li class="nk-menu-item">
+<a href="{% url 'administration:administration_dashboard' %}" class="nk-menu-link" title="Dashboard">
+<span class="nk-menu-icon"><em class="icon ni ni-dashboard"></em></span>
+</a>
+</li> -->
+
+<!--
+<li class="nk-menu-item">
+<a href="html/index-sales.html" class="nk-menu-link" title="Sales Dashboard">
+<span class="nk-menu-icon"><em class="icon ni ni-speed"></em></span>
+</a>
+</li>
+<li class="nk-menu-item">
+<a href="html/index-crypto.html" class="nk-menu-link" title="Crypto Dashboard">
+<span class="nk-menu-icon"><em class="icon ni ni-bitcoin-cash"></em></span>
+</a>
+</li>
+<li class="nk-menu-item">
+<a href="html/index-invest.html" class="nk-menu-link" title="Invest Dashboard">
+<span class="nk-menu-icon"><em class="icon ni ni-invest"></em></span>
+</a>
+</li>
+
+
+<li class="nk-menu-hr"></li>
+
+-->
+<li class="nk-menu-item">
+<a href="{% url 'administration:filemanager_dashboard' %}" class="nk-menu-link" title="File Manager">
+<span class="nk-menu-icon"><em class="icon ni ni-folder"></em></span>
+</a>
+</li>
+
+
+<li class="nk-menu-item">
+<a href="{% url 'administration:mailbox' %}" class="nk-menu-link" title="Mailbox">
+<span class="nk-menu-icon"><em class="icon ni ni-inbox"></em></span>
+</a>
+</li>
+
+
+<li class="nk-menu-item">
+<a href="{% url 'administration:messages' %}"  class="nk-menu-link" title="Messages">
+<span class="nk-menu-icon"><em class="icon ni ni-chat"></em></span>
+</a>
+</li>
+<li class="nk-menu-item">
+<a href="{% url 'administration:chats' %}"  class="nk-menu-link" title="Chats">
+<span class="nk-menu-icon"><em class="icon ni ni-chat-circle"></em></span>
+</a>
+</li>
+<li class="nk-menu-item">
+<a href="{% url 'administration:calendar' %}" class="nk-menu-link" title="Calendar">
+<span class="nk-menu-icon"><em class="icon ni ni-calendar"></em></span>
+</a>
+</li>
+
+<!--
+<li class="nk-menu-item">
+<a href="html/apps/kanban.html" class="nk-menu-link">
+<span class="nk-menu-icon"><em class="icon ni ni-template"></em></span>
+</a>
+</li>
+<li class="nk-menu-hr"></li>
+<li class="nk-menu-item">
+<a href="html/components.html" class="nk-menu-link" title="Go to Components">
+<span class="nk-menu-icon"><em class="icon ni ni-layers"></em></span>
+</a>
+</li>
+-->
+</ul>
+</div>
+<div class="nk-sidebar-footer">
+
+<!--
+<ul class="nk-menu nk-menu-md">
+<li class="nk-menu-item">
+<a href="#" class="nk-menu-link" title="Settings">
+<span class="nk-menu-icon"><em class="icon ni ni-setting"></em></span>
+</a>
+</li>
+</ul>
+-->
+
+</div>
+</div>
+<div class="nk-sidebar-profile nk-sidebar-profile-fixed dropdown">
+
+<!--
+<a href="#" data-toggle="dropdown" data-offset="50,-60">
+<div class="user-avatar">
+</div>
+</a>
+<div class="dropdown-menu dropdown-menu-md ml-4">
+<div class="dropdown-inner user-card-wrap d-none d-md-block">
+<div class="user-card">
+<div class="user-avatar">
+<span>AB</span>
+</div>
+<div class="user-info">
+<span class="lead-text">Abu Bin Ishtiyak</span>
+<span class="sub-text text-soft">info@softnio.com</span>
+</div>
+</div>
+</div>
+<div class="dropdown-inner">
+<ul class="link-list">
+<li><a href="html/user-profile-regular.html"><em class="icon ni ni-user-alt"></em><span>View Profile</span></a></li>
+<li><a href="html/user-profile-setting.html"><em class="icon ni ni-setting-alt"></em><span>Account Setting</span></a></li>
+<li><a href="html/user-profile-activity.html"><em class="icon ni ni-activity-alt"></em><span>Login Activity</span></a></li>
+</ul>
+</div>
+<div class="dropdown-inner">
+<ul class="link-list">
+<li><a href="#"><em class="icon ni ni-signout"></em><span>Sign out</span></a></li>
+</ul>
+</div>
+</div>
+-->
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+ {% block content%} 
+
+ {%endblock%}
+
+<!-- JavaScript -->
+<script src="{% static 'dlite/assets/js/bundle.js' %}"></script>
+<script src="{% static 'dlite/assets/js/scripts.js' %}"></script>
+<script src="{% static 'dlite/assets/js/apps/file-manager.js' %}"></script>
+    
+</body>
+
+</html>
+
+
+
+

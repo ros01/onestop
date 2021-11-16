@@ -1,12 +1,14 @@
 from django import forms
+from django.forms import formset_factory, modelformset_factory, inlineformset_factory, BaseInlineFormSet
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from .models import Item, Category, Vendor, Issue, Restock
+from rrbnstaff.models import RequisitionItem, Requisition
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field
 from django.utils import timezone
 from bootstrap_modal_forms.forms import BSModalModelForm
 from bootstrap_modal_forms.mixins import PassRequestMixin, PopRequestMixin, CreateUpdateAjaxMixin
-
+from django.forms.widgets import CheckboxSelectMultiple
 
 
 
@@ -56,6 +58,179 @@ class ItemModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
 
       return instance
 
+
+class RequisitionModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+
+    #items = forms.ModelChoiceField(queryset=Item.objects.all(), empty_label=None, widget=forms.CheckboxSelectMultiple(),)
+
+    
+
+    class Meta:
+        model = Requisition
+        fields = ('items', 'requisition_reason', 'requesting_staff', 'authorized_by', 'department',)
+
+        widgets = {
+        
+        'requisition_reason': forms.Textarea(attrs={'rows':2, 'cols':12}),  
+        
+        }
+          
+
+    def __init__(self, *args, **kwargs):
+       super(RequisitionModelForm, self).__init__(*args, **kwargs)
+       for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'form-control',
+            })
+       #self.fields['items'].label = "Requisition Items"
+       #self.fields['items'].widget.attrs['placeholder'] = "Requisition Items"
+       #self.fields['items'].label_from_instance = lambda obj: "%s %s" % (obj.first_name, obj.last_name)
+       self.fields['items'].label = "Requisition Items"
+       self.fields['items'].widget = CheckboxSelectMultiple()
+       self.fields['items'].queryset = Item.objects.all()
+
+       self.fields['requisition_reason'].label = "Requisition Reason"
+       self.fields['requisition_reason'].widget.attrs['placeholder'] = "Enter Reason for Requesting Items"
+       self.fields['requesting_staff'].label = "Requesting Staff"
+       self.fields['requesting_staff'].widget.attrs['placeholder'] = "Choose"
+       self.fields['department'].label = "Department"
+       self.fields['department'].widget.attrs['placeholder'] = "Enter Staff Department"
+       self.fields['authorized_by'].label = "Requisition Authorized By"
+       self.fields['authorized_by'].widget.attrs['placeholder'] = "Choose"
+       
+    def save(self):
+
+      if not self.request.is_ajax():
+          instance = super(CreateUpdateAjaxMixin, self).save(commit=True)
+          instance.save()
+      else:
+          instance = super(CreateUpdateAjaxMixin, self).save(commit=False)
+
+      return instance
+
+
+
+class RequisitionsModelForm(forms.ModelForm):
+    #items = forms.ModelChoiceField(queryset=Item.objects.all(), empty_label=None, widget=forms.CheckboxSelectMultiple(),)
+    class Meta:
+        model = Requisition
+        fields = ('requisition_reason', 'requesting_staff', 'authorized_by', 'department',)
+
+        widgets = {
+        'requisition_reason': forms.Textarea(attrs={'rows':2, 'cols':12}),   
+        }
+          
+
+    def __init__(self, *args, **kwargs):
+       super(RequisitionsModelForm, self).__init__(*args, **kwargs)
+       for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'form-control',
+            })
+       #self.fields['items'].label = "Requisition Items"
+       #self.fields['items'].widget.attrs['placeholder'] = "Requisition Items"
+       #self.fields['items'].label_from_instance = lambda obj: "%s %s" % (obj.first_name, obj.last_name)
+       # self.fields['items'].label = "Requisition Items"
+       # self.fields['items'].widget = CheckboxSelectMultiple()
+       # self.fields['items'].queryset = Item.objects.all()
+       self.fields['requisition_reason'].label = "Requisition Reason"
+       self.fields['requisition_reason'].widget.attrs['placeholder'] = "Enter Reason for Requesting Items"
+       self.fields['requesting_staff'].label = "Requesting Staff"
+       self.fields['requesting_staff'].widget.attrs['placeholder'] = "Choose"
+       self.fields['department'].label = "Department"
+       self.fields['department'].widget.attrs['placeholder'] = "Enter Staff Department"
+       self.fields['authorized_by'].label = "Requisition Authorized By"
+       self.fields['authorized_by'].widget.attrs['placeholder'] = "Choose"
+       
+    
+
+class RequisitionItemModelForm(forms.ModelForm):
+    #items = forms.ModelChoiceField(queryset=Item.objects.all(), empty_label=None, widget=forms.CheckboxSelectMultiple(),)
+    class Meta:
+        model = RequisitionItem
+        fields = ( 'requisition', 'item', 'quantity')
+
+
+    def __init__(self, *args, **kwargs):
+       super(RequisitionItemModelForm, self).__init__(*args, **kwargs)
+       for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'form-control',
+            })
+       
+       self.fields['requisition'].label = "Requisition"
+       self.fields['requisition'].widget.attrs['placeholder'] = "Requisition"
+       self.fields['item'].label = "Item Name"
+       self.fields['item'].widget.attrs['placeholder'] = "Item Name"
+       self.fields['quantity'].label = "Quantity"
+       self.fields['quantity'].widget.attrs['placeholder'] = "Quantity"
+       
+    
+
+RequisitionItemFormSet = modelformset_factory(RequisitionItem, fields=('item', 'quantity',), can_delete=True)
+
+
+# class RequisitionForm(forms.Form):
+#     items = forms.CharField(max_length=200)
+#     requisition_reason = forms.CharField(max_length=200)
+#     requesting_staff = forms.CharField(max_length=200)
+#     authorized_by = forms.CharField(max_length=200)
+#     department = forms.CharField(max_length=200)
+    
+# class RequisitionItemInline(admin.TabularInline):
+#   model = RequisitionItem
+
+# class RequisitionAdmin(admin.ModelAdmin):
+#   inlines = [
+#     RequisitionItemInline
+#   ]
+#   list_display = ('id', 'requisition_no', 'requesting_staff', 'department', 'requisition_status')
+#   class Meta:
+#     model = Requisition    
+
+
+
+ 
+class RequisitionItemForm(forms.ModelForm):
+    class Meta:
+        model = RequisitionItem
+        exclude = ()
+
+
+class RequisitionForm(forms.ModelForm):
+    class Meta:
+        model = Requisition
+        exclude = ('requisition_date', 'requisition_status',)
+
+
+# RequisitionFormSet = inlineformset_factory(
+#                                         RequisitionItem, 
+#                                         Requisition, 
+#                                         fields = ['requisition', 'item', 'quantity'], 
+#                                         exclude = [], 
+#                                         can_delete = True,
+#                                         extra=1,
+#                                         )
+   
+
+# class Role(models.Model): # for each role there can be multiple users
+#     role_name=models.CharField(max_length=20)
+
+# class User(models.Model): # each user can have multiple roles
+#     name=models.CharField(max_length=20)
+#     role=models.ManyToManyField(Role, through='UserRole')
+
+# class UserRole(models.Model): # table to store which user has which roles
+#     role=models.ForeignKey(Role)
+#     user=models.ForeignKey(User)      
+    
+
+# class UserForm(ModelForm):
+#     class Meta:
+#         model = User
+
+# RoleFormSet = inlineformset_factory(User, Role) 
+# RoleFormSet = inlineformset_factory(UserRole, User.role.through)
 
 
 

@@ -14,13 +14,13 @@ from tempus_dominus.widgets import DatePicker, DateTimePicker
 class RequisitionModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
     class Meta:
         model = Requisition
-        fields = ('requisition_no', 'item_name', 'quantity_requested', 'requesting_staff', 'department')
+        fields = ('requisition_no', 'requesting_staff', 'authorized_by','department')
         widgets = {
         'requisition_no': forms.HiddenInput(),
         'requesting_staff': forms.HiddenInput(),
         'department': forms.HiddenInput(),
         #'department': forms.TextInput(attrs={'readonly': True}), 
-        'item_name': forms.TextInput(attrs={'readonly': True}), 
+        #'item': forms.TextInput(attrs={'readonly': True}), 
         }
 
     def __init__(self, *args, **kwargs):
@@ -29,8 +29,8 @@ class RequisitionModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelFo
             self.fields[name].widget.attrs.update({
                 'class': 'form-control',
             })
-       self.fields['item_name'].label = "Item Name"
-       self.fields['quantity_requested'].label = "Quantity Requested"
+      # self.fields['item'].label = "Item Name"
+       #self.fields['quantity_requested'].label = "Quantity Requested"
        self.fields['requesting_staff'].label = "Requesting Staff"
        self.fields['department'].label = "Department"
 
@@ -224,11 +224,11 @@ class StaffProfileModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelF
 
     class Meta:
         model = Employee
-        fields = ('staff_name', 'dob', 'gender', 'marital_status', 'next_of_kin', 'nationality', 'email', 'phone', 'zone', 'department', 'designation', 'pay_grade', 'national_id', 'employee_id', 'national_id', 'contact_address', 'city', 'state', 'state_of_origin', 'local_government_area', 'state', 'date_joined', 'pension_date', 'qualification', 'languages', 'professional_organizations', 'blood_group', 'drivers_license', 'digital_passport', 'special_interests', 'hobbies')
+        fields = ('employee', 'dob', 'gender', 'marital_status', 'next_of_kin', 'nationality', 'email', 'phone', 'zone', 'department', 'designation', 'pay_grade', 'national_id', 'staff_id', 'national_id', 'contact_address', 'city', 'state', 'state_of_origin', 'local_government_area', 'state', 'date_joined', 'pension_date', 'qualification', 'languages', 'professional_organizations', 'blood_group', 'drivers_license', 'digital_passport', 'special_interests', 'hobbies')
         
         widgets = {
             #'staff_name': forms.TextInput(attrs={'readonly': True}),
-            'department': forms.TextInput(attrs={'readonly': True}),
+            #'department': forms.TextInput(attrs={'readonly': True}),
             'email': forms.TextInput(attrs={'readonly': True}),
             'phone': forms.TextInput(attrs={'readonly': True}),
             'contact_address': forms.Textarea(attrs={'rows':2, 'cols':3}), 
@@ -243,11 +243,11 @@ class StaffProfileModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelF
                 'class': 'form-control',
             })
 
-       self.fields['staff_name'].initial = self.request.user.id
-       self.fields['staff_name'].label_from_instance = lambda obj: "%s %s" % (obj.first_name, obj.last_name)
-       self.fields['staff_name'].label = "Staff Name"
-       self.fields['staff_name'].widget.attrs['readonly'] = 'readonly'
-       self.fields['department'].initial = self.request.user.department
+       self.fields['employee'].initial = self.request.user.id
+       self.fields['employee'].label_from_instance = lambda obj: "%s %s" % (obj.first_name, obj.last_name)
+       self.fields['employee'].label = "Staff Name"
+       self.fields['employee'].widget.attrs['readonly'] = 'readonly'
+       #self.fields['department'].initial = self.request.user.department
        self.fields['email'].initial = self.request.user.email
        self.fields['phone'].initial = self.request.user.phone_no
        self.fields['dob'].label = "Date of Birth"
@@ -270,8 +270,8 @@ class StaffProfileModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelF
        self.fields['pay_grade'].widget.attrs['placeholder'] = "Enter Pay Grade"
        self.fields['national_id'].label = "National ID"
        self.fields['national_id'].widget.attrs['placeholder'] = "Enter National ID"
-       self.fields['employee_id'].label = "Employee ID"
-       self.fields['employee_id'].widget.attrs['placeholder'] = "Enter Employee ID"
+       self.fields['staff_id'].label = "Employee ID"
+       self.fields['staff_id'].widget.attrs['placeholder'] = "Enter Employee ID"
        self.fields['contact_address'].label = "Contact Address"
        self.fields['contact_address'].widget.attrs['placeholder'] = "Enter Contact Address"
        self.fields['city'].label = "City"

@@ -59,6 +59,19 @@
         <span class="col-5"><strong>Email:</strong></span>
         <span class="col-6">{{object.email}}</span>
         </div>  
+        <div class="row">
+        <span class="col-5"><strong>Associated Items:</strong></span>
+        <span class="col-6">
+
+        {% for item in object.item_set.all %}
+
+        {{ item }} <br>
+
+        {% endfor %}
+
+
+        </span>
+        </div> 
         </div>
         
         <br></div>

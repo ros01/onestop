@@ -1,0 +1,252 @@
+{% extends 'base14.html'%}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title%}| Requisitions {% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.8.2-web/css/allt.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
+<link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
+
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+
+{% endblock %}
+
+<script>
+{% block jquery %}
+$(".item-qty").change(function(){
+    // $(this).next(".btn-update").fadeIn();
+
+  event.preventDefault();
+  var item = $(this).prev("input[type='hidden']").val();
+  var qty = $(this).val()
+  var data = {
+    item: item,
+    qty: qty
+  }
+  console.log(data);
+  $.ajax({
+        type: "GET", // "POST"
+        url: "{% url 'store:create_item_requisition' %}",
+        data: data,
+        success: function(data) {
+            $("#jquery-message").text("Added " + data.item_added + " Deleted " + data.deleted)
+            if (data.deleted){
+                $("#item-"+item).fadeOut();
+             
+            } else {
+                $("#item-line-total-"+item).text(data.line_total);
+               
+            }
+
+            if (data.total_items == 0 ) {
+                $(".table").fadeOut()
+                var template = "{% include 'store/emptylist.html' %}";
+                $(".main-content").html(template);
+
+            }
+
+
+            showFlashMessage(data.flash_message);
+            updateRequisitionItemCount()
+
+            }, 
+        error: function(response, error) {
+            // console.log(response)
+            // console.log(error)
+            $("#add-form").submit()
+        }
+    })
+
+});
+
+{% endblock %}
+</script>
+
+
+
+
+{% block content %}
+{% include "_modal.html" %}
+    <!-- Page Wrapper -->
+     <div id="wrapper">
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content">
+
+    <!-- Begin Page Content -->
+    <div class="container">
+
+    <!-- Page Heading -->
+    <br><br>
+
+    {% include 'partials/_alerts.html' %}
+
+    <!--  <button type="button" id="create-item" class="bs-modal btn btn-success mt-1" data-form-url="{% url 'store:create_item' %}"><i class="fa fa-list text-white"></i> Create Requisition</button><br>
+    {% include 'partials/_alerts.html' %}  -->
+
+    <!-- DataTales Example -->
+
+
+    {% if object.requisitionitem_set.count < 1 %}
+          
+
+    <div class="card shadow mb-4">
+            
+    <div class="card-body">
+
+
+    <div class="row pr-2 mr-2 pt-4 justify-content-center align-items-center"> 
+
+    <div class="col-md-11"> 
+       
+    <p class="display-4 paragraph3 ml-2" style="color:#05567b;">Requisitions List</p>
+    <hr>
+      
+        
+    <div class="row"> 
+    <div class="col-lg-12 col-md-12 col-sm-12 col-12 mb-3" style="padding-right:0; height:100%"> 
+
+    <div class="mb-4" style="background-color: #bfe3f8; padding:5px; border-right:4px solid #ecd863; border-left:4px solid #ecd863"> <b>You currently do not have items in your requisitions list. To create a requisition list, click Add Item.  
+    </div> 
+      
+    <div class="d-flex justify-content-end">  
+    
+    <a href="{% url 'store:retrieve_item' %}" class="btn btn-primary"> Add Item</a> 
+    </div>
+
+    <hr />
+    <br>
+
+    </div>
+    </div> 
+    </div>
+
+    </div>
+
+   
+
+
+    {% else %}
+           
+    <div class="card shadow mb-2">
+    <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-success">Requisition Creation List</h6>
+    </div>
+    <div class="card-body">
+    <div class="table-responsive-lg">
+    <table class="table table-bordered table-hover">
+    <thead>
+    <tr style="background: #41963F;">
+    <td style="color: #fff;" class="small-text" width="05%">S/N</td>
+    <td style="color: #fff;" class="small-text" width="15%">Requisition No</td>
+    <td style="color: #fff;" class="small-text" width="30%">Item Name</td>
+    <td style="color: #fff;" class="small-text" width="30%">Requested Quantity</td>
+    <td style="color: #fff;" class="small-text" width="20%">Remove Item</td>
+    </tr>
+    </thead>
+    <tbody>
+   {% for item in object.requisitionitem_set.all %}
+    <tr id='item-{{ item.item.id }}'>
+    <td width="05%">{{forloop.counter}}</td>
+    <td width="15%">{{item.requisition.requisition_no}}</td>
+    <td width="30%">{{item.item.item_name }}</td>
+   <td width="30%"><form action="." method="GET" ><input type='hidden' name='item' value='{{ item.item.id }}' /><input type='number' class='item-qty' name='qty' value='{{ item.quantity }}' /><input type='submit' class='btn-update btn btn-link' value='Update item' style='display:none;'/></form></td>  
+   <td width="20%" class='text-center'><a href='{{ item.remove }}'>X</a></td>
+   </td>
+   </tr>
+   {% endfor %}
+   </tbody>
+   </table>
+   <form action="" method="post">{% csrf_token %}
+   <div class="form-row">
+   <div class="form-group col-md-6">
+   {{ form.requesting_staff|as_crispy_field }}
+   </div>
+   <div class="form-group col-md-6">
+   {{ form.department|as_crispy_field }}
+   </div>
+   </div>
+   <div class="form-row">
+   <div class="form-group col-md-6">
+   {{ form.authorized_by|as_crispy_field }}
+   </div>
+   <div class="form-group col-md-6">
+   {{ form.requisition_reason|as_crispy_field }}
+   </div>
+   </div>
+   
+
+
+   </div>
+    <div class="d-flex justify-content-end">  
+    
+
+    <!-- <button type="submit" class="btn btn-success"><i class="fa fa-barcode text-white"></i> Yes </button>
+
+    <input type="submit" class="btn btn-small btn-primary py-1 ml-2 mt-1 mb-3" value="Update"/> -->
+
+    <a href="{% url 'store:retrieve_item' %}" class="btn btn-small btn-warning mr-2"><i class="fa fa-barcode text-white"></i> Add Item</a>
+    <button type="submit" class="btn btn-small btn-primary"><i class="fa fa-podcast text-white"></i> Create Requisition</button>
+    <!-- <a href="{% url 'store:requisition_checkout' %}" class="btn btn-warning"> View Requisition Summary</a> -->
+    </div>
+    </form>
+   </div>
+   </div>
+
+   {% endif %}
+
+
+
+
+
+
+   </div>
+   <!-- /.container-fluid -->
+
+   </div>
+   <!-- End of Main Content -->
+
+   </div>
+   <!-- End of Content Wrapper -->
+
+   </div>
+   <!-- End of Page Wrapper -->
+
+
+<!--Jquery plugin-->
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+
+
+
+
+<!--<script type="text/javascript">
+    $(function() {
+    
+        $(".bs-modal").each(function () {
+          $(this).modalForm({
+              formURL: $(this).data('form-url')
+          });
+        });
+    
+    });
+
+</script>
+
+<script>
+      $('#mydata').dataTable();
+</script>  -->
+
+
+
+
+{% endblock %}

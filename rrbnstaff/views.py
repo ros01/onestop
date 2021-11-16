@@ -247,17 +247,21 @@ class RequisitionCreateView(LoginRequiredMixin, ItemObjectMixin, PassRequestMixi
             context['form'] = form
         return context   
    
-    def form_invalid(self, form):
-        form = self.get_form()
+    #def form_invalid(self, form):
+        #form = self.get_form()
 
-        context = {}
-        obj = self.get_object()
-        if obj is not None:
+        #context = {}
+        #obj = self.get_object()
+        #if obj is not None:
           
-           context['object'] = obj
-           context['form'] = form 
+           #context['object'] = obj
+           #context['form'] = form 
           
-        return self.render_to_response(context)
+        #return self.render_to_response(context)
+
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data())
 
       
  
@@ -451,7 +455,7 @@ class MyProfileListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         obj = super(MyProfileListView, self).get_context_data(**kwargs)
-        obj['my_profile_qs'] = Employee.objects.filter(staff_name=self.request.user)
+        obj['my_profile_qs'] = Employee.objects.filter(employee=self.request.user)
         return obj    
 
 class MyProfileDetailView(LoginRequiredMixin, DetailView):

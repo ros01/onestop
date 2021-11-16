@@ -17,7 +17,7 @@ admin.site.register(Vendor, VendorAdmin)
 
 
 class ItemAdmin(admin.ModelAdmin):
-  list_display = ('item_name', 'item_description', 'category',
+  list_display = ('item_name', 'item_description', 'category', 'id',
                   'stock_code', 'vendor', 'quantity', 're_order_no',)
   list_display_links = ('item_name', 'item_description', 're_order_no')
   list_filter = ('item_name', 'stock_code', 're_order_no')

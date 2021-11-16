@@ -16,7 +16,7 @@ def increment_contract_no():
     return new_contract_no
 
 class Category(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     category_name = models.CharField(max_length=120, unique=True)
     description = models.TextField(blank = False, null = False)
     added_on = models.DateField(default=date.today)
@@ -28,7 +28,7 @@ class Category(models.Model):
 
 
 class Vendor(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     vendor_name = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
     phone = models.CharField(max_length=100)
@@ -49,7 +49,7 @@ class Vendor(models.Model):
 
 
 class Contract(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     contract_no = models.CharField(max_length=500, null=True, blank=True, unique=True, 
         default=increment_contract_no)
     contract_name = models.CharField(max_length=200)
@@ -82,7 +82,7 @@ class Project(models.Model):
         )
 
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     contract_no = models.CharField(max_length=200)
     contract_name = models.CharField(max_length=200)
     contract_description = models.TextField(blank = False, null = False)

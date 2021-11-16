@@ -1,10 +1,10 @@
 from django.db import models
 from datetime import datetime
+from datetime import date
 import uuid
 from django.conf import settings
 from django.urls import reverse
-from django.utils import timezone
-from datetime import date
+from store.models import Item
 
  
 # Create your models here.
@@ -27,25 +27,45 @@ def increment_request_no():
 	return new_request_no
 
 
+class RequisitionItem(models.Model):
+	requisition = models.ForeignKey("Requisition", on_delete=models.CASCADE)
+	item = models.ForeignKey(Item, on_delete=models.DO_NOTHING)
+	quantity = models.PositiveIntegerField(default=1)
+	line_item_total = models.PositiveIntegerField(default=1)
+	
+	def __str__(self):
+		return self.item.item_name
+
+
+	def remove(self):
+		return self.item.remove_from_requisition()
+
+	#def remove(self):
+		#return self.item.remove_from_cart()
+
 class Requisition(models.Model):
-	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	#id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	requisition_no = models.CharField(max_length=500, null=True, blank=True, 
         default=increment_requisition_no)
-	item_name = models.CharField(max_length=200)
-	quantity_requested = models.IntegerField()
-	requesting_staff = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
-	department = models.CharField(max_length=200)
-	requisition_date = models.DateTimeField(auto_now_add=True, auto_now=False)
+	#item_name = models.CharField(max_length=200)
+	#item_name = models.ForeignKey('store.Item', related_name='store_item', on_delete=models.DO_NOTHING)
+	items = models.ManyToManyField(Item, through=RequisitionItem)
+	#quantity_requested = models.IntegerField()
+	requisition_reason = models.TextField(blank=True, null=True)
+	requesting_staff = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.DO_NOTHING)
+	authorized_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='approved_by', null=True, on_delete=models.DO_NOTHING)
+	department = models.CharField(max_length=200, null=True)
+	requisition_date = models.DateField(auto_now_add=True, auto_now=False)
 	requisition_status = models.IntegerField(default=1)
 
 	def __str__(self):
-		return str(self.item)
+		return str(self.requisition_no)
+	
+
+	def get_absolute_url(self):
+		return reverse("store:requisition_details", kwargs={"id": self.id})
 
 		
-
-	def requisition_date_pretty(self):
-		return self.requisition_date.strftime('%b %e %Y')
-
 	class Meta:
 		unique_together = ('requisition_no','requesting_staff')
 		ordering = ["-requisition_date"]
@@ -61,7 +81,7 @@ REQUEST_DURATION_CHOICES = (
 
 
 class Request(models.Model):
-	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	#id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	request_no = models.CharField(max_length=500, null=True, blank=True, unique=True,
         default=increment_request_no)
 	vehicle_name = models.CharField(max_length=200)
@@ -70,23 +90,15 @@ class Request(models.Model):
 	destination = models.CharField(max_length=200)
 	request_duration = models.CharField(max_length=120, choices=REQUEST_DURATION_CHOICES, default='1 day')
 	requesting_staff = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
-	request_date = models.DateTimeField(auto_now_add=True, auto_now=False)
-	projected_start_date = models.DateTimeField(default=datetime.now)
-	projected_end_date = models.DateTimeField(default=datetime.now)
+	request_date = models.DateField(auto_now_add=True, auto_now=False)
+	projected_start_date = models.DateField(default=date.today)
+	projected_end_date = models.DateField(default=date.today)
 	request_status = models.IntegerField(default=1)
 	
 
 	def __str__(self):
 		return self.request_no
 
-	def request_date_pretty(self):
-		return self.request_date.strftime('%b %e %Y')
-
-	def projected_start_date_pretty(self):
-		return self.projected_start_date.strftime('%b %e %Y')
-
-	def projected_end_date_pretty(self):
-		return self.projected_end_date.strftime('%b %e %Y')
 
 	class Meta:
 		unique_together = ('request_no','requesting_staff')

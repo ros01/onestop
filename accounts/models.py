@@ -42,6 +42,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('Monitoring', 'Monitoring'),
         ('Registrations', 'Registrations'),
         ('Hr', 'Hr'),
+        ('Admin', 'Admin'),
         ('Procurement', 'Procurement'),
         ('Finance', 'Finance'),
         ('Audit', 'Audit'),
@@ -62,11 +63,25 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('RRBN Staff', 'RRBN Staff'),
         )
 
+    ZONE = (
+        ('HQ', 'HQ'),
+        ('Lagos Zonal Office ', 'Lagos Zonal Office'),
+        ('Lagos CERT-RADMIRS', 'Lagos CERT-RADMIRS'),
+        ('Asaba', 'Asaba'),
+        ('Enugu', 'Enugu'),
+        ('Port Harcourt', 'Port Harcourt'),
+        ('Kano', 'Kano'),
+        ('Sokoto', 'Sokoto'),
+        ('Nnewi', 'Nnewi'),
+        ('Calabar', 'Calabar'),
+        )
+
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     phone_no = models.CharField(max_length=100, blank=True)
     department = models.CharField (max_length=30, choices = DEPARTMENT,  null=True, blank=True)
+    zone = models.CharField(max_length=120, choices=ZONE,  null=True, blank=True)
     role = models.CharField (max_length=20, choices = ROLE, blank=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
@@ -83,6 +98,14 @@ class User(AbstractBaseUser, PermissionsMixin):
             'Unselect this instead of deleting accounts.'
         ),
     )
+
+    is_hod = models.BooleanField(
+        _('HOD'),
+        default=True,
+        help_text=_(
+            'Designates whether this user should be given HOD rights. '),
+    )
+    
     
     USERNAME_FIELD = 'email'
     objects = MyUserManager()

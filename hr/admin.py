@@ -1,6 +1,28 @@
 from django.contrib import admin
 
-from .models import Leave, Specify, Document, Training, Record, Appraisal, Schedule, Performance
+from .models import Department, Employee, Course, Leave, Specify, Document, Training, Record, Appraisal, Schedule, Performance, Discipline, Compliance
+
+
+class DepartmentAdmin(admin.ModelAdmin):
+  list_display = ('id', 'name')
+  list_display_links = ('id', 'name')
+  list_filter = ('id', 'name')
+  search_fields = ('id', 'name')
+  list_per_page = 25
+
+
+admin.site.register(Department, DepartmentAdmin)
+
+
+class EmployeeAdmin(admin.ModelAdmin):
+  list_display = ('employee', 'dob', 'gender', 'department', 'designation')
+  list_display_links = ('employee', 'dob', 'department', 'designation')
+  list_filter = ('employee', 'department', 'designation')
+  search_fields = ('employee', 'dob', 'gender', 'entered_by', 'department', 'designation')
+  list_per_page = 25
+
+
+admin.site.register(Employee, EmployeeAdmin)
 
 
 class LeaveAdmin(admin.ModelAdmin):
@@ -33,6 +55,18 @@ class DocumentAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Document, DocumentAdmin)
+
+
+class CourseAdmin(admin.ModelAdmin):
+  list_display = ('training_name', 'category', 'vendor', 'training_description', 'date_added')
+  list_display_links = ('training_name', 'vendor', 'training_description', 'date_added')
+  list_filter = ('vendor', 'training_description', 'date_added')
+  search_fields = ('training_name', 'category', 'training_description', 'vendor', 'date_added')
+  list_per_page = 25
+
+
+admin.site.register(Course, CourseAdmin)
+
 
 class TrainingAdmin(admin.ModelAdmin):
   list_display = ('training_name', 'category', 'vendor', 'projected_start_date', 'projected_end_date')
@@ -89,3 +123,28 @@ class PerformanceAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Performance, PerformanceAdmin)
+
+
+
+class DisciplineAdmin(admin.ModelAdmin):
+  list_display = ('staff_name', 'case_no', 'case_name', 'case_description', 'case_status', 'due_date')
+  list_display_links = ('staff_name', 'case_no', 'case_description', 'case_status', 'due_date')
+  list_filter = ('staff_name', 'case_description', 'case_status', 'due_date')
+  search_fields = ('staff_name', 'case_no', 'case_description', 'case_status', 'due_date')
+  list_per_page = 25
+
+
+admin.site.register(Discipline, DisciplineAdmin)
+
+class ComplianceAdmin(admin.ModelAdmin):
+  list_display = ('staff_name', 'case_no', 'case_name', 'case_description', 'case_status', 'due_date', 'completed_on')
+  list_display_links = ('staff_name', 'case_no', 'case_description', 'case_status', 'due_date', 'completed_on')
+  list_filter = ('staff_name', 'case_description', 'case_status', 'due_date', 'completed_on')
+  search_fields = ('staff_name', 'case_no', 'case_description', 'case_status', 'due_date', 'completed_on')
+  list_per_page = 25
+
+admin.site.register(Compliance, ComplianceAdmin)
+
+
+
+

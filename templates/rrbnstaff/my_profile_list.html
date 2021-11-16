@@ -62,13 +62,13 @@
     {% for object in my_profile_qs %}
     <tr>
     <td width="05%">{{forloop.counter}}</td>
-    <td width="12%">{{object.staff_name.first_name}} {{object.staff_name.last_name}}</td>
+    <td width="12%">{{object.employee.first_name}} {{object.employee.last_name}}</td>
     <td width="12%">{{object.zone}}</td>
     <td width="12%">{{object.department}}</td>
     <td width="13%">{{object.designation}}</td>
-    <td width="12%">{{object.employee_id}}</td>
-    <td width="12%">{{object.date_joined_pretty}}</td>
-    <td width="12%">{{object.profile_creation_date_pretty}}</td>
+    <td width="12%">{{object.staff_id}}</td>
+    <td width="12%">{{object.date_joined}}</td>
+    <td width="12%">{{object.profile_creation_date}}</td>
     <td width="10%">
 
     <a class="btn btn-primary p-1" href="{% url 'rrbnstaff:my_profile_detail' object.pk %}"><i class="fa fa-folder-open text-white"></i></a>

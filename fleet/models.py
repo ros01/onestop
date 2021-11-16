@@ -29,7 +29,7 @@ def increment_refill_no():
 
 
 class Station(models.Model):
-	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	#id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	station_name = models.CharField(max_length=200)
 	contact_name = models.CharField(max_length=200)
 	address = models.CharField(max_length=200)
@@ -51,7 +51,7 @@ class Station(models.Model):
 		return self.last_updated.strftime('%b %e %Y')
 
 class Refill(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     refill_no = models.CharField(max_length=500, null=True, blank=True, unique=True, default=increment_refill_no)
     station_name =models.CharField(max_length=200)
     address = models.CharField(max_length=200)
@@ -79,7 +79,7 @@ class Refill(models.Model):
         p.save()
 
 class Workshop(models.Model):
-	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	#id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	workshop_name = models.CharField(max_length=200)
 	mechanic_name = models.CharField(max_length=200)
 	address = models.CharField(max_length=200)
@@ -99,7 +99,7 @@ class Workshop(models.Model):
 		return self.date_created.strftime('%b %e %Y')
 
 class Category(models.Model):
-	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	#id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	category_name = models.CharField(max_length=120, unique=True)
 	description = models.TextField(null=True, blank=True)
 	active = models.BooleanField(default=True)
@@ -181,7 +181,7 @@ class Vehicle(models.Model):
 		('interstate', 'Interstate Trip'),
 		)
 
-	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	#id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	vehicle_name = models.CharField(max_length=200)
 	description = models.TextField(blank=True, null=True)
 	vehicle_type = models.CharField(max_length=120, choices=TYPE,  null=True, blank=True)
@@ -220,7 +220,7 @@ class Assign(models.Model):
 		('completed', 'Completed'),
 		)
 
-	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	#id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	request_no = models.CharField(max_length=200)
 	vehicle_name = models.CharField(max_length=200)
 	requesting_staff = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='applying_staff',  on_delete=models.DO_NOTHING)
@@ -285,7 +285,7 @@ class Assign(models.Model):
 
 
 class Release(models.Model):
-	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	#id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	#vehicle = models.ForeignKey('Vehicle', null=True, blank=True, on_delete=models.DO_NOTHING)
 	vehicle_name = models.CharField(max_length=200)
 	request_no = models.CharField(max_length=200)
@@ -356,7 +356,7 @@ class Release(models.Model):
 
 
 class Fueling(models.Model):
-	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	#id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	vehicle = models.ForeignKey('Vehicle', null=True, blank=True, on_delete=models.DO_NOTHING)
 	#driver = models.ForeignKey("hr.Driver", null=True, blank=True, on_delete=models.DO_NOTHING)
 	driver = models.CharField(max_length=200)
@@ -383,7 +383,7 @@ class Fueling(models.Model):
 
 
 class Repair(models.Model):
-	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	#id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	vehicle = models.ForeignKey('Vehicle', null=True, blank=True, on_delete=models.DO_NOTHING)
 	fault = models.TextField(null=True, blank=True)
 	#reported_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='reported_by', on_delete=models.DO_NOTHING)
@@ -406,7 +406,7 @@ class Repair(models.Model):
 		return self.repair_date.strftime('%b %e %Y')
 
 class Schedule(models.Model):
-	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	#id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	schedule_no = models.CharField(max_length=500, null=True, blank=True, 
         default=increment_schedule_no)
 	vehicle = models.ForeignKey('Vehicle', null=True, blank=True, on_delete=models.DO_NOTHING)
@@ -436,7 +436,7 @@ class Schedule(models.Model):
 	
 
 class Maintenance(models.Model):
-	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	#id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	schedule_no = models.CharField(max_length=500, null=True, blank=True, default=increment_schedule_no)
 	vehicle = models.ForeignKey('Vehicle', null=True, blank=True, on_delete=models.DO_NOTHING)
 	driver = models.CharField(max_length=200)
