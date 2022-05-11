@@ -16,45 +16,6 @@ User = settings.AUTH_USER_MODEL
 from hr.models import Employee, Department
 import datetime
 
-# def increment_stock_code():
-#     last_stock_code = Item.objects.all().order_by('stock_code').last()
-#     if not last_stock_code:
-#         return '00001'
-#     stock_code = last_stock_code.stock_code
-#     new_stock_code = str(int(stock_code) + 1)
-#     new_stock_code = stock_code[0:-(len(new_stock_code))] + new_stock_code
-#     return new_stock_code
-
-def increment_stock_code():
-    last_stock_code = Item.objects.all().order_by('id').last()
-    if not last_stock_code:
-        return 'CAS' + '00001'
-    stock_code = last_stock_code.stock_code
-    stock_code_int = int(stock_code[4:8])
-    new_stock_code_int = stock_code_int + 1
-    new_stock_code = 'CAS' + str(new_stock_code_int).zfill(5)
-    return new_stock_code
-
-
-# def increment_stock_code():
-#     last_stock_code = Item.objects.all().order_by('id').last()
-#     if not last_stock_code:
-#         return 'RNH' + '00001'
-#     stock_code = last_stock_code.stock_code
-#     stock_code_int = int(stock_code[4:8])
-#     new_stock_code_int = stock_code_int + 1
-#     new_stock_code = 'RNH' + str(new_stock_code_int).zfill(5)
-#     return new_stock_code
-
-# def increment_stock_code():
-#     last_booking = Item.objects.all().order_by('id').last()
-#     if not last_booking:
-#         return 'RNH' + str(datetime.date.today().year) + str(datetime.date.today().month).zfill(2) + '0000'
-#     stock_code = last_booking.stock_code
-#     booking_int = int(stock_code[9:13])
-#     new_booking_int = booking_int + 1
-#     new_stock_code = 'RNH' + str(str(datetime.date.today().year)) + str(datetime.date.today().month).zfill(2) + str(new_booking_int).zfill(4)
-#     return new_stock_code
 
 
 def increment_requisition_no():
@@ -210,44 +171,6 @@ class RequisitionCart(models.Model):
         items = self.requisitioncartitem_set.all()
         return items
 
-
-        # def get_inventory_item(self):
-        # requisitioncartitem = []
-        # items = self.requisitioncartitem_set.all()
-        # for item in items:
-        #     x = item.item
-        #     q = requisitioncartitem.append(x)
-        #     return q
-
-
-    # for i in cart:
-    #     #We use try block to prevent items in cart that may have been removed from causing error
-    #     try:    
-    #         if(cart[i]['quantity']>0): #items with negative quantity = lot of freebies  
-    #             requisitionCartItems += cart[i]['quantity']
-
-    #             item = Item.objects.get(id=i)
-    #             total = (item.price * cart[i]['quantity'])
-
-    #             requisitionCart['get_cart_total'] += total
-    #             requisitionCart['get_cart_items'] += cart[i]['quantity']
-
-    #             item = {
-    #             'id':item.id,
-    #             'item':{'id':item.id,'name':item.item_name,  
-    #             'imageURL':item.imageURL}, 'quantity':cart[i]['quantity'],
-    #             'get_total':total,
-    #             }
-    #             items.append(item)
-
-    #             # if product.digital == False:
-    #             #   requisition['shipping'] = True
-    #     except:
-    #         pass
-
-    # class Meta:
-    #     unique_together = ('requisition_no','employee')
-    #     ordering = ["-requisition_date"]
     
 class RequisitionCartItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True)
@@ -267,10 +190,12 @@ class RequisitionCartItem(models.Model):
         return self.item.remove_from_requisition()   
 
 class Requisition(models.Model):
-    employee = models.ForeignKey(Employee, related_name='requested_by', blank=True, on_delete=models.DO_NOTHING)
+    # employee = models.ForeignKey(Employee, related_name='requested_by', blank=True, on_delete=models.DO_NOTHING)
+    employee = models.CharField(max_length=200)
     requisition_cart = models.ForeignKey(RequisitionCart, on_delete=models.CASCADE)
     requisition_reason = models.TextField(blank=True)
-    hod = models.ForeignKey(Employee, related_name='approved_by', blank=True, on_delete=models.DO_NOTHING)
+    # hod = models.ForeignKey(Employee, related_name='approved_by', blank=True, on_delete=models.DO_NOTHING)
+    hod =models.CharField(max_length=200)
     department = models.ForeignKey(Department, blank=True, on_delete=models.DO_NOTHING)
     requisition_creation_date = models.DateField(auto_now_add=True, auto_now=False)
     requisition_status = models.IntegerField(default=1)
