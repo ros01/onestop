@@ -1,16 +1,27 @@
 from django import forms
 from django.forms import formset_factory, modelformset_factory, inlineformset_factory, BaseInlineFormSet
 from django.http import HttpResponse, Http404, HttpResponseRedirect
-from .models import Item, Category, Vendor, Issue, Restock
-from rrbnstaff.models import RequisitionItem, Requisition
+from .models import *
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field
 from django.utils import timezone
 from bootstrap_modal_forms.forms import BSModalModelForm
 from bootstrap_modal_forms.mixins import PassRequestMixin, PopRequestMixin, CreateUpdateAjaxMixin
 from django.forms.widgets import CheckboxSelectMultiple
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
+class ItemFilterForm(forms.Form):
+    q = forms.CharField(label='Search', required=False)
+    # category_id = forms.ModelMultipleChoiceField(
+    #     label='Category',
+    #     queryset=Category.objects.all(), 
+    #     widget=forms.CheckboxSelectMultiple, 
+    #     required=False)
+    
+    # max_price = forms.DecimalField(decimal_places=2, max_digits=12, required=False)
+    # min_price = forms.DecimalField(decimal_places=2, max_digits=12, required=False)
 
 
 
@@ -21,12 +32,8 @@ class ItemModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
         fields = ('item_name', 'item_description', 'category', 'stock_code', 'vendor', 'unit', 'quantity', 'unit_price', 're_order_no', 'item_image', 'entered_by',)
 
         widgets = {
-        
-        'item_description': forms.Textarea(attrs={'rows':2, 'cols':12}),
-        
-        
-        }
-                
+        'item_description': forms.Textarea(attrs={'rows':2, 'cols':12}),  
+        }          
 
     def __init__(self, *args, **kwargs):
        super(ItemModelForm, self).__init__(*args, **kwargs)
@@ -34,7 +41,6 @@ class ItemModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
             self.fields[name].widget.attrs.update({
                 'class': 'form-control',
             })
-      
        self.fields['item_name'].label = "Item Name"
        self.fields['item_name'].widget.attrs['placeholder'] = "Item Name"
        self.fields['item_description'].label = "Description"
@@ -49,32 +55,57 @@ class ItemModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
        self.fields['re_order_no'].widget.attrs['placeholder'] = "Enter Item Re-order Level"
 
     def save(self):
-
       if not self.request.is_ajax():
           instance = super(CreateUpdateAjaxMixin, self).save(commit=True)
           instance.save()
       else:
           instance = super(CreateUpdateAjaxMixin, self).save(commit=False)
-
       return instance
 
 
-class RequisitionModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+class InventoryItemsModelForm(forms.ModelForm):
 
-    #items = forms.ModelChoiceField(queryset=Item.objects.all(), empty_label=None, widget=forms.CheckboxSelectMultiple(),)
+    class Meta:
+        model = Item
+        fields = ('item_name', 'item_description', 'category', 'stock_code', 'vendor', 'unit', 'quantity', 'unit_price', 're_order_no', 'item_image', 'entered_by',)
+
+        widgets = {
+        'item_description': forms.Textarea(attrs={'rows':2, 'cols':12}),  
+        }          
+
+    def __init__(self, *args, **kwargs):
+       super(InventoryItemsModelForm, self).__init__(*args, **kwargs)
+       for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'form-control',
+            })
+       self.fields['item_name'].label = "Item Name"
+       self.fields['item_name'].widget.attrs['placeholder'] = "Item Name"
+       self.fields['item_description'].label = "Description"
+       self.fields['item_description'].widget.attrs['placeholder'] = "Enter brief description of item"
+       self.fields['category'].label = "Category"
+       self.fields['category'].widget.attrs['placeholder'] = "Choose"
+       self.fields['unit'].label = "Unit of Measurement"
+       self.fields['unit'].widget.attrs['placeholder'] = "Enter a unit of Measurement"
+       self.fields['unit_price'].label = "Unit Price"
+       self.fields['unit_price'].widget.attrs['placeholder'] = "Enter purchase price of Item"
+       self.fields['re_order_no'].label = "Re-order No"
+       self.fields['re_order_no'].widget.attrs['placeholder'] = "Enter Item Re-order Level"
 
     
 
+
+
+class RequisitionModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+    #items = forms.ModelChoiceField(queryset=Item.objects.all(), empty_label=None, widget=forms.CheckboxSelectMultiple(),)
     class Meta:
         model = Requisition
-        fields = ('items', 'requisition_reason', 'requesting_staff', 'authorized_by', 'department',)
+        # fields = ('items', 'requisition_reason', 'requesting_staff', 'authorized_by', 'department',)
+        fields = ('requisition_reason', 'employee', 'hod', 'department',)
 
         widgets = {
-        
         'requisition_reason': forms.Textarea(attrs={'rows':2, 'cols':12}),  
-        
-        }
-          
+        }  
 
     def __init__(self, *args, **kwargs):
        super(RequisitionModelForm, self).__init__(*args, **kwargs)
@@ -85,18 +116,19 @@ class RequisitionModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelFo
        #self.fields['items'].label = "Requisition Items"
        #self.fields['items'].widget.attrs['placeholder'] = "Requisition Items"
        #self.fields['items'].label_from_instance = lambda obj: "%s %s" % (obj.first_name, obj.last_name)
-       self.fields['items'].label = "Requisition Items"
-       self.fields['items'].widget = CheckboxSelectMultiple()
-       self.fields['items'].queryset = Item.objects.all()
+       
+       # self.fields['items'].label = "Requisition Items"
+       # self.fields['items'].widget = CheckboxSelectMultiple()
+       # self.fields['items'].queryset = Item.objects.all()
 
        self.fields['requisition_reason'].label = "Requisition Reason"
        self.fields['requisition_reason'].widget.attrs['placeholder'] = "Enter Reason for Requesting Items"
-       self.fields['requesting_staff'].label = "Requesting Staff"
-       self.fields['requesting_staff'].widget.attrs['placeholder'] = "Choose"
+       self.fields['employee'].label = "Requesting Staff"
+       self.fields['employee'].widget.attrs['placeholder'] = "Choose"
        self.fields['department'].label = "Department"
        self.fields['department'].widget.attrs['placeholder'] = "Enter Staff Department"
-       self.fields['authorized_by'].label = "Requisition Authorized By"
-       self.fields['authorized_by'].widget.attrs['placeholder'] = "Choose"
+       self.fields['hod'].label = "Requisition Authorized By"
+       self.fields['hod'].widget.attrs['placeholder'] = "Choose"
        
     def save(self):
 
@@ -110,16 +142,18 @@ class RequisitionModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelFo
 
 
 
+
 class RequisitionsModelForm(forms.ModelForm):
     #items = forms.ModelChoiceField(queryset=Item.objects.all(), empty_label=None, widget=forms.CheckboxSelectMultiple(),)
     class Meta:
         model = Requisition
-        fields = ('requisition_reason', 'requesting_staff', 'authorized_by', 'department',)
+        fields = ('requisition_reason', 'department', 'employee', 'hod', )
 
         widgets = {
-        'requisition_reason': forms.Textarea(attrs={'rows':2, 'cols':12}),   
+        'requisition_reason': forms.Textarea(attrs={'rows':2, 'cols':12}),  
+        
         }
-          
+    
 
     def __init__(self, *args, **kwargs):
        super(RequisitionsModelForm, self).__init__(*args, **kwargs)
@@ -127,28 +161,51 @@ class RequisitionsModelForm(forms.ModelForm):
             self.fields[name].widget.attrs.update({
                 'class': 'form-control',
             })
-       #self.fields['items'].label = "Requisition Items"
-       #self.fields['items'].widget.attrs['placeholder'] = "Requisition Items"
-       #self.fields['items'].label_from_instance = lambda obj: "%s %s" % (obj.first_name, obj.last_name)
-       # self.fields['items'].label = "Requisition Items"
-       # self.fields['items'].widget = CheckboxSelectMultiple()
-       # self.fields['items'].queryset = Item.objects.all()
+       
        self.fields['requisition_reason'].label = "Requisition Reason"
        self.fields['requisition_reason'].widget.attrs['placeholder'] = "Enter Reason for Requesting Items"
-       self.fields['requesting_staff'].label = "Requesting Staff"
-       self.fields['requesting_staff'].widget.attrs['placeholder'] = "Choose"
+       self.fields['employee'].label = "Requesting Staff"
+       # self.fields['employee'].label_from_instance = lambda obj: "%s %s" % (obj.first_name, obj.last_name)
        self.fields['department'].label = "Department"
        self.fields['department'].widget.attrs['placeholder'] = "Enter Staff Department"
-       self.fields['authorized_by'].label = "Requisition Authorized By"
-       self.fields['authorized_by'].widget.attrs['placeholder'] = "Choose"
-       
-    
+       self.fields['hod'].label = "Requisition Authorized By"
+       # self.fields['hod'].label_from_instance = lambda obj: "%s %s" % (obj.first_name, obj.last_name)
+       # self.fields['requesting_staff'].queryset = User.objects.none()
+       # self.fields['employee'].queryset =Employee.objects.none()
+       # self.fields['hod'].queryset =Employee.objects.none()
 
-class RequisitionItemModelForm(forms.ModelForm):
+
+       # if 'department' in self.data:
+       #      try:
+       #          department_id = int(self.data.get('department'))
+       #          self.fields['employee'].queryset = Employee.objects.filter(department_id=department_id)
+       #          self.fields['hod'].queryset = Employee.objects.filter(department_id=department_id)
+       #      except (ValueError, TypeError):
+       #          pass  # invalid input from the client; ignore and fallback to empty city queryset
+       # elif self.instance.pk:
+       #      try:
+       #          self.fields['employee'].queryset = Employee.objects.all()
+       #          self.fields['hod'].queryset = Employee.objects.all()
+       #      except (ValueError, TypeError):
+       #          pass  
+
+       # else:
+       #      pass 
+
+
+       # else:
+       #      try:
+       #          self.fields['employee'].queryset = self.instance.department.user_set.order_by('email')
+       #          self.fields['hod'].queryset = self.instance.department.user_set.order_by('email')
+       #      except (ValueError, TypeError):
+       #          pass
+  
+
+class RequisitionCartItemModelForm(forms.ModelForm):
     #items = forms.ModelChoiceField(queryset=Item.objects.all(), empty_label=None, widget=forms.CheckboxSelectMultiple(),)
     class Meta:
-        model = RequisitionItem
-        fields = ( 'requisition', 'item', 'quantity')
+        model = RequisitionCartItem
+        fields = ( 'requisition_cart', 'item', 'quantity')
 
 
     def __init__(self, *args, **kwargs):
@@ -167,33 +224,61 @@ class RequisitionItemModelForm(forms.ModelForm):
        
     
 
-RequisitionItemFormSet = modelformset_factory(RequisitionItem, fields=('item', 'quantity',), can_delete=True)
+RequisitionItemFormSet = modelformset_factory(RequisitionCartItem, fields=('requisition_cart', 'item', 'quantity',), can_delete=True)
 
+class RequisitionsUpdateModelForm(forms.ModelForm):
+    #items = forms.ModelChoiceField(queryset=Item.objects.all(), empty_label=None, widget=forms.CheckboxSelectMultiple(),)
+    class Meta:
+        model = Requisition
+        fields = ('requisition_reason', 'department', 'employee', 'hod', )
 
-# class RequisitionForm(forms.Form):
-#     items = forms.CharField(max_length=200)
-#     requisition_reason = forms.CharField(max_length=200)
-#     requesting_staff = forms.CharField(max_length=200)
-#     authorized_by = forms.CharField(max_length=200)
-#     department = forms.CharField(max_length=200)
+        widgets = {
+        'requisition_reason': forms.Textarea(attrs={'rows':2, 'cols':12}),  
+        
+        }
     
-# class RequisitionItemInline(admin.TabularInline):
-#   model = RequisitionItem
 
-# class RequisitionAdmin(admin.ModelAdmin):
-#   inlines = [
-#     RequisitionItemInline
-#   ]
-#   list_display = ('id', 'requisition_no', 'requesting_staff', 'department', 'requisition_status')
-#   class Meta:
-#     model = Requisition    
+    def __init__(self, *args, **kwargs):
+       super(RequisitionsUpdateModelForm, self).__init__(*args, **kwargs)
+       for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'form-control',
+            })
+       
+       self.fields['requisition_reason'].label = "Requisition Reason"
+       self.fields['requisition_reason'].widget.attrs['placeholder'] = "Enter Reason for Requesting Items"
+       self.fields['employee'].label = "Requesting Staff"
+       # self.fields['employee'].label_from_instance = lambda obj: "%s %s" % (obj.first_name, obj.last_name)
+       self.fields['department'].label = "Department"
+       self.fields['department'].widget.attrs['placeholder'] = "Enter Staff Department"
+       self.fields['hod'].label = "Requisition Authorized By"
+       # self.fields['hod'].label_from_instance = lambda obj: "%s %s" % (obj.first_name, obj.last_name)
+       # self.fields['employee'].queryset = User.objects.none()
 
 
-
+       # if 'department' in self.data:
+       #      try:
+       #          department_id = int(self.data.get('department'))
+       #          self.fields['employee'].queryset = User.objects.filter(department_id=department_id)
+       #          self.fields['hod'].queryset = User.objects.filter(department_id=department_id)
+       #      except (ValueError, TypeError):
+       #          pass  # invalid input from the client; ignore and fallback to empty city queryset
+       # elif self.instance.pk:
+       #      try:
+       #          self.fields['employee'].queryset = User.objects.all()
+       #          self.fields['hod'].queryset = User.objects.all()
+       #      except (ValueError, TypeError):
+       #          pass   
+       # else:
+       #      try:
+       #          self.fields['employee'].queryset = self.instance.department.user_set.order_by('email')
+       #          self.fields['hod'].queryset = self.instance.department.user_set.order_by('email')
+       #      except (ValueError, TypeError):
+       #          pass
  
 class RequisitionItemForm(forms.ModelForm):
     class Meta:
-        model = RequisitionItem
+        model = RequisitionCartItem
         exclude = ()
 
 
@@ -238,7 +323,7 @@ class CategoryModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm)
 
     class Meta:
         model = Category
-        fields = ('category_name', 'description',)
+        fields = ('category_name', 'category_short','description',)
 
         widgets = {
         
@@ -319,38 +404,36 @@ class VendorModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
        
 class IssueRequisitionModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
     class Meta:
-        model = Issue
-        fields = ('requisition_no', 'item_name', 'department', 'requisition_date', 'quantity_requested','quantity_issued', 'requesting_staff', 'issued_by',)
+        model = IssueRequisition
+        fields = ('requisition', 'issued_by',)
+         # 'item_name', 'department', 'requisition_date', 'quantity_requested','quantity_issued', 'requesting_staff', 'issued_by',)
         widgets = {
-        'department': forms.HiddenInput(),
-        'requisition_date': forms.HiddenInput(),   
-        'requesting_staff': forms.HiddenInput(),
-        'requisition_no': forms.TextInput(attrs={'readonly': True}), 
-        'quantity_requested': forms.TextInput(attrs={'readonly': True}),
-        }
-
-        
+        # 'department': forms.HiddenInput(),
+        # 'requisition_date': forms.HiddenInput(),   
+        # 'requesting_staff': forms.HiddenInput(),
+        'requisition': forms.TextInput(attrs={'readonly': True}), 
+        # 'quantity_requested': forms.TextInput(attrs={'readonly': True}),
+        }   
 
     def __init__(self, *args, **kwargs):
        super(IssueRequisitionModelForm, self).__init__(*args, **kwargs)
        for name in self.fields.keys():
             self.fields[name].widget.attrs.update({
                 'class': 'form-control',
-            })
-      
-       self.fields['requisition_no'].label = "Requisition No"
-       self.fields['item_name'].widget.attrs['value'] = self.instance.item_name
-       self.fields['item_name'].widget.attrs['readonly'] = 'readonly'
-       self.fields['item_name'].label = "Item Name"
-       self.fields['department'].label = "Department"
-       self.fields['requisition_date'].label = "Requisition Date"
-       self.fields['quantity_requested'].label = "Requested Quantity"
-       self.fields['quantity_issued'].label = "Quantity Issued"
-       self.fields['quantity_issued'].widget.attrs['placeholder'] = "Enter Issue Quantity"
-       self.fields['requesting_staff'].label = "Requesting Staff"
-       self.fields['requesting_staff'].widget.attrs['placeholder'] = "Requesting Staff"
-       self.fields['issued_by'].label = "Issueing Officer"
-       self.fields['issued_by'].widget.attrs['placeholder'] = "Issuing Officer"
+            }) 
+       self.fields['requisition'].label = "Requisition"
+       # self.fields['item_name'].widget.attrs['value'] = self.instance.item_name
+       # self.fields['item_name'].widget.attrs['readonly'] = 'readonly'
+       # self.fields['item_name'].label = "Item Name"
+       # self.fields['department'].label = "Department"
+       # self.fields['requisition_date'].label = "Requisition Date"
+       # self.fields['quantity_requested'].label = "Requested Quantity"
+       # self.fields['quantity_issued'].label = "Quantity Issued"
+       # self.fields['quantity_issued'].widget.attrs['placeholder'] = "Enter Issue Quantity"
+       # self.fields['requesting_staff'].label = "Requesting Staff"
+       # self.fields['requesting_staff'].widget.attrs['placeholder'] = "Requesting Staff"
+       # self.fields['issued_by'].label = "Issueing Officer"
+       # self.fields['issued_by'].widget.attrs['placeholder'] = "Issuing Officer"
 
     def save(self):
       if not self.request.is_ajax():
@@ -360,11 +443,117 @@ class IssueRequisitionModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.Mo
           instance = super(CreateUpdateAjaxMixin, self).save(commit=False)
       return instance
 
+class IssueRequisitionItemModelForm(forms.ModelForm):
+    class Meta:
+        model = RequisitionCartItem
+        fields = ('item', 'quantity', 'quantity_issued')
+      
+        widgets = {
+        # 'requesting_staff': forms.HiddenInput(),
+        # 'requisition': forms.TextInput(attrs={'readonly': True}), 
+        # 'quantity_requested': forms.TextInput(attrs={'readonly': True}),
+        'quantity_issued': forms.NumberInput(attrs={'class':'form-control'}), 
+        }   
 
+    def __init__(self, *args, **kwargs):
+       super(IssueRequisitionItemModelForm, self).__init__(*args, **kwargs)
+       for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'form-control',
+            }) 
+      
+       # self.fields['requisition'].widget.attrs['value'] = self.instance.requisition
+       self.fields['item'].widget.attrs['readonly'] = 'readonly'
+       self.fields['item'].label = "Item"
+       self.fields['quantity'].widget.attrs['readonly'] = 'readonly'
+       self.fields['quantity'].label = "Quantity Requested"
+       # self.fields['quantity'].label_from_instance = lambda obj: "%s %s" % (obj.first_name, obj.last_name)
+
+
+#IssueRequisitionItemFormSet = modelformset_factory(RequisitionCartItem, form=IssueRequisitionItemModelForm, can_delete=False, extra=0)
+
+class RequisitionCartModelForm(forms.ModelForm):
+    class Meta:
+        model = RequisitionCart
+        fields = ('employee', 'requisition_no')
+      
+        widgets = {
+        # 'requesting_staff': forms.HiddenInput(),
+        # 'requisition': forms.TextInput(attrs={'readonly': True}), 
+        # 'quantity_requested': forms.TextInput(attrs={'readonly': True}),
+        # 'quantity_issued': forms.NumberInput(attrs={'class':'form-control'}), 
+        }   
+
+    def __init__(self, *args, **kwargs):
+       super(RequisitionCartModelForm, self).__init__(*args, **kwargs)
+       for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'form-control',
+            }) 
+      
+       # self.fields['requisition'].widget.attrs['value'] = self.instance.requisition
+       # self.fields['item'].widget.attrs['readonly'] = 'readonly'
+       # self.fields['item'].label = "Item"
+       # self.fields['quantity'].widget.attrs['readonly'] = 'readonly'
+       # self.fields['quantity'].label = "Quantity Requested"
+       # self.fields['quantity'].label_from_instance = lambda obj: "%s %s" % (obj.first_name, obj.last_name)
+
+
+
+class IssueRequisitionsModelForm(forms.ModelForm):
+    class Meta:
+        model = IssueRequisition
+        fields = ('requisition', 'issued_by')
+         # 'item_name', 'department', 'requisition_date', 'quantity_requested','quantity_issued', 'requesting_staff', 'issued_by',)
+        widgets = {
+        'issued_by': forms.HiddenInput(),
+        # 'requisition_date': forms.HiddenInput(),   
+        # 'requesting_staff': forms.HiddenInput(),
+        # 'requisition': forms.TextInput(attrs={'readonly': True}), 
+        # 'quantity_requested': forms.TextInput(attrs={'readonly': True}),
+        }   
+
+    def __init__(self, *args, **kwargs):
+       super(IssueRequisitionsModelForm, self).__init__(*args, **kwargs)
+       for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'form-control',
+            }) 
+      
+       # self.fields['requisition'].widget.attrs['value'] = self.instance.requisition
+       self.fields['requisition'].widget.attrs['readonly'] = 'readonly'
+       self.fields['requisition'].label = "Requisition No"
+       # self.fields['item_name'].widget.attrs['value'] = self.instance.item_name
+       # self.fields['item_name'].widget.attrs['readonly'] = 'readonly'
+       # self.fields['item_name'].label = "Item Name"
+
+       # self.fields['issued_by'].label = "Requisition Issued By"
+       # self.fields['issued_by'].label_from_instance = lambda obj: "%s %s" % (obj.first_name, obj.last_name)
+
+
+       # self.fields['department'].label = "Department"
+       # self.fields['requisition_date'].label = "Requisition Date"
+       # self.fields['quantity_requested'].label = "Requested Quantity"
+       #self.fields['quantity_issued'].label = "Quantity Issued"
+       #self.fields['quantity_issued'].widget.attrs['placeholder'] = "Enter Issue Quantity"
+       # self.fields['requesting_staff'].label = "Requesting Staff"
+       # self.fields['requesting_staff'].widget.attrs['placeholder'] = "Requesting Staff"
+       # self.fields['issued_by'].label = "Issueing Officer"
+       # self.fields['issued_by'].widget.attrs['placeholder'] = "Issuing Officer"
+
+#RequisitionCartFormSet = modelformset_factory(RequisitionCart, form=RequisitionCartModelForm, can_delete=False, extra=0)  
+
+IssueRequisitionItemFormSet = modelformset_factory(RequisitionCartItem, form=IssueRequisitionItemModelForm, can_delete=True, extra=0) 
+
+# IssueRequisitionItemFormSet = modelformset_factory(
+#     RequisitionItem, fields=('item', 'quantity', 'quantity_issued'), 
+#     widgets={'quantity': forms.TextInput(attrs={'readonly': True})
+
+#     },
+#     can_delete=False, extra=0)
 
 
 class RestockModelForm(forms.ModelForm):
-
 
     class Meta:
         model = Restock

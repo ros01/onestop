@@ -484,10 +484,5 @@ class Maintenance(models.Model):
 		if self.id is not None:
 			schedule.schedule_status = 2
 			schedule.save()
-	
-	
-
-
-
 
 

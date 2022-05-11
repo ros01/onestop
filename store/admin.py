@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Vendor, Item, Category, Issue, Restock
+from .models import *
+
 
 
 class VendorAdmin(admin.ModelAdmin):
@@ -29,7 +30,7 @@ class ItemAdmin(admin.ModelAdmin):
 admin.site.register(Item, ItemAdmin)
 
 class CategoryAdmin(admin.ModelAdmin):
-  list_display = ('category_name', 'description', 'active',
+  list_display = ('id', 'category_name', 'description', 'active',
                   'entry_date')
   list_display_links = ('category_name', 'description')
   list_filter = ('category_name', 'entry_date', 'description')
@@ -37,19 +38,72 @@ class CategoryAdmin(admin.ModelAdmin):
                    'entry_date')
   list_per_page = 25
 
+admin.site.register(Category, CategoryAdmin)
+
+# class RequisitionItemInline(admin.TabularInline):
+#   model = RequisitionItem
+
+# class IssueAdmin(admin.ModelAdmin):
+#   inlines = [
+#     RequisitionItemInline
+#   ]
+#   list_display = ('id', 'requisition', 'issued_by', 'issue_date')
+#   class Meta:
+#     model = Issue
+
+class RequisitionAdmin(admin.ModelAdmin):
+  list_display = ('id', 'employee', 'requisition_cart', 'requisition_reason', 'hod', 'department', 'requisition_status')
+  list_display_links = ('id', 'requisition_cart', 'department')
+  list_filter = ('id', 'requisition_cart','department')
+  search_fields = ('id', 'employee', 'requisition_cart', 'hod', 'department')
+  list_per_page = 25
+
+admin.site.register(Requisition, RequisitionAdmin)
 
 
-class IssueAdmin(admin.ModelAdmin):
-  list_display = ('requisition_no', 'item_name', 'quantity_requested', 'quantity_issued', 'requesting_staff',
-                  'issued_by', 'issue_date')
-  list_display_links = ('requisition_no', 'item_name', 'quantity_requested', 'quantity_issued', 'issue_date')
-  list_filter = ('requisition_no', 'item_name', 'issued_by', 'quantity_issued', 'issue_date')
-  search_fields = ('requisition_no', 'item_name', 'quantity_issued', 'requesting_staff',
-                   'issued_by', 'issue_date')
+# class RequisitionAdmin(admin.ModelAdmin):
+#   list_display = ('requisition_no', 'employee', 'requisition_reason')
+#   list_display_links = ('requisition_no', 'remployee', 'requisition_reason')
+#   list_filter = ('requisition_no', 'employee', 'requisition_reason')
+#   search_fields = ('requisition_no', 'employee', 'requisition_reason')
+#   list_per_page = 25
+
+
+# admin.site.register(Requisition, RequisitionAdmin)
+
+class RequisitionCartItemAdmin(admin.ModelAdmin):
+  list_display = ('item', 'requisition_cart', 'quantity', 'quantity_issued')
+  list_display_links = ('item', 'requisition_cart', 'quantity', 'quantity_issued')
+  list_filter = ('item', 'requisition_cart', 'quantity', 'quantity_issued')
+  search_fields = ('item', 'requisition_cart', 'quantity', 'quantity_issued')
+  list_per_page = 25
+  raw_id_fields = ['item']
+
+
+admin.site.register(RequisitionCartItem, RequisitionCartItemAdmin)
+
+
+
+class RequisitionCartAdmin(admin.ModelAdmin):
+  list_display = ('requisition_no', 'employee', 'requisition_status')
+  list_display_links = ('requisition_no', 'employee', 'requisition_status')
+  list_filter = ('requisition_no', 'employee', 'requisition_status')
+  search_fields = ('requisition_no', 'employee', 'requisition_status')
   list_per_page = 25
 
 
-admin.site.register(Issue, IssueAdmin)
+admin.site.register(RequisitionCart, RequisitionCartAdmin)
+
+
+class IssueRequisitionAdmin(admin.ModelAdmin):
+  list_display = ('requisition', 'issued_by', 'issue_date')
+  list_display_links = ('requisition', 'issue_date')
+  list_filter = ('requisition', 'issued_by', 'issue_date')
+  search_fields = ('requisition', 'issued_by', 'issue_date')
+  list_per_page = 25
+
+
+admin.site.register(IssueRequisition, IssueRequisitionAdmin)
 
 
 class RestockAdmin(admin.ModelAdmin):

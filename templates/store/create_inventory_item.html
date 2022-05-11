@@ -1,0 +1,279 @@
+{% extends 'base15.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title%}| Create Inventory Item {% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
+<!-- <link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet"> -->
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block javascript %}
+ <!--  <script>
+    $("#id_stock_code").change(function () {
+      var form = $(this).closest("form");
+      $.ajax({
+        // url: "/ajax/create_stock_code/",
+        url: form.attr("data-create-stock-code-url"),
+        data: form.serialize(),
+        dataType: 'json',
+        success: function (data){
+          if (data.is_taken) {
+            alert(data.error_message);
+          }
+        }
+      });
+
+    });
+  </script> -->
+
+   <!-- <script>
+    $("#id_stock_code").change(function () {
+      var stock_code = $(this).val();
+      $.ajax({
+        // url: "/ajax/create_stock_code/",
+        url: "{% url 'store:create_stock_code' %}",
+
+        data: {
+          'stock_code': stock_code
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_taken) {
+            alert("This stock code already exists.");
+          }
+        }
+      });
+
+    });
+  </script>
+ -->
+
+
+
+  <script>
+
+  // function setStockcode() {
+  //   var category = $('#id_category').val()
+
+  //   if (category != "Stationeries")
+  //   $('#id_stock_code').val($('#id_category').val())
+
+    
+  // };
+
+
+  // $("#id_category").change(function () {
+  //   setStockcode()
+
+
+  function setStockcode() {
+    var category = $('#id_category').val()
+
+    if (category != "Stationeries")
+    $('#id_stock_code').val($('#id_category').val())
+
+    
+  };
+
+
+  $("#id_category").change(function () {
+    // var formData = $("#id_category").serialize();
+
+    var category = $(this).val()
+    // var item_name = $(this).val()
+
+    var data = {
+      category: category,
+      // item_name: item_name
+    }
+
+    console.log(data);
+     $.ajax({
+      type: "GET",
+      url: "{% url 'store:create_stock_code' %}",
+      data: data,
+      // dataType: 'json',
+      success: function (data) {
+       document.getElementById('id_stock_code').value=data;
+      }
+      // error: function(response, error) {
+      //   console.log(response)
+      //   console.log(error)
+      // }
+     
+    });
+
+    // setStockcode()
+
+
+
+
+    // var item = $(this).find(':selected').val();
+    // $.ajax({
+    //   // url: "/ajax/create_stock_code/",
+    //   url: "{% url 'store:create_stock_code' %}",
+
+    //   data: {
+    //     'item': item
+    //   },
+    //   dataType: 'json',
+    //   success: function (data) {
+    //     document.getElementById('id_stock_code').value=data;
+    //   }
+    // });
+
+  });
+  </script>
+
+{% endblock %}
+
+{% block content %}
+{% include "_modal.html" %}
+
+<!-- <div class="container">
+
+<div class="row my-2">
+<div class="col-lg-7 col-md-9 col-sm-12 col-12 m-auto" style= "border-right:2px solid #eaecef; border-left:2px solid #eaecef; border-top:2px solid #eaecef; border-bottom:2px solid #eaecef">
+
+<div class="container">
+<div class="row mt-2 pt-2">
+<div class="col text-left p-0 m-0">
+<p class="text-success display-4 paragraph2">Create New Inventory Item</p>
+<hr>
+</div>
+</div>
+</div> -->
+
+
+<!-- <div class="container">
+<div class="row mt-0 pl-1 mb-3" style="background-color: #eaecef; border-right:4px solid #eaecef; border-left:4px solid #eaecef; border-top: :4px solid #eaecef; border-bottom: :4px solid #eaecef">
+<i class="fas fa-info fa-2x py-2 pl-3"></i>      
+<p class="lead ml-3 pl-3 py-2 my-auto">
+Fill the Form below. All fields are required</p></div>
+</div> -->
+
+<div class="content">
+
+  <div class="container-fluid ">
+
+
+
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+  <div class="box-element" id="form-wrapper">
+
+<form id="inventory-form" method="POST" action="." enctype="multipart/form-data" data-create-stock-code-url="{% url 'store:create_stock_code' %}">
+{% csrf_token %}
+
+ <input type="hidden" name="entered_by" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_entered_by">
+
+                
+<div class="form-row">
+<div class="form-group col-md-6 mb-0">
+{{ form.item_name |as_crispy_field }}  
+
+</div>    
+
+<div class="form-group col-md-6 mb-0">
+{{ form.item_description|as_crispy_field }}
+</div>                       
+</div>
+
+              
+<div class="form-row">
+<div class="form-group col-md-6 mb-0">
+{{ form.category|as_crispy_field }}
+</div> 
+<div class="form-group col-md-6 mb-0">
+{{ form.stock_code|as_crispy_field }}
+</div> 
+</div>                               
+            
+
+<div class="form-row">
+<div class="form-group col-md-6 mb-0">
+{{ form.vendor|as_crispy_field }}
+</div>
+<div class="form-group col-md-6 mb-0">
+{{ form.unit|as_crispy_field }}
+</div>             
+</div>
+
+<div class="form-row">
+<div class="form-group col-md-6 mb-0">
+{{ form.quantity|as_crispy_field }}
+</div>
+<div class="form-group col-md-6 mb-0">
+{{ form.unit_price|as_crispy_field }}
+</div>             
+</div>
+
+<div class="form-row">
+<div class="form-group col-md-6 mb-0">
+{{ form.re_order_no|as_crispy_field }}
+</div>
+<div class="form-group col-md-6 mb-0">
+{{ form.item_image|as_crispy_field }}
+</div>             
+</div>
+
+
+      
+<hr>
+<div class="d-flex justify-content-end">   
+    
+ 
+  
+<button type="submit" class="btn btn-success py-1 mt-2 mb-4" name="_save"> Save Item &#x21E8;</button>
+
+
+</div>
+</div>
+</div>
+</div>
+</form>
+</div>
+
+
+
+
+
+
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
+
+<!-- <script src="{% static 'js/jquery.js' %}"></script> -->
+<!-- <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<script type="text/javascript">
+    $(function() {
+    
+        $(".bs-modal").each(function () {
+          $(this).modalForm({
+              formURL: $(this).data('form-url')
+          });
+        });
+    
+    });
+
+</script> -->
+
+
+
+
+<!-- <script>
+  $('#mydata').dataTable();
+</script> -->
+
+
+
+
+
+
+
+{% endblock %}

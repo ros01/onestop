@@ -3,7 +3,8 @@ import uuid
 from django.conf import settings
 from datetime import datetime
 from datetime import date
-
+from django.contrib.auth import get_user_model
+User = get_user_model()
 # Create your models here.
 
 
@@ -48,10 +49,14 @@ def increment_training_no():
 
 class Department(models.Model):
     #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ["name"]
 
 
 class Employee(models.Model):
@@ -115,6 +120,7 @@ class Employee(models.Model):
 
 
     #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.IntegerField(primary_key=True)
     employee = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     dob = models.DateField(default=date.today)
     gender = models.CharField(max_length=120, choices=GENDER,  null=True, blank=True)
@@ -125,7 +131,7 @@ class Employee(models.Model):
     phone = models.CharField(max_length=100)
     zone = models.CharField(max_length=120, choices=ZONE,  null=True, blank=True)
     #department = models.CharField(max_length=120, choices=DEPARTMENT,  null=True, blank=True)
-    department = models.ForeignKey(Department, null=True, related_name='department_em', on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, null=True,  on_delete=models.CASCADE)
     designation = models.ForeignKey('Title', null=True, blank=True, on_delete=models.DO_NOTHING)
     pay_grade = models.ForeignKey('Grade', null=True, blank=True, on_delete=models.DO_NOTHING)
     national_id = models.CharField(max_length=100)
@@ -149,7 +155,7 @@ class Employee(models.Model):
 
         
     def __str__(self):
-        return str(self.employee)
+        return str(self.employee.get_full_name)
 
 class Driver(models.Model):
     #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

@@ -26,11 +26,14 @@
     <input type="hidden" name="entered_by" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_entered_by">
     <div class="form-row">
                   
-    <div class="form-group col-md-6">
+    <div class="form-group col-md-4">
     {{ form.category_name|as_crispy_field }}
     </div>
+    <div class="form-group col-md-4">
+    {{ form.category_short|as_crispy_field }}
+    </div>
 
-    <div class="form-group col-md-6">
+    <div class="form-group col-md-4">
     {{ form.description|as_crispy_field }}
     </div>
     </div>

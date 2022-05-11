@@ -1,4 +1,4 @@
-{% extends 'base2.html'%}
+{% extends 'base15.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block title%}| Update Requitisiton {% endblock %}
@@ -32,7 +32,7 @@
         <br>
 
         <div class="row ml-4 mt-4 pt-4">
-        <p class='lead'>Requisition # {{ object.requisition_no }} </p>
+        <p class='lead'>Requisition # {{ object.requisition_cart.requisition_no }} </p>
         </div>
 
         <div class="row ml-4">
@@ -48,9 +48,24 @@
 
         <div class="col-md-12">
 
-        <form action="" method="post">{% csrf_token %}
-        {{ form|crispy }}
-         </div>
+        <form method="post" id="requisitionForm" data-users-url="{% url 'store:ajax_load_users' %}" novalidate>{% csrf_token %}
+        <div class="form-row">
+        <div class="form-group col-md-6">
+        {{ form.department|as_crispy_field }}
+        </div>
+        <div class="form-group col-md-6">
+        {{ form.employee|as_crispy_field }}
+        </div>
+        </div>
+        <div class="form-row">
+        <div class="form-group col-md-6">
+        {{ form.hod|as_crispy_field }}
+        </div>
+        <div class="form-group col-md-6">
+        {{ form.requisition_reason|as_crispy_field }}
+        </div>
+        </div>
+        </div>
         
         <br>
         </div>
@@ -86,6 +101,7 @@
                     </tr>
                 {% endfor %}
             </table>
+            
 
            <div class="d-flex justify-content-end"> 
            <input type="submit" class="btn btn-small btn-primary py-1 ml-2 mt-1 mb-3" value="Update"/>
@@ -94,8 +110,8 @@
            </div>
 
            </div>
+      
         </form>
-        
 
 
           
@@ -116,6 +132,46 @@
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
 <script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+    $("#id_department").change(function () {
+      var url = $("#requisitionForm").attr("data-users-url");
+      var departmentId = $(this).val();
+
+      $.ajax({
+        url: '{% url 'store:ajax_load_users' %}',
+        data: {
+          'department': departmentId
+        },
+        success: function (data) {
+          $("#id_requesting_staff").html(data);
+        }
+      });
+
+    });
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+    $("#id_department").change(function () {
+      var url = $("#requisitionForm").attr("data-users-url");
+      var departmentId = $(this).val();
+
+      $.ajax({
+        url: '{% url 'store:ajax_load_users' %}',
+        data: {
+          'department': departmentId
+        },
+        success: function (data) {
+          $("#id_authorized_by").html(data);
+        }
+      });
+
+    });
+  </script>
+
 
 <!--Jquery plugin-->
 <script type="text/javascript">

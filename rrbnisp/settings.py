@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'b'
+SECRET_KEY = 'micb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'bootstrap_modal_forms',
     'rrbnstaff',
     'crispy_forms',
+    'formtools',
     'django_filters',
     'widget_tweaks',
     'multiselectfield',
@@ -107,7 +108,7 @@ WSGI_APPLICATION = 'rrbnisp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'rrbnonestopdb',
+        'NAME': 'rrbnonestopdb1',
         'USER': 'postgres',
         'PASSWORD': 'blackstone1',
         'HOST': 'localhost',

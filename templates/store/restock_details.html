@@ -110,7 +110,10 @@
          
         <hr> 
         <div class="d-flex justify-content-end">  
-            
+
+        <a href="{% url 'store:create_srv' id=object.id %}" target="_blank"  class="btn btn-warning text-white py-1 px-3 mt-1 mr-2 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Generate SRV</a>  
+        
+                
         <a href="{% url 'store:restock_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Restock List</a>  
         </div>  
         </div>

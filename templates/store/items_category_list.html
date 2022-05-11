@@ -54,7 +54,8 @@
                   <thead>
                     <tr style="background: #41963F;">
                         <td style="color: #fff;" class="small-text" width="05%">S/N</td>
-                          <td style="color: #fff;" class="small-text" width="60%">Category Name</td>
+                          <td style="color: #fff;" class="small-text" width="40%">Category Name</td>
+                          <td style="color: #fff;" class="small-text" width="20%">Category Short</td>
                           <td style="color: #fff;" class="small-text" width="20%">Last Updated</td>
                           <td style="color: #fff;" class="small-text" width="15%">Actions</td>
                       </tr>
@@ -66,7 +67,8 @@
                 {% for object in category_qs %}
                 <tr>
                 <td width="05%">{{forloop.counter}}</td>
-                <td width="60%">{{object.category_name}}</td>
+                <td width="40%">{{object.category_name}}</td>
+                <td width="20%">{{object.category_short}}</td>
                 <td width="20%">{{object.updated}}</td>
                 <td width="15%">
 

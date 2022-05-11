@@ -1,4 +1,4 @@
-{% extends 'base2.html'%}
+{% extends 'base15.html' %}
 {% load static %}
 {% block title%}| Requisitions {% endblock %}
 
@@ -30,6 +30,8 @@
 
           <!-- Page Heading -->
          <br><br><br>
+
+         <a class="btn btn-primary ml-4 p-1" href="{% url 'store:retrieve_item' %}"><i class="fa fa-list text-white"></i> Create Requisition</a>
          
 
         {% include 'partials/_alerts.html' %}
@@ -62,15 +64,15 @@
       {% for object in requisition_qs %}
       <tr>
       <td width="05%">{{forloop.counter}}</td>
-      <td width="10%">{{object.requisition_no}}</td>
-      <td width="23%">{{object.requesting_staff.first_name}} {{object.requesting_staff.last_name}}</td>
+      <td width="10%">{{object.requisition_cart.requisition_no}}</td>
+      <td width="23%">{{object.employee}}</td>
       <td width="13%">{{object.department}}</td>
-      <td width="23%">{{object.authorized_by.first_name}} {{object.authorized_by.last_name}}</td>
+      <td width="23%">{{object.hod}}</td>
       <td width="13%">{{object.requisition_reason}}</td>
-      <td width="13%">{{object.requisition_date}}</td>
+      <td width="13%">{{object.requisition_creation_date}}</td>
       <td width="10%">
 
-      <a href="{% url 'store:requisition_details' object.id %}" class="btn btn-outline-warning btn-sm">View Requisition</a></td>
+      <a href="{% url 'store:requisition_details' object.pk %}" class="btn btn-outline-warning btn-sm">View Requisition</a></td>
 
       </td>
       </tr>

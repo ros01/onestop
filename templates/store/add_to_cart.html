@@ -1,0 +1,181 @@
+{% extends 'base15.html'%}
+{% load static %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{% block title%}| Retrieve Item {% endblock %}
+
+{% block styles %}
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
+<link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"> -->
+{% endblock %}
+
+
+{% block content %}
+
+
+
+
+
+{% include "_modal.html" %}
+<!-- Page Wrapper -->
+
+
+  <div id="wrapper">
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
+  <!-- Main Content -->
+  <div id="content">
+  <!-- Begin Page Content -->
+  <div class="container">  
+
+  <!-- Page Heading -->
+  <br><br>
+
+  {% include 'partials/_alerts.html' %}
+
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+  <div class="card-body">
+
+
+  <div class="row pr-2 mr-2 pt-4 justify-content-center align-items-center"> 
+
+  <div class="col-md-11"> 
+       
+  <p class="display-4 paragraph3 ml-2" style="color:#05567b;">Search for Item</p>
+  <hr>
+      
+        
+  <div class="row"> 
+  <div class="col-lg-12 col-md-12 col-sm-12 col-12 mb-3" style="padding-right:0; height:100%"> 
+
+  <div class="mb-4" style="background-color: #bfe3f8; padding:5px; border-right:4px solid #ecd863; border-left:4px solid #ecd863"> <b>PLEASE NOTE:</b> All requisitions are subject to the Requesting Staff's HOD Approval before it can be processed by RRBN Stores Unit.  
+  </div> 
+    
+
+  <form method="get" action="{% url 'store:find_item' %}">
+
+
+  <!-- <div class="form-row">
+          
+  <div class="form-group col-md-5"> -->
+         
+  <div class="form-group">
+  <input name="q" type="text" id="id_q"  class="form-control input-lg"  placeholder="Enter item name"  />
+  </div>
+  <div class="form-group col-xs-12 text-left">
+  <button type="submit" class="btn btn-primary">Search</button>
+  </div>
+  </form>
+  </div>
+  </div>
+
+  <hr />
+
+  <br>
+
+  <p class="display-4 paragraph3 ml-2" style="color:#05567b;">Showing available items based on your selection</p>
+  <hr>
+
+  <p id='jquery-message' class='lead'>
+
+  <table class="table table-bordered" >
+  <thead style="background-color: #bfe3f8";>
+  <tr>
+  <th width="20%">Item Name</th>
+  <th width="20%">Item Description</th>
+  <th width="33%">Item Category</th>
+  <th width="10%">Available</th>
+  <!--  <th width="15%">Requested</th>  -->
+  <th width="17%">Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for item in queryset %}
+  <tr>
+  <td width="20%">{{ item.item_name }}</td>
+  <td width="20%">{{ item.item_description }}</td>
+  <td width="33%">{{ item.category }}</td>
+  <td width="10%">{{ item.quantity }}</td> 
+   <!--  <td width="15%">
+ 
+  
+
+  <p class="quantity">{{item.quantity}}</p>
+  <div class="quantity">
+  <img data-item="{{item.item.id}}" data-action="add" class="chg-quantity update-cart" src="{% static  'images/arrow-up.png' %}">
+  <img data-item="{{item.item.id}}" data-action="remove" class="chg-quantity update-cart" src="{% static  'images/arrow-down.png' %}">
+  </div> -->
+  </td>  
+  
+  <td width="17%">
+  
+
+  <button data-item="{{item.id}}" data-action="add" class="btn btn-outline-success add-btn update-cart">Add to  Cart</button>
+ 
+
+
+  </td>
+  </tr>
+  {% empty %}
+  <tr>
+  <td colspan="100%" text-align="center">No item(s) match your query parameters</td>
+  </tr>
+  {% endfor %} 
+
+
+  </tbody>
+  </table>
+  </div>
+  </div> 
+  </div> 
+  </div>
+  </div>
+  </div>
+  <!-- /.container-fluid -->
+  </div>
+  <!-- End of Main Content -->
+  </div>
+  <!-- End of Content Wrapper -->
+  </div>
+   <!-- End of Page Wrapper  -->
+
+
+
+<!-- <script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>  -->
+
+
+
+
+
+
+
+<script type="text/javascript">
+    $(function() {
+    
+        $(".bs-modal").each(function () {
+          $(this).modalForm({
+              formURL: $(this).data('form-url')
+          });
+        });
+    
+    });
+
+</script>
+
+
+
+
+
+
+
+
+{% endblock %}
+

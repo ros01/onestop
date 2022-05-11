@@ -1,4 +1,4 @@
-{% extends 'base2.html' %}
+{% extends 'base15.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
 
@@ -155,20 +155,23 @@
               <div class="col-md-4" onclick="window.location='{% url 'store:retrieve_item' %}';" style="cursor: pointer;">
               <div class="card remove-borer">
                 <div class="card-body">
-                <button type="button" class="btn danger text-danger pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/barcode.png' %}" alt="shop"> Receive Stock</button>
+                <button type="button" class="btn danger text-danger pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/barcode.png' %}" alt="shop"> Create Requsition</button>
                 </div>
                 </div>
               </div> 
 
-          
-
-            <div class="col-md-4" onclick="window.location='{% url 'store:retrieve_item' %}';" style="cursor: pointer;">
+            
+            <div class="col-md-4" onclick="window.open('{% url 'store:generate_inventory_report' %}','_blank');;" style="cursor: pointer;">
               <div class="card remove-borer">
                 <div class="card-body">
-                <button type="button" class="btn warning text-warning pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/reports.png' %}" alt="shop"> Create Requsition</button>
+                <button type="button" class="btn warning text-warning pt-5  pb-5 mt-2 mb-2 w-100"><img class="icons-set" src="{% static 'img/reports.png' %}" alt="shop"> Generate Inventory Report</button>
                 </div>
                 </div>
               </div> 
+
+
+
+
 
 
               <!--  <div class="col-md-4" onclick="window.location='{% url 'store:requisition_list' %}';" style="cursor: pointer;">

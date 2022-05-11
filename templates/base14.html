@@ -302,7 +302,7 @@
               </li>   -->
                      
             <li>
-            <a href='{% url "store:create_item_requisition" %}'><i class="fa fa-shopping-cart fa-navbar-cart"></i> <span id="requisition-count-badge" class='badge badge-pill badge-success'>{{ request.session.requisition_item_count }}</span></a>
+            <a href='{% url "store:create_item_requisition" %}'><i class="fa fa-shopping-cart fa-navbar-cart"></i> <span id="requisition-count-badge" class='badge badge-pill badge-success'>{% if request.session.id is not None %} {{ request.session.requisition_item_count }} {% endif %}</span></a>
             </li>
           
               <li class="nav-item dropdown">

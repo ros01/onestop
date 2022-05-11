@@ -130,52 +130,52 @@ $(".item-qty").change(function(){
 
     </div>
 
-   
-
-
     {% else %}
            
-    <div class="card shadow mb-2">
-    <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-success">Requisition Creation List</h6>
-    </div>
-    <div class="card-body">
-    <div class="table-responsive-lg">
-    <table class="table table-bordered table-hover">
-    <thead>
-    <tr style="background: #41963F;">
-    <td style="color: #fff;" class="small-text" width="05%">S/N</td>
-    <td style="color: #fff;" class="small-text" width="15%">Requisition No</td>
-    <td style="color: #fff;" class="small-text" width="30%">Item Name</td>
-    <td style="color: #fff;" class="small-text" width="30%">Requested Quantity</td>
-    <td style="color: #fff;" class="small-text" width="20%">Remove Item</td>
-    </tr>
-    </thead>
-    <tbody>
+   <div class="card shadow mb-2">
+   <div class="card-header py-3">
+   <h6 class="m-0 font-weight-bold text-success">Requisition Creation List</h6>
+   </div>
+   <div class="card-body">
+   <div class="table-responsive-lg">
+   <table class="table table-bordered table-hover">
+   <thead>
+   <tr style="background: #41963F;">
+   <td style="color: #fff;" class="small-text" width="05%">S/N</td>
+   <td style="color: #fff;" class="small-text" width="15%">Requisition No</td>
+   <td style="color: #fff;" class="small-text" width="40%">Item Name</td>
+   <td style="color: #fff;" class="small-text" width="40%">Requested Quantity</td>
+   <!-- <td style="color: #fff;" class="small-text" width="20%">Remove Item</td> -->
+   </tr>
+   </thead>
+   <tbody>
    {% for item in object.requisitionitem_set.all %}
-    <tr id='item-{{ item.item.id }}'>
-    <td width="05%">{{forloop.counter}}</td>
-    <td width="15%">{{item.requisition.requisition_no}}</td>
-    <td width="30%">{{item.item.item_name }}</td>
-   <td width="30%"><form action="." method="GET" ><input type='hidden' name='item' value='{{ item.item.id }}' /><input type='number' class='item-qty' name='qty' value='{{ item.quantity }}' /><input type='submit' class='btn-update btn btn-link' value='Update item' style='display:none;'/></form></td>  
-   <td width="20%" class='text-center'><a href='{{ item.remove }}'>X</a></td>
+   <tr id='item-{{ item.item.id }}'>
+   <td width="05%">{{forloop.counter}}</td>
+   <td width="15%">{{item.requisition.requisition_no}}</td>
+   <td width="40%">{{item.item.item_name }}</td>
+   <td width="40%"><form action="." method="GET" ><input type='hidden' name='item' value='{{ item.item.id }}' /><input type='number' class='item-qty' name='qty' value='{{ item.quantity }}' /><input type='submit' class='btn-update btn btn-link' value='Update item' style='display:none;'/></form></td>  
+   <!-- <td width="20%" class='text-center'><a href='{{ item.remove }}'>X</a></td> -->
    </td>
    </tr>
    {% endfor %}
    </tbody>
    </table>
-   <form action="" method="post">{% csrf_token %}
+   <form method="post" id="requisitionForm" data-users-url="{% url 'store:ajax_load_users' %}" novalidate>{% csrf_token %}
+
+  <!--  <input type="hidden" name="authorized_by" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_authorized_by"> -->
+
    <div class="form-row">
-   <div class="form-group col-md-6">
-   {{ form.requesting_staff|as_crispy_field }}
-   </div>
    <div class="form-group col-md-6">
    {{ form.department|as_crispy_field }}
    </div>
+   <div class="form-group col-md-6">
+   {{ form.employee|as_crispy_field }}
+   </div>
    </div>
    <div class="form-row">
    <div class="form-group col-md-6">
-   {{ form.authorized_by|as_crispy_field }}
+   {{ form.hod|as_crispy_field }}
    </div>
    <div class="form-group col-md-6">
    {{ form.requisition_reason|as_crispy_field }}
@@ -225,6 +225,46 @@ $(".item-qty").change(function(){
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
 <script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+    $("#id_department").change(function () {
+      var url = $("#requisitionForm").attr("data-users-url");
+      var departmentId = $(this).val();
+
+      $.ajax({
+        url: '{% url 'store:ajax_load_users' %}',
+        data: {
+          'department': departmentId
+        },
+        success: function (data) {
+          $("#id_employee").html(data);
+        }
+      });
+
+    });
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+    $("#id_department").change(function () {
+      var url = $("#requisitionForm").attr("data-users-url");
+      var departmentId = $(this).val();
+
+      $.ajax({
+        url: '{% url 'store:ajax_load_users' %}',
+        data: {
+          'department': departmentId
+        },
+        success: function (data) {
+          $("#id_hod").html(data);
+        }
+      });
+
+    });
+  </script>
 
 
 

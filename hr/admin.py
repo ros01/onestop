@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Department, Employee, Course, Leave, Specify, Document, Training, Record, Appraisal, Schedule, Performance, Discipline, Compliance
+from .models import Department, Employee, Course, Leave, Specify, Document, Training, Record, Appraisal, Schedule, Performance, Discipline, Compliance, Title, Grade
 
 
 class DepartmentAdmin(admin.ModelAdmin):
@@ -14,11 +14,34 @@ class DepartmentAdmin(admin.ModelAdmin):
 admin.site.register(Department, DepartmentAdmin)
 
 
+
+
+class TitleAdmin(admin.ModelAdmin):
+  list_display = ('id', 'job_title')
+  list_display_links = ('id', 'job_title')
+  list_filter = ('id', 'job_title')
+  search_fields = ('id', 'job_title')
+  list_per_page = 25
+
+
+admin.site.register(Title, TitleAdmin)
+
+
+class GradeAdmin(admin.ModelAdmin):
+  list_display = ('id', 'pay_grade_code', 'pay_grade_name')
+  list_display_links = ('id', 'pay_grade_code', 'pay_grade_name')
+  list_filter = ('id', 'pay_grade_code', 'pay_grade_name')
+  search_fields = ('id', 'pay_grade_code', 'pay_grade_name')
+  list_per_page = 25
+
+
+admin.site.register(Grade, GradeAdmin)
+
 class EmployeeAdmin(admin.ModelAdmin):
-  list_display = ('employee', 'dob', 'gender', 'department', 'designation')
-  list_display_links = ('employee', 'dob', 'department', 'designation')
-  list_filter = ('employee', 'department', 'designation')
-  search_fields = ('employee', 'dob', 'gender', 'entered_by', 'department', 'designation')
+  list_display = ('id','employee', 'dob', 'gender', 'department', 'designation')
+  list_display_links = ('id','employee', 'dob', 'department', 'designation')
+  list_filter = ('id','employee', 'department', 'designation')
+  search_fields = ('id','employee', 'dob', 'gender', 'entered_by', 'department', 'designation')
   list_per_page = 25
 
 

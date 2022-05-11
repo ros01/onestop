@@ -1,4 +1,4 @@
-{% extends 'base2.html'%}
+{% extends 'base15.html'%}
 {% load static %}
 {% load widget_tweaks %}
 {% load crispy_forms_tags %}
@@ -65,17 +65,17 @@ $(".variation_select").change(function(){
     <div class="row"> 
     <div class="col-lg-12 col-md-12 col-sm-12 col-12 mb-3" style="padding-right:0; height:100%"> 
 
-    <div class="mb-4" style="background-color: #bfe3f8; padding:5px; border-right:4px solid #ecd863; border-left:4px solid #ecd863"> <b>PLEASE NOTE:</b> All requisitions are subject to the Requesting Staff's HOD Approval they can be processed by RRBN Stores Unit.  
+    <div class="mb-4" style="background-color: #bfe3f8; padding:5px; border-right:4px solid #ecd863; border-left:4px solid #ecd863"> <b>PLEASE NOTE:</b> Item Restock is only complete upon issuance of the  Stores Receipt Voucher.  
     </div> 
   
 
-      <form method="get" action="{% url 'rrbnstaff:find_item' %}">
+      <form method="get" action="{% url 'store:search_inventory' %}">
       <div class="form-row">
           
           <div class="form-group col-md-5">
          
           <div class="form-group">
-          <input name="q" type="text" id="id_q"  class="form-control input-lg"  placeholder="Enter station name"  />
+          <input name="q" type="text" id="id_q"  class="form-control input-lg"  placeholder="Enter item name"  />
           </div>
           <div class="form-group col-xs-12 text-left">
           <button type="submit" class="btn btn-primary">Search</button>

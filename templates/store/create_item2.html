@@ -1,6 +1,63 @@
 {% load widget_tweaks %}
 {% load crispy_forms_tags %}
 
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+
+{% block javascript %}
+  <script>
+    // $("#id_stock_code").change(function () {
+    //   var stock_code = $(this).val();
+
+      
+
+    //   $.ajax({
+    //     // url: "/ajax/create_stock_code/",
+    //     url: "{% url 'store:create_stock_code' %}",
+
+    //     data: {
+    //       'stock_code': stock_code
+    //     },
+    //     dataType: 'json',
+    //     success: function (data) {
+    //       if (data.is_taken) {
+    //         alert("This stock code already exists.");
+    //       }
+    //     }
+    //   });
+
+    // });
+
+
+    $("#id_category").change(function () {
+    // var formData = $("#id_category").serialize();
+
+    var category = $(this).val()
+    // var item_name = $(this).val()
+
+    var data = {
+      category: category,
+      // item_name: item_name
+    }
+
+    console.log(data);
+     $.ajax({
+      type: "GET",
+      url: "{% url 'store:create_stock_code' %}",
+      data: data,
+      // dataType: 'json',
+      success: function (data) {
+       document.getElementById('id_stock_code').value=data;
+      }
+      // error: function(response, error) {
+      //   console.log(response)
+      //   console.log(error)
+      // }
+     
+    });
+  </script>
+  {% endblock %}
+
 
     <!-- Content Wrapper -->
     <div id="content-wrapper bg-light" class="d-flex flex-column">
@@ -51,7 +108,7 @@
     </div>
     </div>
 
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-4 variation_select">
     {{ form.category|as_crispy_field }}
      <div class="{% if form.category.errors %} invalid{% endif %}">
           {% for error in field.errors %}
@@ -60,13 +117,15 @@
     </div>
 
     </div>
+
+
     </div>
     
 
     <div class="row">
 
     <div class="form-group col-md-4">
-   {{ form.stock_code|as_crispy_field }}
+    {{ form.stock_code|as_crispy_field }}
     <div class="{% if form.stock_code.errors %} invalid{% endif %}">
     {% for error in field.errors %}
     <p class="help-block">{{ error }}</p>
@@ -148,3 +207,93 @@
     </div>
     <!-- End of Main Content -->
     </div>
+
+  <!--    <script type="text/javascript">
+
+
+    function create_stockcode(){
+    var x = document.getElementById('#id_category').value;
+    if(x=='Stationeries')
+    {
+        document.getElementById('field2').value= 'B';
+    }
+    }
+
+    </script>
+
+
+    <script type="text/javascript">
+  
+    var form = document.getElementById('form')
+    form.addEventListener('submit', function(e){
+        e.preventDefault()
+        console.log('Form Submitted...')
+        // document.getElementById('form-button').classList.add("hidden");
+        // document.getElementById('payment-info').classList.remove("hidden");
+      })
+
+    
+      document.getElementById('form-button').addEventListener('click', function(e){
+        submitFormData()
+      })
+      
+
+      function submitFormData(){
+        console.log('Payment button clicked')
+
+      var requisitionInfo = {
+        'employee':null,
+        'requisition_reason':null,
+        'hod':null,
+        'department':null,
+      }
+
+      if (requisition_status != 2){
+          requisitionInfo.requisition_reason = form.requisition_reason.value
+          requisitionInfo.employee = form.employee.value
+          requisitionInfo.hod = form.hod.value
+          requisitionInfo.department = form.department.value
+        }
+
+        // if (shipping != 'False'){
+        //  shippingInfo.address = form.address.value
+        //  shippingInfo.city = form.city.value
+        //  shippingInfo.state = form.state.value
+        //  shippingInfo.zipcode = form.zipcode.value
+        // }
+
+
+        // if (user == 'AnonymousUser'){
+        //  userFormData.name = form.name.value
+        //  userFormData.email = form.email.value
+        // }
+
+        // console.log('Shipping Info:', shippingInfo)
+        // console.log('User Info:', userFormData)
+        console.log('Requisition Info:', requisitionInfo)
+
+        var url = '/store/process_order/'
+        fetch(url, {
+          method:'POST',
+          headers:{
+            'Content-Type':'applicaiton/json',
+            'X-CSRFToken':csrftoken,
+          }, 
+          // body:JSON.stringify({'form':userFormData, 'shipping':shippingInfo, 'requisition':requisitionInfo}),
+
+          body:JSON.stringify({'requisition':requisitionInfo}),
+          
+        })
+        .then((response) => response.json())
+        .then((data) => {
+        console.log('Success:', data);
+        alert('Transaction completed');  
+
+        cart = {}
+        document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
+
+        window.location.href = "{% url 'store:store_dashboard' %}"
+
+        })
+      }
+  </script> -->

@@ -62,7 +62,7 @@
     {% for object in staff_profile_qs %}
     <tr>
     <td width="05%">{{forloop.counter}}</td>
-    <td width="12%">{{object.staff_name.first_name}} {{object.staff_name.last_name}}</td>
+    <td width="12%">{{object.employee.get_full_name}}</td>
     <td width="12%">{{object.zone}}</td>
     <td width="12%">{{object.department}}</td>
     <td width="13%">{{object.designation}}</td>

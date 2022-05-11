@@ -46,9 +46,6 @@ import xlwt
 
 # Create your views here.
 
-
-
-
 class DashboardTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "fleet/fleet_dashboard.html"
 

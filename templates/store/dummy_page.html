@@ -1,0 +1,50 @@
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
+<link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+<script>
+{% block jquery %}
+
+
+// ajax add to cart
+
+$("#submit-btn").click(function(event){
+  event.preventDefault();
+  
+  var formData = $("#add-form").serialize();
+  console.log(formData);
+  $.ajax({
+    type: "GET", // "POST"
+    url: "{% url 'store:create_item_requisition' %}",
+    data: formData,
+    success: function(data) {
+      //showFlashMessage(data.flash_message);
+      showFlashMessage(data.flash_message);
+      updateRequisitionItemCount();
+    }, 
+    error: function(response, error) {
+      // console.log(response)
+      // console.log(error)
+      // $("#add-form").submit()
+    }
+  })
+
+  // $("#add-form").submit()
+
+});
+{% endblock %}
+</script>
+
+
+<!-- <form id='add-form' method='GET' action="{% url 'store:add_item' %}">
+  <input type='hidden' name='item' value='{{ object.id }}' />
+  <br/>
+  <input class='mb-4' type='number' name='qty' value='1' />   
+
+   </form> -->

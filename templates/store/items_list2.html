@@ -30,7 +30,14 @@
 <!-- Page Heading -->
 <br><br><br>
 
-    <button type="button" id="create-item" class="bs-modal btn btn-success mt-1" data-form-url="{% url 'store:create_item' %}"><i class="fa fa-list text-white"></i> Add New Item</button><br>
+    <!-- <button type="button" id="create-item" class="bs-modal btn btn-success mt-1" data-form-url="{% url 'store:create_item' %}"><i class="fa fa-list text-white"></i> Add New Item</button><br> -->
+
+    <a href="{% url 'store:create_inventory_item' %}" class="text-white py-2 mt-2 mb-4 btn btn-success"><i class="fa fa-list text-white"></i>Add New Item</a>
+
+
+
+
+
     {% include 'partials/_alerts.html' %}
 
     <!-- DataTales Example -->
@@ -66,7 +73,7 @@
     <td width="10%">{{object.category}}</td>
     <td width="10%">{{object.quantity}}</td>
     <td width="13%">{{object.re_order_no}}</td>
-    <td width="10%">{{object.updated_pretty}}</td>
+    <td width="10%">{{object.updated}}</td>
     <td width="12%">
     <a class="btn btn-primary p-1" href="{% url 'store:item_detail' object.id %}"><i class="fa fa-folder-open text-white"></i></a>
     <button type="button" id="update-item" class="bs-modal btn btn-small btn-warning mt-1 p-1" data-form-url="{% url 'store:item_update' object.pk %}"><i class="fas fa-redo"></i></button>

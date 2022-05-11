@@ -4,14 +4,8 @@
 <form method="post" action="">
   {% csrf_token %}
 
-  {{ form.requisition_date|as_crispy_field }}
-  {{ form.requesting_staff|as_crispy_field }}
-  {{ form.department|as_crispy_field }}
-
-  <input type="hidden" name="issued_by" {% if user.is_authenticated %} value="{{ request.user.id }}" {% endif %} required id="id_issued_by"  id="div_id_issued_by">
-
-
- <div class="modal-header">
+  
+  <div class="modal-header">
     <h5 class="modal-title text-success">Issue Requisition</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
@@ -19,6 +13,12 @@
   </div>
 
   <div class="modal-body">
+
+  <div class="row ml-1">
+        <p class='lead'>Requisition # {{ object.requisition_no }} </p>
+  </div>
+
+
   <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
       {% for error in form.non_field_errors %}
         {{ error }}
@@ -27,17 +27,8 @@
 
     <div class="row">
     <div class="form-group col-md-4">
-    {{ form.requisition_no|as_crispy_field }}
-    <div class="{% if form.requisition_no.errors %} invalid{% endif %}">
-          {% for error in field.errors %}
-            <p class="help-block">{{ error }}</p>
-          {% endfor %}
-    </div>
-    </div>
-
-    <div class="form-group col-md-4">
-    {{ form.item_name|as_crispy_field }}
-    <div class="{% if form.item_name.errors %} invalid{% endif %}">
+    {{ form.requisition|as_crispy_field }}
+    <div class="{% if form.requisition.errors %} invalid{% endif %}">
           {% for error in field.errors %}
             <p class="help-block">{{ error }}</p>
           {% endfor %}
@@ -46,8 +37,8 @@
 
     
     <div class="form-group col-md-4">
-    {{ form.quantity_requested|as_crispy_field }}
-    <div class="{% if form.quantity_requested.errors %} invalid{% endif %}">
+    {{ form.issued_by|as_crispy_field }}
+    <div class="{% if form.issued_by.errors %} invalid{% endif %}">
           {% for error in field.errors %}
             <p class="help-block">{{ error }}</p>
           {% endfor %}
@@ -56,24 +47,67 @@
 
     </div>
 
-    <div class="row">
-    <div class="form-group col-md-4">
-    {{ form.quantity_issued|as_crispy_field }}
-    <div class="{% if form.quantity_issued.errors %} invalid{% endif %}">
-          {% for error in field.errors %}
-            <p class="help-block">{{ error }}</p>
-          {% endfor %}
-    </div>
-    </div>
 
-    
-    </div>
+     <!-- <div class="col-md-5 mt-0"> -->
+      <table class="table">
+                {{ requisition_formset.management_form }}
+
+                {% for form in requisition_formset.forms %}
+                    {% if forloop.first %}
+                        <thead>
+                        <tr>
+                            {% for field in form.visible_fields %}
+                                <th>{{ field.label|capfirst }}</th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                    {% endif %}
+                    <tr class="{% cycle row1 row2 %} formset_row">
+                        {% for field in form.visible_fields %}
+                            <td>
+                                {# Include the hidden fields in the form #}
+                                {% if forloop.first %}
+                                    {% for hidden in form.hidden_fields %}
+                                        {{ hidden }}
+                                    {% endfor %}
+                                {% endif %}
+                                {{ field.errors.as_ul }}
+                                {{ field }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+
+
+  <!--  <thead>
+    <tr style="background: #41963F;">
+    <td style="color: #fff;" class="small-text" width="40%">Item Name</td>
+    <td style="color: #fff;" class="small-text" width="30%">Requested Quantity</td>
+    <td style="color: #fff;" class="small-text" width="30%">Quantity Issued</td>
+    </tr>
+    </thead>
+    <tbody>
+
+    {% for item in object.requisitionitem_set.all %}
+    <tr>
+    <td width="40%">{{item.item.item_name }}</td>
+   <td width="30%">
+   <input type='hidden' name='item' value='{{ item.item.id }}' />
+   {{ item.quantity }}</td>  
+   <td width="30%">
+   <input type='hidden' name='item' value='{{ item.item.id }}' />
+   <input type='number' class='item-qty' name='qty' /></td> 
+   </td>
+   </tr>
+   {% endfor %}
+   </tbody> -->
+    </table> 
 
   </div>
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times text-white"></i>  Close</button>
-    <button type="button" class="submit-btn btn btn-success ml-2 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i>  Issue Requisition</button>
+  <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times text-white"></i>  Close</button>
+  <button type="button" class="submit-btn btn btn-success ml-2 pt-2 pb-1 pr-2"><i class="fa fa-podcast text-white"></i>  Issue Requisition</button>
 
   </div>
 

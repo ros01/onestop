@@ -14,8 +14,8 @@ from django.views.generic import (
 )
 from .forms import RequisitionModelForm, OrderModelForm, VehicleFilterForm, StaffProfileModelForm, LeaveRequestModelForm
 from bootstrap_modal_forms.generic import BSModalCreateView
-from .models import Requisition, Request
-from store.models import Issue, Item
+from .models import  Request
+from store.models import *
 from fleet.models import Assign, Vehicle
 from hr.models import Employee, Leave, Specify, Document, Training, Record, Appraisal, Schedule, Performance, Discipline, Compliance
 from django.contrib.messages.views import SuccessMessageMixin
@@ -346,7 +346,7 @@ class MyIssuedRequisitions(LoginRequiredMixin, ListView):
 
 class MyIssuedRequisitionsDetails(LoginRequiredMixin, DetailView):
     template_name = "rrbnstaff/my_issued_requisitions_details.html"
-    model = Issue 
+    model = IssueRequisition 
 
 
 class RequestListView(LoginRequiredMixin, ListView):

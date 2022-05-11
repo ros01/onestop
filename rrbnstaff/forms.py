@@ -1,6 +1,7 @@
 from django import forms
 from django.http import HttpResponse, Http404, HttpResponseRedirect
-from .models import Requisition, Request
+from .models import Request
+from store.models import Requisition 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field
 from django.utils import timezone
@@ -14,10 +15,10 @@ from tempus_dominus.widgets import DatePicker, DateTimePicker
 class RequisitionModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
     class Meta:
         model = Requisition
-        fields = ('requisition_no', 'requesting_staff', 'authorized_by','department')
+        fields = ('employee', 'requisition_cart', 'requisition_reason', 'hod','department')
         widgets = {
-        'requisition_no': forms.HiddenInput(),
-        'requesting_staff': forms.HiddenInput(),
+        'requisition_cart': forms.HiddenInput(),
+        'employee': forms.HiddenInput(),
         'department': forms.HiddenInput(),
         #'department': forms.TextInput(attrs={'readonly': True}), 
         #'item': forms.TextInput(attrs={'readonly': True}), 
@@ -31,7 +32,7 @@ class RequisitionModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelFo
             })
       # self.fields['item'].label = "Item Name"
        #self.fields['quantity_requested'].label = "Quantity Requested"
-       self.fields['requesting_staff'].label = "Requesting Staff"
+       self.fields['employee'].label = "Requesting Staff"
        self.fields['department'].label = "Department"
 
     def save(self):
