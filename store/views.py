@@ -52,9 +52,6 @@ from reportlab.graphics.charts.barcharts import VerticalBarChart
 from reportlab.lib import colors
 from reportlab.lib.utils import ImageReader
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT, TA_JUSTIFY
-import random
-import pandas as pd
-import re
 
 
 import time
