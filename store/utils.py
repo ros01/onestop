@@ -43,8 +43,8 @@ def cookieCart(request):
 
 def cartData(request):
 	if request.user.is_authenticated:
-		employee = request.user.employee
-		requisitionCart, created = RequisitionCart.objects.get_or_create(employee=employee.employee, requisition_status=1)
+		employee = request.user
+		requisitionCart, created = RequisitionCart.objects.get_or_create(employee=employee, requisition_status=1)
 		items = requisitionCart.requisitioncartitem_set.all()
 		requisitionCartItems = requisitionCart.get_requisition_cart_items
 	else:

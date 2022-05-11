@@ -215,9 +215,11 @@ def updateItem(request):
     print('Action:', action)
     print('Item:', itemId)
 
-    employee = request.user.employee
+    # employee = request.user.employee
+    employee = request.user
     item = Item.objects.get(id=itemId)
-    requisition_cart, created = RequisitionCart.objects.get_or_create(employee=employee.employee, requisition_status=1)
+    # requisition_cart, created = RequisitionCart.objects.get_or_create(employee=employee.employee, requisition_status=1)
+    requisition_cart, created = RequisitionCart.objects.get_or_create(employee=employee, requisition_status=1)
 
     requisitionCartItem, created = RequisitionCartItem.objects.get_or_create(requisition_cart=requisition_cart, item=item)
 
@@ -336,8 +338,10 @@ def processOrder(request):
     data = json.loads(request.body)
 
     if request.user.is_authenticated:
-        employee = request.user.employee
-        requisition_cart, created = RequisitionCart.objects.get_or_create(employee=employee.employee, requisition_status=1)
+        # employee = request.user.employee
+        employee = request.user
+        requisition_cart, created = RequisitionCart.objects.get_or_create(employee=employee, requisition_status=1)
+        # requisition_cart, created = RequisitionCart.objects.get_or_create(employee=employee.employee, requisition_status=1)
         #requisition_cart, created = RequisitionCart.objects.get_or_create(requisition_status=1)
     # else:
     #     employee, requisition_cart = guestOrder(request, data)
@@ -354,10 +358,12 @@ def processOrder(request):
     # if requisition_cart.shipping == True:
     #if requisition_cart.requisition_status == 2:
         Requisition.objects.create(
-        employee=Employee.objects.get(id=data['requisition']['employee']),
+        # employee=Employee.objects.get(id=data['requisition']['employee']),
+        employee=data['requisition']['employee'],
         requisition_cart=requisition_cart,
         requisition_reason=data['requisition']['requisition_reason'],
-        hod=Employee.objects.get(id=data['requisition']['hod']),
+        # hod=Employee.objects.get(id=data['requisition']['hod']),
+        hod=data['requisition']['hod'],
     
 
         department=Department.objects.get(id=data['requisition']["department"]),
