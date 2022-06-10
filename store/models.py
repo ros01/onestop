@@ -30,7 +30,7 @@ def increment_requisition_no():
 
 
 def increment_restock_no():
-    last_restock_no = Restock.objects.all().order_by('restock_no').last()
+    last_restock_no = RestockCart.objects.all().order_by('restock_no').last()
     if not last_restock_no:
         return '1000'
     restock_no = last_restock_no.restock_no
@@ -262,56 +262,95 @@ def update_item_quantity_on_save(sender, instance, created, *args, **kwargs):
 
 
    
-class RequisitionItem(models.Model):
-    item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True)
-    requisition = models.ForeignKey(Requisition, on_delete=models.SET_NULL, null=True)
-    quantity = models.IntegerField(default=0, null=True, blank=True)
-    quantity_issued = models.IntegerField(default=0, null=True, blank=True)
+
+class RestockCart(models.Model):
+    staff_name = models.ForeignKey(User, related_name='restock_created_by', blank=True, on_delete=models.DO_NOTHING)
+    date = models.DateField(auto_now_add=True, auto_now=False)
+    restock_no = models.CharField(max_length=500, null=True, blank=True, 
+        default=increment_restock_no)
+    complete = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.restock_no)
+
+    # def get_absolute_url(self):
+    #     return reverse("store:requisition_details", kwargs={"id": self.id})
+        
+    @property
+    def get_restock_cart_total(self):
+        restockCartItems = self.restockcartitem_set.all()
+        total = sum([item.get_total for item in restockCartItems])
+        return total 
+
+    @property
+    def get_restock_cart_items(self):
+        restockCartItems = self.restockcartitem_set.all()
+        total = sum([item.qty for item in restockCartItems])
+        return total 
+
+    @property
+    def get_restock_cart_items_qs(self):
+        restockCartItems = self.restockcartitem_set.all()
+        return restockCartItems 
+
+    def get_restock_item_quantity(self):
+        item_quantity = 0
+        items = self.restockcartitem_set.all()
+        for item in items:
+            item_quantity += item.quantity_issued
+            return item_quantity
+        
+    def get_inventory_item(self):
+        restockcartitem = []
+        items = self.restockcartitem_set.all()
+        for item in items:
+            restockcartitem = item.item
+            return restockcartitem
+
+        
+    def get_cartitems(self):
+        items = self.restockcartitem_set.all()
+        return items
+
+    
+class RestockCartItem(models.Model):
+    item_name = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True)
+    vendor = models.ForeignKey('Vendor', null=True, blank=True, on_delete=models.DO_NOTHING)
+    restock_cart = models.ForeignKey(RestockCart, on_delete=models.CASCADE, null=True)
+    unit_price = models.DecimalField(decimal_places=2, max_digits=20, blank=True, null=True)
+    qty = models.IntegerField(default=0, null=True, blank=True)
+    quantity_ordered = models.IntegerField(default=0, null=True, blank=True)
+    quantity_received = models.IntegerField(default=0, null=True, blank=True)
     date_added = models.DateField(auto_now_add=True)
     
-    def __str__(self):
-        return str(self.id)
-    
-    def remove(self):
-        return self.item.remove_from_requisition()
-
-
-
-class Restock(models.Model):
-    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    restock_no = models.CharField(max_length=500, null=True, blank=True, unique=True, default=increment_restock_no)
-    item_name =models.CharField(max_length=200)
-    item_description = models.TextField(blank=True, null=True)
-    category = models.ForeignKey('Category', related_name='item_category', null=True, blank=True, on_delete=models.DO_NOTHING)
-    stock_code = models.CharField(max_length=200)
-    vendor = models.ForeignKey('Vendor', null=True, blank=True, on_delete=models.DO_NOTHING)
-    unit = models.CharField(max_length=100, choices = UNIT_OF_MEASUREMENT)
-    quantity_ordered = models.IntegerField()
-    unit_price = models.DecimalField(decimal_places=2, max_digits=20)
-    quantity_received = models.IntegerField()
-    received_by = models.ForeignKey(User, related_name='received_by',  on_delete=models.DO_NOTHING)
-    received_on = models.DateField(default=date.today, blank=True)
-    
-    def __str__(self):
-        return str(self.item_name)
-
     class Meta:
-        ordering = ["-received_on"]
+        unique_together = ('item_name','restock_cart')
+    
+  
+    @property
+    def get_total(self):
+        if self.unit_price:
+            total = self.unit_price * self.quantity_received
+            return total
+        else:
+            return self.qty
 
-    def received_on_pretty(self):
-        return self.received_on.strftime('%b %e %Y')
+    
+    def __str__(self):
+        return str(self.restock_cart.restock_no)
+
 
     def save(self, *args, **kwargs):
-        super(Restock, self).save(*args, **kwargs)
-        p = Item.objects.get(item_name=self.item_name)
-        p.quantity += self.quantity_received
-        p.save()
+        super(RestockCartItem, self).save(*args, **kwargs)
+
+        if self.unit_price:
+            p = Item.objects.get(item_name=self.item_name)
+            p.quantity += self.quantity_received
+            p.vendor = self.vendor
+            p.unit_price = self.unit_price
+            p.save()
 
 
-        
-  
-        
-           
 
 
 

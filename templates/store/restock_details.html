@@ -26,97 +26,92 @@
         <div class="container-fluid">
         <br>
 
+        {% include 'partials/_alerts.html' %}
+
         <div class="row ml-4 mt-4 pt-4">
         <h3 class="col-12 text-info">Manage Restock Details</h3>
         </h3>
         </div>
 
         <div class="row mx-4 mt-2 pt-3 bg-white">
-        <div class="col-md-6 mt-0">
+        <div class="col-md-12 mt-0">
         <div class="col-md-12">
         <div class="row">
         <br>
         <p class="col-12 text-success lead">Item Restock Details</p>
         </div>
 
+        <p class='lead'>Restock # {{ object.restock_no }} </p>
+
+        <div class="table-responsive-lg">
+        <table class="table table-bordered table-hover" id="mydata">
+        <thead>
+        <tr style="background: #41963F;">
+        <td style="color: #fff;" class="small-text">S/N</td>
+        <td style="color: #fff;" class="small-text">Item Name</td>
+        <td style="color: #fff;" class="small-text">Vendor</td>
+        <td style="color: #fff;" class="small-text">Unit Price</td>
+        <td style="color: #fff;" class="small-text">Quantity Ordered</td>
+         <td style="color: #fff;" class="small-text">Quantity Received</td>
+        <td style="color: #fff;" class="small-text">Total</td>
+        </tr>
+        </thead>                      
+        <tbody>
+
+        {% for i in object.restockcartitem_set.all %}
+          
+        <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{i.item_name}}</td>
+        <td>{{i.vendor}}</td>
+        <td>{{i.unit_price}}</td>
+        <td>{{i.quantity_ordered}}</td>     
+        <td>{{i.quantity_received}}</td>
+        <td>{{i.get_total}}</td>                                      
+
+        </tr>
+
+        {% endfor %}
+        </tbody>
+        </table>
+        </div>
+
+        <div class="d-flex justify-content-end mr-3">
+        <h5>SRV Total: <strong>N {{object.get_restock_cart_total}}</strong></h5></div>
+
+              
+
+        <p class="text-success lead">Control Details</p>
+
         <div class="row">
-        <span class="col-5"><strong>Restock No:</strong></span>
-        <span class="col-6 ">{{object.restock_no}}</span>
+        <span class="col-1"><strong>Received By:</strong></span>
+        <span class="col-1">{{object.staff_name.first_name}} {{object.staff_name.last_name}}
+        </span>
         </div>
 
         <div class="row">
-        <span class="col-5"><strong>Item Name:</strong></span>
-        <span class="col-6">{{object.item_name}}</span>
-        </div>
-
-        <div class="row">
-        <span class="col-5"><strong>Item Description:</strong></span>
-        <span class="col-6">{{object.item_description}}</span>
-        </div>
-                 
-        <div class="row">
-        <span class="col-5"><strong>Category:</strong></span>
-        <span class="col-6">{{object.category}}</span>
-        </div>
-                  
-        <div class="row">
-        <span class="col-5"><strong>Stock Code:</strong></span>
-        <span class="col-6">{{object.stock_code}}</span>
-        </div>
-                  
-        <div class="row">
-        <span class="col-5"><strong>Vendor:</strong></span>
-        <span class="col-6">{{object.vendor}}</span>
-        </div>  
-                  
-        <div class="row">
-        <span class="col-5"><strong>Unit of Measurement:</strong></span>
-        <span class="col-6">{{object.unit}}</span>
-        </div>
-        
-        <div class="row">
-        <span class="col-5"><strong>Quantity Ordered:</strong></span>
-        <span class="col-6">{{object.quantity_ordered}}</span>
-        </div>
-        
-        <div class="row">
-        <span class="col-5"><strong>Unit Price:</strong></span>
-        <span class="col-6">{{object.unit_price}}</span>
-        </div>
-                  
-        <div class="row">
-        <span class="col-5"><strong>Quantity Received:</strong></span>
-        <span class="col-6">{{object.quantity_received}}</span>
+        <span class="col-1"><strong>Recieved On:</strong></span>
+        <span class="col-1">{{object.date}}</span>
         </div>
 
 
         </div>
         <br>
-        </div>   
-
-        <div class="col-md-5">
-        <p class="text-success lead">Control Details</p>
-        <div class="row">
-        <span class="col-5"><strong>Received by:</strong></span>
-        <span class="col-6">{{object.received_by.first_name}} {{object.received_by.last_name}}
-        </span>
-        </div>
-
-        <div class="row">
-        <span class="col-5"><strong>Recieved On:</strong></span>
-        <span class="col-6">{{object.received_on}}</span>
-        </div>
+    
+        
 
          
         <hr> 
         <div class="d-flex justify-content-end">  
 
-        <a href="{% url 'store:create_srv' id=object.id %}" target="_blank"  class="btn btn-warning text-white py-1 px-3 mt-1 mr-2 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Generate SRV</a>  
+        <a href="{% url 'store:create_srv' object.id %}" target="_blank"  class="btn btn-warning text-white py-1 px-3 mt-1 mr-2 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Generate SRV</a>  
+
+
         
                 
         <a href="{% url 'store:restock_list' %}" class="btn btn-info text-white py-1 px-3 mt-1 mb-3"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Return to Restock List</a>  
         </div>  
-        </div>
+        
 
         </div>
         <!-- /.container-fluid -->

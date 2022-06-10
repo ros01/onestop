@@ -34,7 +34,7 @@ import datetime
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from formtools.wizard.views import SessionWizardView
-from .utils import cookieCart, cartData, guestOrder
+from .utils import cookieCart, cartData, restockcartData, guestOrder
 
 import io
 from django.http import FileResponse
@@ -52,6 +52,8 @@ from reportlab.graphics.charts.barcharts import VerticalBarChart
 from reportlab.lib import colors
 from reportlab.lib.utils import ImageReader
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT, TA_JUSTIFY
+import random
+import re
 
 
 import time
@@ -166,9 +168,9 @@ def find_item(request):
 
 @login_required
 def search_inventory(request):
-    data = cartData(request)
-    requisitionCartItems = data['requisitionCartItems']
-    requisitionCart = data['requisitionCart']
+    data = restockcartData(request)
+    restockCartItems = data['restockCartItems']
+    restockCart = data['restockCart']
     # items = data['items']
     # inventory = Item.objects.all()
     qs = Item.objects.all()
@@ -178,7 +180,7 @@ def search_inventory(request):
     else:
         qs = Item.objects.all()[:3]
     context = {
-        'queryset': qs, 'requisitionCartItems':requisitionCartItems, 'requisitionCart':requisitionCart,
+        'queryset': qs, 'restockCartItems':restockCartItems, 'restockCart':restockCart,
     }
     return render(request, 'store/inventory_items.html', context)
 
@@ -194,7 +196,19 @@ def cart(request):
     context = {'items':items, 'requisitionCart':requisitionCart, 'requisitionCartItems':requisitionCartItems}
     return render(request, 'store/requisition_cart.html', context)
 
-def checkout(request):
+
+def restock_cart(request):
+    data = restockcartData(request)
+
+    restockCartItems = data['restockCartItems']
+    restockCart = data['restockCart']
+    items = data['items']
+
+    context = {'items':items, 'restockCart':restockCart, 'restockCartItems':restockCartItems}
+    return render(request, 'store/restock_cart.html', context)
+
+
+def requisition_checkout(request):
     data = cartData(request)
     form = RequisitionsModelForm(request.POST, request.FILES)
     
@@ -204,6 +218,34 @@ def checkout(request):
 
     context = {'items':items, 'requisitionCart':requisitionCart, 'requisitionCartItems':requisitionCartItems, 'form':form}
     return render(request, 'store/checkout.html', context)
+
+
+def restock_checkout(request):
+    data = restockcartData(request)
+    restockCartItems = data['restockCartItems']
+    restockCart = data['restockCart']
+    items = data['items']
+
+    context = {'items':items, 'restockCart':restockCart, 'restockCartItems':restockCartItems}
+    return render(request, 'store/restock_checkout.html', context)
+
+
+def finalize_restock(request):
+   
+    data = json.loads(request.body)
+
+    if request.user.is_authenticated:
+        
+        staff_name = request.user
+        restock_cart, created = RestockCart.objects.get_or_create(staff_name=staff_name, complete=False)
+          
+        restock_cart.complete = True
+        restock_cart.save()
+
+    
+    return JsonResponse('Rstock Completed', safe=False)
+
+
 
 def updateItem(request):
     data = json.loads(request.body)
@@ -231,6 +273,91 @@ def updateItem(request):
         requisitionCartItem.delete()
 
     return JsonResponse('Item was added', safe=False)
+
+
+
+def updateRestockCart(request):
+    data = json.loads(request.body)
+    itemId = data['itemId']
+    action = data['action']
+    print('Action:', action)
+    print('Item:', itemId)
+
+    
+    staff_name = request.user
+    item_name = Item.objects.get(id=itemId)
+    restock_cart, created = RestockCart.objects.get_or_create(staff_name=staff_name, complete=False)
+
+    restockCartItem, created = RestockCartItem.objects.get_or_create(restock_cart=restock_cart, item_name=item_name)
+
+    if action == 'add':
+        restockCartItem.qty = (restockCartItem.qty + 1)
+    elif action == 'remove':
+        restockCartItem.qty = (restockCartItem.qty - 1)
+
+    restockCartItem.save()
+
+    if restockCartItem.qty <= 0:
+        restockCartItem.delete()
+
+    return JsonResponse('Item was added', safe=False)
+
+
+class RestockItem(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
+    model = RestockCartItem
+    template_name = 'store/restock_cart_item.html'
+    form_class = RestockCartModelForm
+    success_message = 'Item Restock Successful'
+    success_url = reverse_lazy('store:restock_cart')
+     
+    # def get_success_url(self):
+    #     print (self.kwargs)
+    #     return reverse("store:restock_cart", kwargs={"pk": self.object.pk})
+    
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['schedule_qs'] = Schedule.objects.select_related("hospital_name").filter(application_status=4, hospital_name=self.schedule.hospital_name)      
+    #     return context
+
+    # def get_initial(self):
+    #     return {
+    #         'restock_cart': self.kwargs["pk"],
+
+    #     }
+
+
+    
+    def get_form_kwargs(self):
+        self.restock_cart_items = RestockCartItem.objects.get(pk=self.kwargs['pk'])
+        kwargs = super().get_form_kwargs()
+        kwargs['initial']['item_name'] = self.restock_cart_items.item_name
+        # kwargs['initial']['restock_cart'] = self.restock_cart_items.restock_cart
+        kwargs['initial']['vendor'] = self.restock_cart_items.item_name.vendor
+        kwargs['initial']['unit_price'] = self.restock_cart_items.item_name.unit_price
+        return kwargs
+    
+
+    
+
+    # def form_invalid(self, form):
+    #     return self.render_to_response(self.get_context_data())
+
+
+class ReceivedItemsList(LoginRequiredMixin, ListView):
+    template_name = "store/restock_list.html"
+    context_object_name = 'object'
+
+    def get_queryset(self):
+        return RestockCart.objects.all()
+        
+
+    def get_context_data(self, **kwargs):
+        obj = super(ReceivedItemsList, self).get_context_data(**kwargs)
+        obj['restock_qs'] = RestockCart.objects.order_by('date')
+        return obj
+
+
+
 
 class ItemCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
     template_name = 'store/create_item2.html'
@@ -444,17 +571,6 @@ class RequisitionListView(LoginRequiredMixin, ListView):
 #         return render(request, self.template_name, context) 
 
 
-class RequisitionDetailsView(LoginRequiredMixin, DetailView):
-    template_name = "store/requisition_detail2.html"
-    model = Requisition
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(RequisitionDetailsView, self).get_context_data(**kwargs)
-        data = cartData(self.request)
-        requisitionCartItems = data['requisitionCartItems']
-
-        context['requisitionCartItems'] = requisitionCartItems
-        return context   
 
 
 
@@ -674,7 +790,7 @@ class ItemObjectMixin(object):
         return obj 
 
 
-class RestockItem(LoginRequiredMixin, ItemObjectMixin, View):
+class RestockItem2(LoginRequiredMixin, ItemObjectMixin, View):
     template_name = "store/restock_item.html"
     template_name1 = "store/restock_item_details.html"
     
@@ -710,24 +826,112 @@ class RestockItem(LoginRequiredMixin, ItemObjectMixin, View):
 
         return render(request, self.template_name1, context)
 
+class VendorCreateView(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
+    template_name = 'store/create_vendor2.html'
+    form_class = VendorModelForm
+    success_message = 'Vendor created Successfully.'
 
-class ReceivedItemsList(LoginRequiredMixin, ListView):
-    template_name = "store/restock_list.html"
-    context_object_name = 'object'
+    success_url = reverse_lazy('store:vendor_list')
 
-    def get_queryset(self):
-        return Restock.objects.all()
+class ItemObjectMixin(object):
+    model = Item
+    def get_object(self):
+        id = self.kwargs.get('id')
+        obj = None
+        if id is not None:
+            obj = get_object_or_404(self.model, id=id)
+        return obj 
+
+
+class RestockItem2(LoginRequiredMixin, PassRequestMixin, SuccessMessageMixin, UpdateView):
+    model = RestockCartItem
+    template_name = 'store/restock_cart_item.html'
+    form_class = RestockCartModelForm
+    success_message = 'Item Restock Successful'
+    success_url = reverse_lazy('store:restock_list')
+
+
+
+
+
+
+    # def post(self, request, *args, **kwargs):
+    #     self.object = self.get_object()
+    #     form_class = self.get_form_class()
+    #     form = self.get_form(form_class)
+    #     # qs = RequisitionCartItem.objects.filter(requisition_cart__issuerequisition=self.get_object())
+    #     obj = get_object_or_404(RequisitionCart,  requisition_no=self.get_object())
+    #     qs1 = obj.requisitioncartitem_set.all()
+    #     formsets = IssueRequisitionItemFormSet(self.request.POST, queryset=qs1)
+
+    #     if form.is_valid() and formsets.is_valid():
+    #         form.save()
+    #         formsets.save()    
         
+    #     return super().post(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        obj = super(ReceivedItemsList, self).get_context_data(**kwargs)
-        obj['restock_qs'] = Restock.objects.order_by('-received_on')
-        return obj
+
+
+# class RestockItem(LoginRequiredMixin, ItemObjectMixin, PassRequestMixin, SuccessMessageMixin, CreateView):
+#     template_name = 'store/restock_cart_item.html'
+#     form_class = RestockCartModelForm
+#     success_message = 'Item Restock Successful.'
+#     success_url = reverse_lazy('store:restock_list')
+
+
+#     def get_context_data(self, *args, **kwargs):
+#         context = super(RestockItem, self).get_context_data(**kwargs)
+#         context = {}
+#         obj = self.get_object()
+#         if obj is not None:
+#             form = RestockCartModelForm
+#             context['object'] = obj  
+#             context['form'] = form
+#         return context   
+   
+#     def form_invalid(self, form):
+#         return self.render_to_response(self.get_context_data())
+
+class RequisitionDetailsView(LoginRequiredMixin, DetailView):
+    template_name = "store/requisition_detail2.html"
+    model = Requisition
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(RequisitionDetailsView, self).get_context_data(**kwargs)
+        data = cartData(self.request)
+        requisitionCartItems = data['requisitionCartItems']
+
+        context['requisitionCartItems'] = requisitionCartItems
+        return context   
+
+
+
+
+
 
 
 class ItemRestockDetails(LoginRequiredMixin, DetailView):
     template_name = "store/restock_details.html"
-    model = Restock
+    model = RestockCart
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ItemRestockDetails, self).get_context_data(**kwargs)
+        data = restockcartData(self.request)
+        restockCartItems = data['restockCartItems']
+
+        context['restockCartItems'] = restockCartItems
+        return context   
+
+def restock_checkout(request):
+    data = restockcartData(request)
+    restockCartItems = data['restockCartItems']
+    restockCart = data['restockCart']
+    items = data['items']
+
+    context = {'items':items, 'restockCart':restockCart, 'restockCartItems':restockCartItems}
+    return render(request, 'store/restock_checkout.html', context)
+
+
 
 
 
@@ -738,6 +942,7 @@ def create_srv(request, id):
     # doc = SimpleDocTemplate("form_letter.pdf",pagesize=A4,
     #                 rightMargin=72,leftMargin=72,
     #                 topMargin=72,bottomMargin=18)
+
     doc = SimpleDocTemplate(response,topMargin=20)
     doc.pagesize = landscape(A4)
     doc.title = 'Stores Received Voucher'
@@ -748,12 +953,16 @@ def create_srv(request, id):
 
     formatted_time = time.ctime()
     full_name = "Infosys"
-    object = get_object_or_404(Restock, pk=id)
+
+    
+    object = get_object_or_404(RestockCart, pk=id)
 
     address_parts = ["411 State St.", "Marshalltown, IA 50158"]
     
 
-    object.vendor
+    # object.vendor
+
+
     # Story.append(Spacer(1, 30))
 
     # Story.append(Paragraph('''<img src="static/img/logo_small.png" valign="middle" width="100" height="100"/> 
@@ -803,6 +1012,10 @@ def create_srv(request, id):
     Story.append(Paragraph(ptext, styles["Normal"]))
     Story.append(Spacer(1, 12))
 
+    restock_now = object.get_restock_cart_items_qs
+
+
+
     
     # Create return address
     # ptext = '<font size=12> Vendor Name:  </font>' + str(object.vendor)
@@ -811,29 +1024,33 @@ def create_srv(request, id):
     # Story.append(Paragraph(ptext, styles["Normal"]))
 
 
-    ptext = '<font size=12>%s</font>' % object.vendor
-    Story.append(Paragraph(ptext, styles["Normal"]))
+    # ptext = '<font size=12>%s</font>' % object.vendor
+    # Story.append(Paragraph(ptext, styles["Normal"]))
 
-    ptext = '<font size=12>%s</font>' % object.vendor.address
-    Story.append(Paragraph(ptext, styles["Normal"]))
+    # ptext = '<font size=12>%s</font>' % object.vendor.address
+    # Story.append(Paragraph(ptext, styles["Normal"]))
 
     Story.append(Spacer(1, 12))
 
-    restock = Restock.objects.filter(restock_no=object.restock_no)
+    
+    # restock = RestockCart.objects.filter(restock_no=object.restock_no)
+   
 
     data = []
-    data.append(["Stock Code", "Item Name", "Item Description", "UOM", "Unit Price", "Quantity Ordered", "Quantity Received"])
+    data.append(["Item Name", "Vendor", "Unit Price", "Quantity Ordered", "Quantity Received", "Total", "Date Supplied"])
+
+
 
     try:
-        for obj in restock:
+        for obj in restock_now:
             row = []
-            row.append(obj.stock_code)
             row.append(obj.item_name)
-            row.append(obj.item_description)
-            row.append(obj.unit)
+            row.append(obj.vendor)
             row.append(obj.unit_price)
             row.append(obj.quantity_ordered)
             row.append(obj.quantity_received)
+            row.append(obj.get_total)
+            row.append(obj.date_added)
             data.append(row)
     except:
         pass
@@ -859,13 +1076,22 @@ def create_srv(request, id):
 
     Story.append(t)
     Story.append(Spacer(1, 12))
+
+
+    Story.append(Spacer(1, 0))
+    ptext = '<font size=14>SRV Total  N%s</font>'% str(object.get_restock_cart_total)
+    
+    Story.append(Paragraph(ptext, styles["RIGHT"]))
+    Story.append(Spacer(1, 12))
+
+
     ptext = '<font size=12>Received by:</font>'
     Story.append(Paragraph(ptext, styles["Justify"]))
     Story.append(Spacer(1, 2))
     
     Story.append(sign)
 
-    ptext = '<font size=12>%s</font>' % object.received_by.get_full_name
+    ptext = '<font size=12>%s</font>' % object.staff_name.get_full_name
     Story.append(Paragraph(ptext, styles["Normal"]))
     Story.append(Spacer(1, 12))
     doc.build(Story)
@@ -1402,7 +1628,7 @@ class ItemCategoyListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         obj = super(ItemCategoyListView, self).get_context_data(**kwargs)
-        obj['category_qs'] = Category.objects.order_by('-entry_date')
+        obj['category_qs'] = Category.objects.order_by('id')
         return obj
 
 

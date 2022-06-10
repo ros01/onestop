@@ -106,14 +106,47 @@ class IssueRequisitionAdmin(admin.ModelAdmin):
 admin.site.register(IssueRequisition, IssueRequisitionAdmin)
 
 
-class RestockAdmin(admin.ModelAdmin):
-  list_display = ('restock_no', 'item_name', 'stock_code', 'vendor', 'quantity_ordered',
-                  'unit_price', 'quantity_received', 'received_on')
-  list_display_links = ('restock_no', 'item_name', 'stock_code', 'vendor', 'quantity_received')
-  list_filter = ('restock_no', 'item_name', 'unit_price', 'vendor', 'quantity_received')
-  search_fields = ('restock_no', 'item_name', 'vendor', 'quantity_ordered',
-                   'unit_price', 'quantity_received')
+class RestockCartAdmin(admin.ModelAdmin):
+  list_display = ('id', 'restock_no', 'staff_name', 'date')
+  list_display_links = ('id', 'restock_no', 'staff_name', 'date')
+  list_filter = ('id', 'restock_no', 'staff_name', 'date')
+  search_fields = ('id', 'restock_no', 'staff_name', 'date')
   list_per_page = 25
 
 
-admin.site.register(Restock, RestockAdmin)
+admin.site.register(RestockCart, RestockCartAdmin)
+
+class RestockCartItemAdmin(admin.ModelAdmin):
+  list_display = ('id', 'item_name', 'restock_cart', 'vendor', 'quantity_ordered', 'quantity_received')
+  list_display_links = ('id', 'item_name', 'restock_cart', 'vendor', 'quantity_ordered','quantity_received')
+  list_filter = ('id', 'item_name', 'restock_cart', 'vendor', 'quantity_ordered', 'quantity_received')
+  search_fields = ('id', 'item_name', 'restock_cart', 'vendor', 'quantity_ordered', 'quantity_received')
+  list_per_page = 25
+  
+
+
+admin.site.register(RestockCartItem, RestockCartItemAdmin)
+
+
+# class RestockAdmin(admin.ModelAdmin):
+#   list_display = ('id', 'restock_cart', 'restock_date')
+#   list_display_links = ('id', 'restock_cart', 'restock_date')
+#   list_filter = ('id', 'restock_cart', 'restock_date')
+#   search_fields = ('id', 'restock_cart', 'restock_date')
+#   list_per_page = 25
+
+
+# admin.site.register(Restock, RestockAdmin)
+
+
+# class RestockAdmin(admin.ModelAdmin):
+#   list_display = ('restock_no', 'item_name', 'stock_code', 'vendor', 'quantity_ordered',
+#                   'unit_price', 'quantity_received', 'received_on')
+#   list_display_links = ('restock_no', 'item_name', 'stock_code', 'vendor', 'quantity_received')
+#   list_filter = ('restock_no', 'item_name', 'unit_price', 'vendor', 'quantity_received')
+#   search_fields = ('restock_no', 'item_name', 'vendor', 'quantity_ordered',
+#                    'unit_price', 'quantity_received')
+#   list_per_page = 25
+
+
+# admin.site.register(Restock, RestockAdmin)

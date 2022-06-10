@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block styles %}
+
 <link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
 <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
 <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
@@ -24,7 +25,7 @@
 <th><h5>Total Items Count: <strong>{{requisitionCart.get_requisition_cart_items}}</strong></h5></th>
 <th><h5>Requisition No:<strong> {{requisitionCart.requisition_no}}</strong></h5></th>
 <th>
-<a  style="float:right; margin:5px;" class="btn btn-success" href="{% url 'store:checkout' %}">Finalize Requisition</a>
+<a  style="float:right; margin:5px;" class="btn btn-success" href="{% url 'store:requisition_checkout' %}">Finalize Requisition</a>
 </th>
 </tr>
 </table>
@@ -66,7 +67,7 @@
  {% for item in items %}
  <tr>
 				   
- <td width="25%"><img class="row-image" src="{{item.item.imageURL}}"></td>
+ <td width="25%"><img class="row-image" src="{{item.item_name.item_image}}"></td>
  <td width="45%">{{item.item.item_name }}</td>
  <td width="30%">
  <p class="quantity">{{item.quantity}}</p>

@@ -201,6 +201,11 @@ class RequisitionsModelForm(forms.ModelForm):
        #          pass
   
 
+
+
+      
+
+
 class RequisitionCartItemModelForm(forms.ModelForm):
     #items = forms.ModelChoiceField(queryset=Item.objects.all(), empty_label=None, widget=forms.CheckboxSelectMultiple(),)
     class Meta:
@@ -553,47 +558,80 @@ IssueRequisitionItemFormSet = modelformset_factory(RequisitionCartItem, form=Iss
 #     can_delete=False, extra=0)
 
 
-class RestockModelForm(forms.ModelForm):
+# class RestockModelForm(forms.ModelForm):
 
-    class Meta:
-        model = Restock
+#     class Meta:
+#         model = Restock
 
-        fields = ('restock_no', 'item_name', 'item_description', 'category', 'stock_code', 'vendor', 'unit', 'quantity_ordered', 'unit_price', 'quantity_received', 'received_by', 'received_on')
+#         fields = ('restock_no', 'item_name', 'item_description', 'category', 'stock_code', 'vendor', 'unit', 'quantity_ordered', 'unit_price', 'quantity_received', 'received_by', 'received_on')
 
-        widgets = {
-       'item_description': forms.Textarea(attrs={'readonly': True,'rows':2, 'cols':12}),
-       'restock_no': forms.HiddenInput(),
-       'stock_code': forms.TextInput(attrs={'readonly': True}), 
-       'item_name': forms.TextInput(attrs={'readonly': True}), 
+#         widgets = {
+#        'item_description': forms.Textarea(attrs={'readonly': True,'rows':2, 'cols':12}),
+#        'restock_no': forms.HiddenInput(),
+#        'stock_code': forms.TextInput(attrs={'readonly': True}), 
+#        'item_name': forms.TextInput(attrs={'readonly': True}), 
        
-       'unit': forms.TextInput(attrs={'readonly': True}), 
+#        'unit': forms.TextInput(attrs={'readonly': True}), 
 
-        }
+#         }
 
         
 
+#     def __init__(self, *args, **kwargs):
+#        super(RestockModelForm, self).__init__(*args, **kwargs)
+#        for name in self.fields.keys():
+#             self.fields[name].widget.attrs.update({
+#                 'class': 'form-control',
+#             })
+      
+       
+#        self.fields['item_name'].label = "Item Name"
+#        self.fields['item_description'].label = "Item Description"
+#        self.fields['item_description'].widget.attrs['placeholder'] = "Enter Item Description"
+#        self.fields['category'].label = "Category"
+#        self.fields['stock_code'].label = "Stock Code"
+#        self.fields['vendor'].label = "Vendor"
+#        self.fields['unit'].label = "Unit of Measurement"
+#        self.fields['quantity_ordered'].label = "Quantity Ordered"
+#        self.fields['quantity_ordered'].widget.attrs['placeholder'] = "Enter Quantity Ordered"
+#        self.fields['unit_price'].label = "Unit Price"
+#        self.fields['unit_price'].widget.attrs['placeholder'] = "Enter Unit Price"
+#        self.fields['quantity_received'].label = "Quantity Received"
+#        self.fields['quantity_received'].widget.attrs['placeholder'] = "Enter Quantity Received"
+
+    
+
+class RestockCartModelForm(PopRequestMixin, CreateUpdateAjaxMixin, forms.ModelForm):
+
+    class Meta:
+        model = RestockCartItem
+
+        fields = ('item_name', 'vendor', 'restock_cart', 'unit_price', 'quantity_ordered', 'quantity_received')
+
+        widgets = {
+        # 'item_name': forms.HiddenInput(), 
+        # 'item_name': forms.TextInput(attrs={'readonly': True}), 
+        # 'vendor': forms.TextInput(attrs={'readonly': True}), 
+        'restock_cart': forms.HiddenInput(),   
+        }      
+
     def __init__(self, *args, **kwargs):
-       super(RestockModelForm, self).__init__(*args, **kwargs)
+       super(RestockCartModelForm, self).__init__(*args, **kwargs)
        for name in self.fields.keys():
             self.fields[name].widget.attrs.update({
                 'class': 'form-control',
             })
       
-       
+       self.fields['item_name'].widget.attrs['value'] = self.instance.item_name
+       self.fields['item_name'].widget.attrs['readonly'] = 'readonly'
        self.fields['item_name'].label = "Item Name"
-       self.fields['item_description'].label = "Item Description"
-       self.fields['item_description'].widget.attrs['placeholder'] = "Enter Item Description"
-       self.fields['category'].label = "Category"
-       self.fields['stock_code'].label = "Stock Code"
+       # self.fields['item_name'].label = "Item Name"
+       self.fields['vendor'].widget.attrs['value'] = self.instance.item_name.vendor
+       
        self.fields['vendor'].label = "Vendor"
-       self.fields['unit'].label = "Unit of Measurement"
+       self.fields['restock_cart'].label = "Restock Cart"
        self.fields['quantity_ordered'].label = "Quantity Ordered"
        self.fields['quantity_ordered'].widget.attrs['placeholder'] = "Enter Quantity Ordered"
        self.fields['unit_price'].label = "Unit Price"
-       self.fields['unit_price'].widget.attrs['placeholder'] = "Enter Unit Price"
        self.fields['quantity_received'].label = "Quantity Received"
        self.fields['quantity_received'].widget.attrs['placeholder'] = "Enter Quantity Received"
-
-    
-
-

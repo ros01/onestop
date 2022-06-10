@@ -194,7 +194,7 @@
 
           {% endif %}
 
-          <!-- {% if "request_item" in request.path %}
+         <!--  {% if "request_item" in request.path %}
 
           <li class="nav-item active ">
             <a class="nav-link" href="{% url 'store:create_item_requisition' %}">
@@ -234,7 +234,7 @@
             </a>
           </li>
 
-           {% elif "cart" in request.path %}
+           {% elif "requisition_cart" in request.path %}
 
           <li class="nav-item active ">
             <a class="nav-link" href="{% url 'store:requisition_list' %}">
@@ -243,7 +243,7 @@
             </a>
           </li>
 
-          {% elif "checkout" in request.path %}
+          {% elif "requisition_checkout" in request.path %}
 
           <li class="nav-item active ">
             <a class="nav-link" href="{% url 'store:requisition_list' %}">
@@ -285,7 +285,16 @@
 
           {% endif %}
 
-          {% if "restock" in request.path %}
+         {% if "restock_details" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'store:restock_list' %}">
+              <i class="material-icons">fact_check</i>
+              <p>Received Items</p>
+            </a>
+          </li>
+
+          {% elif "restock_list" in request.path %}
 
           <li class="nav-item active ">
             <a class="nav-link" href="{% url 'store:restock_list' %}">
@@ -305,8 +314,18 @@
 
           {% endif %}
 
+           {% if "restock_cart" in request.path %}
 
-          {% if "item_list" in request.path %}
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'store:item_list' %}">
+
+              <i class="material-icons">fact_check</i>
+              <p>Restock Item</p>
+            </a>
+          </li>
+
+
+          {% elif "item_list" in request.path %}
 
           <li class="nav-item active ">
             <a class="nav-link" href="{% url 'store:item_list' %}">
@@ -403,11 +422,26 @@
             {% endif %}
            
             </li>  
+
+             <li>
+
+            {% if restockCartItems %}
+           
+            <a href='{% url "store:restock_cart" %}'><i class="fa fa-shopping-cart fa-navbar-cart"></i> <span id="requisition-count-badge" class='badge badge-pill badge-warning text-white'>{{restockCartItems}}</span></a>
+
+            {% else %}
+
+            <a href='{% url "store:restock_cart" %}'><i class="fa fa-shopping-cart fa-navbar-cart"></i> <span id="requisition-count-badge" class='badge badge-pill badge-warning text-white'>0</span></a>
+
+            {% endif %}
+           
+            </li>  
+    
     
             <li class="nav-item dropdown">
                 <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="material-icons">notifications_active</i>
-                  <span class="notification">4</span>
+                  <span class="notification">0</span>
                   <p class="d-lg-none d-md-block">
                     Some Actions
                   </p>

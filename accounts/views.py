@@ -65,38 +65,42 @@ def login(request):
     user = auth.authenticate(email=email, password=password)
     if user is not None:
         auth_login(request, user)
-        if user.department.name == 'Hr' and user.role == 'Human Resources':
-            return redirect('hr:hr_dashboard')
-        if user.department.name == 'Admin':
-            return redirect('administration:filemanager_dashboard')
-        if user.department.name == 'Stores' and user.role == 'Stores':
-            return redirect('store:store_dashboard')
-        if user.department.name == 'Protocol' and user.role == 'Fleet Managment':
-            return redirect('fleet:fleet_dashboard')
-        if user.department.name == 'Procurement' and user.role == 'Procurement':
-            return redirect('procurement:procurement_dashboard')
-        if user.department.name == 'Monitoring':
-            return redirect('rrbnstaff:staff_dashboard')
-        if user.department.name == 'Registrars Office':
-            return redirect('rrbnstaff:staff_dashboard')
-        if user.department.name == 'Registrations':
-            return redirect('rrbnstaff:staff_dashboard')
-        if user.department.name == 'Hr':
-            return redirect('rrbnstaff:staff_dashboard')
-        if user.department.name == 'Procurement':
-            return redirect('rrbnstaff:staff_dashboard')
-        if user.department.name == 'Finance':
-            return redirect('rrbnstaff:staff_dashboard')
-        if user.department.name == 'Audit':
-            return redirect('rrbnstaff:staff_dashboard')
-        if user.department.name == 'ICT':
-            return redirect('rrbnstaff:staff_dashboard')
-        if user.department.name == 'Stores':
-            return redirect('rrbnstaff:staff_dashboard')
-        if user.department.name == 'Protocol':
-            return redirect('rrbnstaff:staff_dashboard')
-        else:
-            messages.error(request, 'Please enter the correct email and password for your account. Note that both fields may be case-sensitive.')
+        try: 
+            if user.department.name == 'Hr' and user.role == 'Human Resources':
+                return redirect('hr:hr_dashboard')
+            if user.department.name == 'Admin':
+                return redirect('administration:filemanager_dashboard')
+            if user.department.name == 'Stores' and user.role == 'Stores':
+                return redirect('store:store_dashboard')
+            if user.department.name == 'Protocol' and user.role == 'Fleet Managment':
+                return redirect('fleet:fleet_dashboard')
+            if user.department.name == 'Procurement' and user.role == 'Procurement':
+                return redirect('procurement:procurement_dashboard')
+            if user.department.name == 'Monitoring':
+                return redirect('rrbnstaff:staff_dashboard')
+            if user.department.name == 'Registrars Office':
+                return redirect('rrbnstaff:staff_dashboard')
+            if user.department.name == 'Registrations':
+                return redirect('rrbnstaff:staff_dashboard')
+            if user.department.name == 'Hr':
+                return redirect('rrbnstaff:staff_dashboard')
+            if user.department.name == 'Procurement':
+                return redirect('rrbnstaff:staff_dashboard')
+            if user.department.name == 'Finance':
+                return redirect('rrbnstaff:staff_dashboard')
+            if user.department.name == 'Audit':
+                return redirect('rrbnstaff:staff_dashboard')
+            if user.department.name == 'ICT':
+                return redirect('rrbnstaff:staff_dashboard')
+            if user.department.name == 'Stores':
+                return redirect('rrbnstaff:staff_dashboard')
+            if user.department.name == 'Protocol':
+                return redirect('rrbnstaff:staff_dashboard')
+            else:
+                messages.error(request, 'Please enter the correct email and password for your account. Note that both fields may be case-sensitive.')
+                return redirect('accounts:signin')
+        except:
+            messages.error(request, 'Please Login using the Admin Panel')
             return redirect('accounts:signin')
     else:
         messages.error(request, 'Please enter the correct email and password for your account. Note that both fields may be case-sensitive.')

@@ -45,17 +45,11 @@
         <table class="table table-bordered table-hover" id="mydata">
         <thead>
         <tr style="background: #41963F;">
-        <td style="color: #fff;" class="small-text" width="05%">S/N</td>
-        <td style="color: #fff;" class="small-text" width="08%">Restock No</td>
-        <td style="color: #fff;" class="small-text" width="14%">Item Name</td>
-        <td style="color: #fff;" class="small-text" width="10%">Stock Code</td>
-        <td style="color: #fff;" class="small-text" width="08%">Vendor</td>
-        <td style="color: #fff;" class="small-text" width="10%">Quantity Ordered</td>
-        <td style="color: #fff;" class="small-text" width="08%">Unit Price</td>
-        <td style="color: #fff;" class="small-text" width="10%">Quantity Received</td>
-        <td style="color: #fff;" class="small-text" width="10%">Received By</td>
-        <td style="color: #fff;" class="small-text" width="10%">Received On</td>
-        <td style="color: #fff;" class="small-text" width="07%">Actions</td>
+        <td style="color: #fff;" class="small-text" width="06%">S/N</td>
+        <td style="color: #fff;" class="small-text" width="20%">Restock No</td>
+        <td style="color: #fff;" class="small-text" width="20%">Restock Date</td>
+        <td style="color: #fff;" class="small-text" width="34%">Received By</td>
+        <td style="color: #fff;" class="small-text" width="20%">Restock Details</td>
         </tr>
     
 
@@ -63,18 +57,16 @@
         {% if restock_qs %}
         {% for object in restock_qs %}
         <tr>
-        <td width="05%">{{forloop.counter}}</td>
-        <td width="08%">{{object.restock_no}}</td>
-        <td width="14%">{{object.item_name}}</td>
-        <td width="10%">{{object.stock_code}}</td>
-        <td width="08%">{{object.vendor}}</td>
-        <td width="10%">{{object.quantity_ordered}}</td>
-        <td width="08%">{{object.unit_price}}</td>
-        <td width="10%">{{object.quantity_received}}</td>
-        <td width="10%">{{object.received_by.first_name}} {{object.received_by.last_name}}</td>
-        <td width="10%">{{object.received_on_pretty}}</td>
-        <td width="07%">
-        <a class="btn btn-primary p-1" href="{% url 'store:restock_details' object.id %}"><i class="fa fa-folder-open text-white"></i></a>
+        <td width="06%">{{forloop.counter}}</td>
+        <td width="20%">{{object.restock_no}}</td>
+        <td width="20%">{{object.date}}</td>
+        <td width="34%">{{object.staff_name.first_name}} {{object.staff_name.last_name}}</td>
+        <td width="20%">
+       <!--  <a class="btn btn-primary p-1" href=""><i class="fa fa-folder-open text-white"> View Restock Details</i></a> -->
+
+        <a href="{% url 'store:restock_details' object.id %}"  class="btn btn-warning text-white py-1 px-3 mt-1 ml-4 mb-3"> View Restock Details <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>  
+
+
         </td>
         </td>
         </tr>
@@ -116,9 +108,6 @@
 <script>
   $('#mydata').dataTable();
 </script>
-
-
-
 
 
 

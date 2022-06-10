@@ -1,15 +1,20 @@
-{% extends 'base2.html'%}
+{% extends 'base15.html'%}
 {% load static %}
 {% load widget_tweaks %}
 {% load crispy_forms_tags %}
 {% block title%}| Retrieve Item {% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}"> -->
+
+
+
 <!-- <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}"> -->
-<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
+
+
+<!-- <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
 <link href="{% static 'css/mycustomcss.css' %}" rel="stylesheet">
-<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet"> -->
 {% endblock %}
 
 
@@ -112,7 +117,10 @@
 
 <!-- <a href="{% url 'store:restock_item' item.id %}" class="bs-modal btn btn-small btn-primary mr-2"><i class="fas fa-trash-alt"></i> Restock Item</a> -->
 
-<button type="button" id="restock-item" class="bs-modal btn btn-small btn-primary mt-1 p-1" data-form-url="{% url 'store:restock_item' item.id %}">Restock Item</i></button>
+<!-- <button type="button" id="restock-item" class="bs-modal btn btn-small btn-primary mt-1 p-1" data-form-url="{% url 'store:restock_item' item.id %}">Restock Item</i></button> -->
+
+
+<button data-item="{{item.id}}" data-action="add" class="btn btn-primary add-btn update-restockcart">Add to  Cart</button>
  
 
 
@@ -141,9 +149,9 @@
 
 
 
-<script src="{% static 'js/jquery.js' %}"></script>
+<!-- <script src="{% static 'js/jquery.js' %}"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script> -->
 
 
 
@@ -151,7 +159,7 @@
 
 
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     $(function() {
     
         $(".bs-modal").each(function () {
@@ -162,7 +170,7 @@
     
     });
 
-</script>
+</script> -->
 
 
 

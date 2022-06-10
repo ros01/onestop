@@ -1,0 +1,187 @@
+{% extends 'base15.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles2.css' %}">
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}"> 
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+
+	<div class="content">
+
+	<div class="container-fluid ">
+
+	<div class="box-element">
+
+	<br>
+	<br>
+	<table class="table">
+	                    
+	<a  class="btn btn-warning" href="{% url 'store:restock_cart' %}">&#x2190; Back to Requisition Cart</a>
+	<tr>
+	<th><h5>Total Items Count: <strong>{{restockCart.get_restock_cart_items}}</strong></h5></th>
+	
+	<th><h5>Restock No:<strong> {{restockCart.restock_no}}</strong></h5></th>
+	<th>
+
+	<form id="form">
+	
+	
+	<input type="hidden" name="complete" value="True" required id="id_complete">
+	
+
+	
+  <input id="form-button" class="btn btn-success btn-block" type="submit" value="Finalize">
+  </form>
+	</div>
+
+	</th>
+	</tr>
+	</table>
+
+	</div>
+
+	<br>
+  <div class="box-element">
+  <div class="cart-row">
+ 
+   <table class="table table-bordered table-hover">
+   <thead>
+   <tr>
+   <td width="20%">Item Name</td>
+   <td width="20%">Vendor</td>
+   <td width="15%">Quantity Ordered</td>
+   <td width="15%">Quantity Received</td>
+   <td width="15%">Amount</td>
+   <td width="15%">Total</td>
+    </tr>
+   </div>
+	
+   <div class="cart-row">
+				
+   <tbody>
+   {% for item in items %}
+   <tr>
+   <td width="20%">{{item.item_name}}</td>
+   <td width="20%">{{item.vendor }}</td>
+   <td width="15%">{{item.quantity_ordered }}</td>
+   <td width="15%">{{item.quantity_received }}</td>
+   <td width="15%">{{item.unit_price }}</td>
+   <td width="15%">{{item.get_total }}</td>
+   
+   <!-- <td width="20%" class='text-center'><a href='{{ item.remove }}'>X</a></td> -->
+   </td>
+   </tr>
+   </div>
+   {% endfor %}
+   </tbody>
+   </table>
+
+   </div>
+
+   <div class="d-flex justify-content-end mr-3">
+   <h5>SRV Total: <strong>N {{restockCart.get_restock_cart_total}}</strong></h5></div>
+   </div>
+
+   </div>
+
+
+
+
+
+	<script type="text/javascript">
+		
+		var restock_status = '{{restockCart.complete}}'
+
+		
+
+		var form = document.getElementById('form')
+		form.addEventListener('submit', function(e){
+	    	e.preventDefault()
+	    	console.log('Form Submitted...')
+	    	// document.getElementById('form-button').classList.add("hidden");
+	    	// document.getElementById('payment-info').classList.remove("hidden");
+	    })
+
+		
+	    document.getElementById('form-button').addEventListener('click', function(e){
+	    	submitFormData()
+	    })
+	    
+
+	    function submitFormData(){
+	    	console.log('Restock Finalized')
+
+	  //   	var userFormData = {
+			// 	'name':null,
+			// 	'email':null,
+			// 	'total':total,
+			// }
+
+			// var shippingInfo = {
+			// 	'address':null,
+			// 	'city':null,
+			// 	'state':null,
+			// 	'zipcode':null,
+			// }
+
+			var restockStatus = {
+				'complete':null,
+				
+			}
+
+			if (restock_status != 'True' ){
+	    		restockStatus.complete = form.complete.value
+	    		
+	    	}
+
+	    	// if (shipping != 'False'){
+	    	// 	shippingInfo.address = form.address.value
+		    // 	shippingInfo.city = form.city.value
+		    // 	shippingInfo.state = form.state.value
+		    // 	shippingInfo.zipcode = form.zipcode.value
+	    	// }
+
+
+	    	// if (user == 'AnonymousUser'){
+	    	// 	userFormData.name = form.name.value
+	    	// 	userFormData.email = form.email.value
+	    	// }
+
+	    	// console.log('Shipping Info:', shippingInfo)
+	    	// console.log('User Info:', userFormData)
+	    	console.log('Restock Status:', restockStatus)
+
+	    	var url = '/store/finalize_restock/'
+	    	fetch(url, {
+	    		method:'POST',
+	    		headers:{
+	    			'Content-Type':'applicaiton/json',
+	    			'X-CSRFToken':csrftoken,
+	    		}, 
+	    		// body:JSON.stringify({'form':userFormData, 'shipping':shippingInfo, 'requisition':requisitionInfo}),
+
+	    		body:JSON.stringify({'restock':restockStatus}),
+	    		
+	    	})
+	    	.then((response) => response.json())
+	    	.then((data) => {
+				console.log('Success:', data);
+				alert('Restock complete');  
+
+				cart = {}
+				document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
+
+				window.location.href = "{% url 'store:store_dashboard' %}"
+
+				})
+	    }
+	</script>
+{% endblock content %}
+
+
+ 
