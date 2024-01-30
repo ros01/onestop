@@ -39,20 +39,20 @@ class MyUserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
 
-    # DEPARTMENT = (
-    #     ('Monitoring', 'Monitoring'),
-    #     ('Registrations', 'Registrations'),
-    #     ('Hr', 'Hr'),
-    #     ('Admin', 'Admin'),
-    #     ('Procurement', 'Procurement'),
-    #     ('Finance', 'Finance'),
-    #     ('Audit', 'Audit'),
-    #     ('ICT', 'ICT'),
-    #     ('Stores', 'Stores'),
-    #     ('Institute', 'Institute'),
-    #     ('Protocol', 'PR & Protocol'),
-    #     ('Registrars Office', 'Registrars Office'),
-    #     )
+    DEPARTMENT = (
+        ('Monitoring', 'Monitoring'),
+        ('Registrations', 'Registrations'),
+        ('Hr', 'Hr'),
+        ('Admin', 'Admin'),
+        ('Procurement', 'Procurement'),
+        ('Finance', 'Finance'),
+        ('Audit', 'Audit'),
+        ('ICT', 'ICT'),
+        ('Stores', 'Stores'),
+        ('Institute', 'Institute'),
+        ('Protocol', 'PR & Protocol'),
+        ('Registrars Office', 'Registrars Office'),
+        )
 
    
     ROLE = (
@@ -81,8 +81,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     phone_no = models.CharField(max_length=100, blank=True)
-    # department = models.CharField (max_length=30, choices = DEPARTMENT,  null=True, blank=True)
-    department = models.ForeignKey('hr.Department', null=True, on_delete=models.CASCADE)
+    department = models.CharField (max_length=30, choices = DEPARTMENT,  null=True, blank=True)
+    # department = models.ForeignKey('hr.Department', null=True, on_delete=models.CASCADE)
     zone = models.CharField(max_length=120, choices=ZONE,  null=True, blank=True)
     role = models.CharField (max_length=20, choices = ROLE, blank=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)

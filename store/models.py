@@ -4,6 +4,7 @@ from django.conf import settings
 from datetime import datetime
 from datetime import date
 from django.utils import timezone
+from accounts.choices import *
 from .choices import UNIT_OF_MEASUREMENT
 from multiselectfield import MultiSelectField
 from django.db.models.signals import pre_save, post_save
@@ -191,12 +192,13 @@ class RequisitionCartItem(models.Model):
 
 class Requisition(models.Model):
     # employee = models.ForeignKey(Employee, related_name='requested_by', blank=True, on_delete=models.DO_NOTHING)
-    employee = models.CharField(max_length=200)
+    employee = models.CharField(max_length=200, null=True, blank=True)
     requisition_cart = models.ForeignKey(RequisitionCart, on_delete=models.CASCADE)
     requisition_reason = models.TextField(blank=True)
     # hod = models.ForeignKey(Employee, related_name='approved_by', blank=True, on_delete=models.DO_NOTHING)
-    hod =models.CharField(max_length=200)
-    department = models.ForeignKey(Department, blank=True, on_delete=models.DO_NOTHING)
+    hod =models.CharField(max_length=200, null=True, blank=True)
+    # department = models.ForeignKey(Department, blank=True, on_delete=models.DO_NOTHING)
+    department = models.CharField (max_length=30, choices = DEPARTMENT,  null=True, blank=True)
     requisition_creation_date = models.DateField(auto_now_add=True, auto_now=False)
     requisition_status = models.IntegerField(default=1)
 

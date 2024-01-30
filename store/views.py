@@ -488,11 +488,8 @@ def processOrder(request):
         requisition_reason=data['requisition']['requisition_reason'],
         # hod=Employee.objects.get(id=data['requisition']['hod']),
         hod=data['requisition']['hod'],
-    
-
-        department=Department.objects.get(id=data['requisition']["department"]),
-
-        #department=data['requisition']['department'],
+        #department=Department.objects.get(id=data['requisition']["department"]),
+        department=data['requisition']['department'],
       
         )
 

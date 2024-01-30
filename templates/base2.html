@@ -207,37 +207,7 @@
 
           {% endif %}
 
-          {% if "restock_details" in request.path %}
-
-          <li class="nav-item active ">
-            <a class="nav-link" href="{% url 'store:restock_list' %}">
-              <i class="material-icons">fact_check</i>
-              <p>Received Items</p>
-            </a>
-          </li>
-
-          {% elif "restock_list" in request.path %}
-
-          <li class="nav-item active ">
-            <a class="nav-link" href="{% url 'store:restock_list' %}">
-              <i class="material-icons">fact_check</i>
-              <p>Received Items</p>
-            </a>
-          </li>
-
-          {% else %}
-
-          <li class="nav-item ">
-            <a class="nav-link" href="{% url 'store:restock_list' %}">
-              <i class="material-icons">fact_check</i>
-              <p>Received Items</p>
-            </a>
-          </li>
-
-          {% endif %}
-
-
-           {% if "restock_cart" in request.path %}
+          {% if "restock_cart" in request.path %}
 
           <li class="nav-item active ">
             <a class="nav-link" href="{% url 'store:item_list' %}">
@@ -278,6 +248,37 @@
           </li>
 
           {% endif %}
+
+
+          {% if "restock_details" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'store:restock_list' %}">
+              <i class="material-icons">fact_check</i>
+              <p>Received Items</p>
+            </a>
+          </li>
+
+          {% elif "restock_list" in request.path %}
+
+          <li class="nav-item active ">
+            <a class="nav-link" href="{% url 'store:restock_list' %}">
+              <i class="material-icons">fact_check</i>
+              <p>Received Items</p>
+            </a>
+          </li>
+
+          {% else %}
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'store:restock_list' %}">
+              <i class="material-icons">fact_check</i>
+              <p>Received Items</p>
+            </a>
+          </li>
+
+          {% endif %}
+
 
 
 
@@ -369,7 +370,7 @@
               <li class="nav-item dropdown">
                 <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="material-icons">notifications_active</i>
-                  <span class="notification">5</span>
+                  <span class="notification">0</span>
                   <p class="d-lg-none d-md-block">
                     Some Actions
                   </p>
