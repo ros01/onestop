@@ -58,14 +58,23 @@ def cartData(request):
 
 def restockcartData(request):
 	if request.user.is_authenticated:
-		staff_name = request.user
-		restockCart, created = RestockCart.objects.get_or_create(staff_name=staff_name, complete=False)
+		restockCart, created = RestockCart.objects.get_or_create(staff_name=request.user, complete=False)
 		items = restockCart.restockcartitem_set.all()
 		restockCartItems = restockCart.get_restock_cart_items
 	else:
 		items = []
-		restockCart = {'get_restock_cart_items':0, 'get_restock_cart_total':0}
-		restockCartItems = restockCart['get_restock_cart_items']
+		restockCart = {'get_restock_cart_items': 0, 'get_restock_cart_total': 0}
+		restockCartItems = 0
+
+	# if request.user.is_authenticated:
+	# 	staff_name = request.user
+	# 	restockCart, created = RestockCart.objects.get_or_create(staff_name=staff_name, complete=False)
+	# 	items = restockCart.restockcartitem_set.all()
+	# 	restockCartItems = restockCart.get_restock_cart_items
+	# else:
+	# 	items = []
+	# 	restockCart = {'get_restock_cart_items':0, 'get_restock_cart_total':0}
+	# 	restockCartItems = restockCart['get_restock_cart_items']
 
 	return {'restockCartItems':restockCartItems ,'restockCart':restockCart, 'items':items}
 

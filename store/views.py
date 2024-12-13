@@ -100,6 +100,9 @@ class LoginRequiredMixin(object):
         return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
 
 
+
+
+
 class DashboardTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "store/store_dashboard2.html"
         
@@ -165,6 +168,37 @@ def find_item(request):
         'queryset': qs, 'requisitionCartItems':requisitionCartItems, 'items':items, 'requisitionCart':requisitionCart,
     }
     return render(request, 'store/add_to_cart.html', context)
+
+
+@login_required
+def check_item(request):
+    data = cartData(request)
+    requisitionCartItems = data['requisitionCartItems']
+    requisitionCart = data['requisitionCart']
+    items = data['items']
+
+    item_name = request.POST.get('item_name')
+
+    products = Item.objects.all()
+    context = {'products':products, 'requisitionCartItems':requisitionCartItems}
+    return render(request, 'store/search.html', context)
+
+
+@login_required
+def search_item(request):
+    data = cartData(request)
+    requisitionCartItems = data['requisitionCartItems']
+    requisitionCart = data['requisitionCart']
+    items = data['items']
+    search_text = request.POST.get('search')
+
+    # look up all films that contain the text
+    # exclude user films
+    # userfilms = UserFilms.objects.filter(user=request.user)
+    results = Item.objects.filter(item_name__icontains=search_text)
+    context = {"results": results, 'requisitionCartItems':requisitionCartItems, 'items':items, 'requisitionCart':requisitionCart}
+    return render(request, 'store/search_results.html', context)
+
 
 @login_required
 def search_inventory(request):
@@ -900,12 +934,6 @@ class RequisitionDetailsView(LoginRequiredMixin, DetailView):
 
         context['requisitionCartItems'] = requisitionCartItems
         return context   
-
-
-
-
-
-
 
 class ItemRestockDetails(LoginRequiredMixin, DetailView):
     template_name = "store/restock_details.html"

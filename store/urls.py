@@ -106,9 +106,14 @@ urlpatterns = [
 	path('<int:pk>/vendor_update/', VendorUpdateView.as_view(), name='vendor_update'),
 	path('<int:id>/item_delete/', ItemDeleteView.as_view(), name='item_delete'),
 	path('<int:id>/category_delete/', CategoryDeleteView.as_view(), name='category_delete'),
-	path('<int:id>/vendor_delete/', VendorDeleteView.as_view(), name='vendor_delete'),
-    
-    
-
-    
+	path('<int:id>/vendor_delete/', VendorDeleteView.as_view(), name='vendor_delete'),    
     ]
+
+
+htmx_urlpatterns = [
+    path('check_item/', views.check_item, name="check_item"),
+    path('search-item/', views.search_item, name='search-item'),
+    ]
+
+
+urlpatterns += htmx_urlpatterns

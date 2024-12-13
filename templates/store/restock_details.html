@@ -57,9 +57,8 @@
         </tr>
         </thead>                      
         <tbody>
-
-        {% for i in object.restockcartitem_set.all %}
-          
+        {% if object.restockcartitem_set.all %}
+        {% for i in object.restockcartitem_set.all %}  
         <tr>
         <td>{{forloop.counter}}</td>
         <td>{{i.item_name}}</td>
@@ -70,8 +69,12 @@
         <td>{{i.get_total}}</td>                                      
 
         </tr>
-
         {% endfor %}
+        {% else %}
+        <tr>
+        <td colspan="7" class="text-center">No item(s) available for this restock.</td>
+        </tr>
+        {% endif %}
         </tbody>
         </table>
         </div>
